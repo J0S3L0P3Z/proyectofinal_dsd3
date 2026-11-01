@@ -1,0 +1,103 @@
+
+  /* Configuración General */
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: #030712;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Capa oscura y fondo de la imagen */
+.imagen-fondo-hero {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -2;
+}
+
+/* Gradiente superpuesto para mantener la legibilidad encima de la imagen */
+.seccion-hero::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(
+    to right,
+    rgb(7 16 34 / 0.92) 0%,
+    rgb(8 15 37 / 0.82) 50%,
+    rgb(7 13 35 / 0.88) 100%
+  );
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Utilidades Tipográficas */
+.texto-blanco {
+  color: #ffffff;
+}
+
+.fs-7 {
+  font-size: 0.75rem;
+}
+
+/* Indicador de Estado */
+.punto-estado {
+  width: 8px;
+  height: 8px;
+}
+
+/* Insignias personalizadas */
+.insignia-estado {
+  background-color: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(8px);
+}
+
+.insignia-etiqueta {
+  background-color: rgba(29, 114, 254, 0.12);
+  border: 1px solid rgba(29, 114, 254, 0.25);
+}
+
+/* Tarjeta del Formulario */
+.tarjeta-login {
+  background-color: rgba(13, 18, 30, 0.85);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Personalización de Entradas */
+.grupo-entrada-oscuro .form-control,
+.grupo-entrada-oscuro .input-group-text {
+  border-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(17, 24, 39, 0.7) !important;
+}
+
+.grupo-entrada-oscuro .form-control:focus {
+  box-shadow: none;
+  border-color: #1d72fe;
+}
+
+.grupo-entrada-oscuro .form-control::placeholder {
+  color: #6c757d;
+}
+
+.cursor-puntero {
+  cursor: pointer;
+}
+
+/* Estilos de Botones */
+.btn-primary {
+  background-color: #1d72fe;
+  border-color: #1d72fe;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: #0b5ed7;
+  border-color: #0b5ed7;
+  transform: translateY(-1px);
+}
