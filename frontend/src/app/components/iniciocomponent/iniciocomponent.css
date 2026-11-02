@@ -1,40 +1,23 @@
 
   /* Configuración General */
-body {
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background-color: #030712;
-  position: relative;
-  overflow-x: hidden;
-}
 
-/* Capa oscura y fondo de la imagen */
-.imagen-fondo-hero {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover;
-  z-index: -2;
-}
+  .imagen-fondo-hero {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: -1;
+    pointer-events: none;
+  }
 
-/* Gradiente superpuesto para mantener la legibilidad encima de la imagen */
-.seccion-hero::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: linear-gradient(
-    to right,
-    rgb(7 16 34 / 0.92) 0%,
-    rgb(8 15 37 / 0.82) 50%,
-    rgb(7 13 35 / 0.88) 100%
-  );
-  z-index: -1;
-  pointer-events: none;
-}
+  .seccion-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: 100vh;
+  }
 
 /* Utilidades Tipográficas */
 .texto-blanco {

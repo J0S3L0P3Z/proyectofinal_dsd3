@@ -4,24 +4,17 @@ import { AppRoutingModule } from './app-routing-module';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { App } from './app';
-import { Navbarcomponent } from './components/navbarcomponent/navbarcomponent';
 import { Footercomponent } from './components/footercomponent/footercomponent';
-import { Alojamientoscomponent } from './components/alojamientoscomponent/alojamientoscomponent';
 import { Iniciocomponent } from './components/iniciocomponent/iniciocomponent';
-import { Gestionalojamientocomponent } from './components/gestionalojamientocomponent/gestionalojamientocomponent';
-import { Gestionreservascomponent } from './components/gestionreservascomponent/gestionreservascomponent';
-import { Misreservascomponent } from './components/misreservascomponent/misreservascomponent';
 
 @NgModule({
   declarations: [
     App,
-    Navbarcomponent,
-    Footercomponent,
-    Alojamientoscomponent,
+
     Iniciocomponent,
-    Gestionalojamientocomponent,
-    Gestionreservascomponent,
-    Misreservascomponent,
+
+    Footercomponent,
+
   ],
   imports: [
     BrowserModule,
