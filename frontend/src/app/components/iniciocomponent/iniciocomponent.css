@@ -1,0 +1,28 @@
+/* Contenedor principal de la sección */
+.seccion-hero {
+  position: relative;
+  background-color: #0b0f19; /* Fondo base por si la imagen tarda en cargar */
+}
+
+/* Estilo para que la etiqueta <img> actúe como fondo estirado */
+.imagen-fondo-hero {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Evita que la imagen se deforme cubriendo todo el espacio */
+  z-index: 0;
+}
+
+/* Capa de oscurecimiento (Overlay) para resaltar los textos */
+.seccion-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(5, 7, 11, 0.82); /* Oscurece la imagen un 82% para dar contraste */
+  z-index: 1;
+}
