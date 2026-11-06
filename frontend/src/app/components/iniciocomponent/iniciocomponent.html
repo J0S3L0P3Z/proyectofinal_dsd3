@@ -6,92 +6,98 @@
     alt="Fondo de la sección principal"
   >
 
-<main class="container my-auto py-5 position-relative z-1">
-  <div class="row gy-5 align-items-center justify-content-between">
+  <main class="container my-auto py-5 position-relative z-1">
+    <div class="row gy-5 align-items-center justify-content-between">
 
-    <!-- Columna de la izquierda: Información -->
-    <div class="col-lg-6">
+      <!-- Columna de la izquierda Información -->
+      <div class="col-lg-5 offset-lg-1">
+        <div class="p-4 p-sm-5 rounded-4 info-hero-overlay">
+          <!-- Título Principal -->
+          <h2 class="display-4 fw-bold mb-3 text-white">
+            Investiga antes de
+            <span class="text-primary">hacer click</span>
+          </h2>
 
-      <!-- Título Principal -->
-      <h2 class="display-4 fw-bold mb-3">
-        Investiga antes de<br>
-        <span class="text-primary">hacer click</span>
-      </h2>
+          <!-- Descripción -->
+          <p class="text-light lead mb-5 fs-6">
+            Analiza cualquier URL, detecta amenazas y descubre qué hay detrás de cada enlace en segundos.
+          </p>
 
-      <!-- Descripción -->
-      <p class="text-secondary lead mb-5 fs-6">
-        Analiza cualquier URL, detecta amenazas y descubre qué hay detrás de cada enlace en segundos.
-      </p>
-
-      <!-- Decorativos / Estadísticas -->
-      <div class="row g-4 border-top border-secondary border-opacity-25 pt-4">
-        <div class="col-4">
-          <div class="h3 fw-bold mb-1">2.4M+</div>
-          <p class="text-secondary small mb-0">URLs analizadas</p>
-        </div>
-        <div class="col-4">
-          <div class="h3 fw-bold mb-1">99.9%</div>
-          <p class="text-secondary small mb-0">Precisión</p>
-        </div>
-        <div class="col-4">
-          <div class="h3 fw-bold mb-1">< 3s</div>
-          <p class="text-secondary small mb-0">Respuesta</p>
+          <!-- Decorativos  -->
+          <div class="row g-4 border-top border-secondary border-opacity-25 pt-4">
+            <div class="col-4">
+              <div class="h3 fw-bold mb-1 text-white">2.4M+</div>
+              <p class="text-secondary small mb-0">URLs analizadas</p>
+            </div>
+            <div class="col-4">
+              <div class="h3 fw-bold mb-1 text-white">99.9%</div>
+              <p class="text-secondary small mb-0">Precisión</p>
+            </div>
+            <div class="col-4">
+              <div class="h3 fw-bold mb-1 text-white">< 3s</div>
+              <p class="text-secondary small mb-0">Respuesta</p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Columna de la derecha: Formulario -->
-    <div class="col-lg-5 offset-lg-1">
-      <div class="card tarjeta-login border-secondary border-opacity-25 rounded-4 p-4 p-sm-5">
-        <div class="card-body p-0">
-          <h3 class="text-primary h4 fw-bold mb-1">Bienvenido de nuevo</h3>
-          <p class="text-secondary small mb-4">Ingresa tus datos para continuar.</p>
+      <!-- Columna de la derecha del gormulario -->
+      <div class="col-lg-5 offset-lg-1">
+        <div class="card tarjeta-login border-secondary border-opacity-25 rounded-4 p-4 p-sm-5">
+          <div class="card-body p-0">
+            <h3 class="text-primary h4 fw-bold mb-1">Bienvenido de nuevo</h3>
+            <p class="text-secondary small mb-4">Ingresa tus datos para continuar.</p>
 
-          <form>
-            <!-- Usuario -->
-            <div class="mb-3">
-              <label for="email" class="form-label text-primary h6 fw-bold mb-1">Correo electrónico</label>
-              <div class="input-group grupo-entrada-oscuro">
-                <span class="input-group-text bg-transparent border-end-0 text-secondary">
-                  <i class="bi bi-envelope"></i>
-                </span>
-                <input type="email" class="form-control bg-transparent border-start-0 text-white" id="email" placeholder="nombre@empresa.com" required>
+            <form>
+
+
+              <!-- Usuario -->
+              <div class="input-group mb-3">
+                <label for="email" class="form-label text-primary h6 fw-bold mb-1">Correo electrónico</label>
+                <div class="input-group grupo-entrada-oscuro">
+
+              <span class="input-group-text bg-transparent border-end-0 text-secondary" id="basic-addon1">
+
+                <i class="fa-regular fa-envelope"></i>
+              </span>
+                  <input type="email" class="form-control bg-transparent  text-white" id="email"
+                         placeholder="Eje: julioesteban@correo" aria-label="Eje:julioesteban@correo" required>
+                </div>
               </div>
-            </div>
 
-            <!-- Contraseña -->
-            <div class="mb-4">
-              <div class="d-flex justify-content-between align-items-center mb-1">
-                <label for="password" class="form-label text-primary small fw-semibold mb-0">Contraseña</label>
-                <a href="#" class="text-primary text-decoration-none small">¿Olvidaste tu contraseña?</a>
+
+              <!-- Contraseña -->
+              <div class="mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <label for="password" class="form-label text-primary h6 fw-bold mb-1">Contraseña</label>
+                  <a href="#" class="text-primary text-decoration-none small">¿Olvidaste tu contraseña?</a>
+                </div>
+                <div class="input-group grupo-entrada-oscuro">
+                      <span class="input-group-text bg-transparent border-end-0 text-secondary" id="basic-addon2">
+                        <i class="fa-solid fa-lock"></i>
+                       </span>
+                  <input type="password" class="form-control bg-transparent text-white" id="password"
+                         placeholder="••••••••" required>
+                </div>
               </div>
-              <div class="input-group grupo-entrada-oscuro">
-                <span class="input-group-text bg-transparent border-end-0 text-secondary">
-                  <i class="bi bi-lock"></i>
-                </span>
-                <input type="password" class="form-control bg-transparent border-start-0 border-end-0 text-white" id="password" placeholder="••••••••" required>
-                <span class="input-group-text bg-transparent border-start-0 text-secondary cursor-puntero">
-                  <i class="bi bi-eye"></i>
-                </span>
+
+              <!-- Botón de inicio de Sesión -->
+              <button type="submit"
+                      class="btn btn-primary w-100 py-2.5 fw-semibold d-flex align-items-center justify-content-center gap-2 mb-4">
+                Iniciar sesión
+                <i class="bi bi-arrow-right"></i>
+              </button>
+
+              <!-- Link del egistro -->
+              <div class="text-center small">
+                <span class="text-secondary">¿No tienes una cuenta?</span>
+                <a href="#" class="text-white text-decoration-none fw-semibold ms-1">Crear cuenta</a>
               </div>
-            </div>
-
-            <!-- Botón de inicio de Sesión -->
-            <button type="submit" class="btn btn-primary w-100 py-2.5 fw-semibold d-flex align-items-center justify-content-center gap-2 mb-4">
-              Iniciar sesión
-              <i class="bi bi-arrow-right"></i>
-            </button>
-
-            <!-- Link del egistro -->
-            <div class="text-center small">
-              <span class="text-secondary">¿No tienes una cuenta?</span>
-              <a href="#" class="text-white text-decoration-none fw-semibold ms-1">Crear cuenta</a>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
 
-  </div>
-</main>
+    </div>
+  </main>
 </section>
