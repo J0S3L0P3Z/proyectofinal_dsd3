@@ -6,22 +6,11 @@ import { FormsModule } from '@angular/forms';
 import { App } from './app';
 import { Footercomponent } from './components/footercomponent/footercomponent';
 import { Iniciocomponent } from './components/iniciocomponent/iniciocomponent';
+import { Crearcuentacomponent } from './components/crearcuentacomponent/crearcuentacomponent';
 
 @NgModule({
-  declarations: [
-    App,
-
-    Iniciocomponent,
-
-    Footercomponent,
-
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    CommonModule,
-    FormsModule,
-  ],
+  declarations: [App, Iniciocomponent, Footercomponent, Crearcuentacomponent],
+  imports: [BrowserModule, AppRoutingModule, CommonModule, FormsModule],
   providers: [provideBrowserGlobalErrorListeners()],
   bootstrap: [App],
 })

@@ -1,0 +1,88 @@
+/* Configuración General */
+.imagen-fondo-hero {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.seccion-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 100vh;
+}
+
+.info-hero-overlay {
+  background-color: rgba(11, 15, 25, 0.75);
+  backdrop-filter: blur(10px);
+}
+/* Utilidades Tipográficas */
+.texto-blanco {
+  color: #ffffff;
+}
+
+.fs-7 {
+  font-size: 0.75rem;
+}
+
+/* Indicador de Estado */
+.punto-estado {
+  width: 8px;
+  height: 8px;
+}
+
+/* Insignias personalizadas */
+.insignia-estado {
+  background-color: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+}
+
+.insignia-etiqueta {
+  background-color: rgba(29, 114, 254, 0.12);
+  border: 1px solid rgba(29, 114, 254, 0.25);
+}
+
+/* Tarjeta del Formulario */
+.tarjeta-login {
+  background-color: rgba(13, 18, 30, 0.85);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Personalización de Entradas */
+.grupo-entrada-oscuro .form-control,
+.grupo-entrada-oscuro .input-group-text {
+  border-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(17, 24, 39, 0.7) !important;
+}
+
+.grupo-entrada-oscuro .form-control:focus {
+  box-shadow: none;
+  border-color: #1d72fe;
+}
+
+.grupo-entrada-oscuro .form-control::placeholder {
+  color: #6c757d;
+}
+
+.cursor-puntero {
+  cursor: pointer;
+}
+
+/* Estilos de Botones */
+.btn-primary {
+  background-color: #1d72fe;
+  border-color: #1d72fe;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: #0b5ed7;
+  border-color: #0b5ed7;
+  transform: translateY(-1px);
+}
