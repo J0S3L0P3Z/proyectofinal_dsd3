@@ -15,7 +15,10 @@
   isolation: isolate;
   overflow: hidden;
   min-height: 100vh;
+  justify-content: center;
 }
+
+
 
 .info-hero-overlay {
   background-color: rgba(11, 15, 25, 0.75);
@@ -85,4 +88,25 @@
   background-color: #0b5ed7;
   border-color: #0b5ed7;
   transform: translateY(-1px);
+}
+
+.strength {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+/* Estado inactivo color oscuro de fondo */
+.strength-segment {
+  flex: 1;
+  height: 4px;
+  background-color: #1a2b4c;
+  border-radius: 2px;
+  transition: background-color 0.3s ease;
+}
+
+/* Estado activo color neón cian cuando la barra se llena */
+.strength-segment.active {
+  background-color: #00c3ff;
+  box-shadow: 0 0 8px rgba(0, 195, 255, 0.4);
 }
