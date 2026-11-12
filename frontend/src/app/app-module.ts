@@ -7,9 +7,11 @@ import { App } from './app';
 import { Footercomponent } from './components/footercomponent/footercomponent';
 import { Iniciocomponent } from './components/iniciocomponent/iniciocomponent';
 import { Crearcuentacomponent } from './components/crearcuentacomponent/crearcuentacomponent';
+import { Inicioadmincomponent } from './components/inicioadmincomponent/inicioadmincomponent';
+import {Navbarcomponent} from './components/navbarcomponent/navbarcomponent';
 
 @NgModule({
-  declarations: [App, Iniciocomponent, Footercomponent, Crearcuentacomponent],
+  declarations: [App, Iniciocomponent, Footercomponent, Crearcuentacomponent, Inicioadmincomponent, Navbarcomponent],
   imports: [BrowserModule, AppRoutingModule, CommonModule, FormsModule],
   providers: [provideBrowserGlobalErrorListeners()],
   bootstrap: [App],

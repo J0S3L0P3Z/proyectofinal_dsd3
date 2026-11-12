@@ -1,0 +1,460 @@
+<section class="seccion-hero">
+
+  <img src="/imagenes/fondoadmin.png" class="imagen-fondo-hero" alt="Fondo de la sección principal">
+
+  <div class="container-fluid dashboard-cyber p-4 min-vh-100 text-white">
+
+
+    <!-- Botón superior para abrir el Drawer -->
+    <nav class="navbar navbar-dark bg-transparent px-4 pt-4">
+      <div class="container-fluid p-0">
+        <button class="btn btn-cyber-outline d-flex align-items-center gap-2" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#cyberDrawer" aria-controls="cyberDrawer">
+          <i class="fa-solid fa-bars-staggered text-primary"></i>
+          <span class="text-white small fw-semibold">Menu de Opciones</span>
+        </button>
+      </div>
+    </nav>
+
+
+    <!-- Bloque para realizar los Scrapings -->
+    <div class="container-fluid px-4 mb-5">
+
+
+      <!-- Tarjeta  para ingresar la URL -->
+      <div class="card cyber-stat-card p-4 border-secondary border-opacity-25 rounded-4 mb-4">
+        <h5 class="fw-bold mb-1 d-flex align-items-center gap-2 text-white">
+          <i class="fa-solid fa-bolt text-primary"></i> Realizar un Scraping
+        </h5>
+        <p class="text-secondary small mb-3">Ingresa la URL de la página que deseas analizar</p>
+
+        <div class="d-flex flex-column flex-md-row gap-3 align-items-center">
+          <div class="input-group grupo-entrada-oscuro cyber-search-box flex-grow-1">
+            <span class="input-group-text bg-transparent border-end-0 text-secondary ps-3">
+              <i class="fa-solid fa-link"></i>
+            </span>
+            <input type="text" class="form-control bg-transparent text-white border-start-0 shadow-none ps-2"
+                   placeholder="https://ejemplo.com">
+          </div>
+          <button
+            class="btn btn-primary d-flex align-items-center gap-2 px-4 py-2 text-nowrap w-100 w-md-auto justify-content-center">
+            <i class="fa-solid fa-play"></i> Analizar
+          </button>
+        </div>
+      </div>
+
+
+      <!-- Bloque de Resultados del Análisis -->
+      <div class="card cyber-stat-card p-4 border-secondary border-opacity-25 rounded-4">
+
+
+        <!-- Cabecera de resultados y estado exitoso -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+          <h5 class="fw-bold m-0 d-flex align-items-center gap-2 text-white">
+            <i class="fa-solid fa-chart-bar text-primary"></i> Resultados del Análisis
+          </h5>
+          <div class="text-end">
+            <div
+              class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-success bg-opacity-10 text-success small fw-semibold border border-success border-opacity-25">
+              <i class="fa-solid fa-circle-check"></i> Scraping completado exitosamente
+            </div>
+            <span class="d-block text-secondary fs-7 mt-1">10/11/2026 - 15:32</span>
+          </div>
+        </div>
+
+
+        <!-- Las 3 IAs -->
+        <div class="row g-4">
+
+
+          <!-- IA 1: -->
+          <div class="col-lg-4 col-md-6">
+            <div
+              class="card cyber-stat-card p-3 border-secondary border-opacity-25 rounded-3 h-100 bg-black bg-opacity-25">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center gap-2 text-white fw-bold">
+                  <i class="fa-solid fa-brain text-primary fs-5"></i> IA 1
+                </div>
+                <span
+                  class="badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-25 px-2 py-1">Resumen</span>
+              </div>
+              <p class="text-secondary small mb-4">
+                La página trata sobre tecnología y desarrollo de software. Contiene información de proyectos, noticias y
+                recursos para programadores.
+              </p>
+              <div
+                class="mt-auto pt-3 border-top border-secondary border-opacity-10 small text-secondary d-flex flex-column gap-1">
+                <div><i class="fa-solid fa-users me-2 text-primary"></i> Personas: </div>
+                <div><i class="fa-solid fa-image me-2 text-primary"></i> Imágenes: </div>
+                <div><i class="fa-solid fa-code me-2 text-primary"></i> Framework: </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- IA 2  -->
+          <div class="col-lg-4 col-md-6">
+            <div
+              class="card cyber-stat-card p-3 border-secondary border-opacity-25 rounded-3 h-100 bg-black bg-opacity-25">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center gap-2 text-white fw-bold">
+                  <i class="fa-solid fa-wand-magic-sparkles text-info fs-5"></i> IA 2
+                </div>
+                <span class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-25 px-2 py-1">Resumen</span>
+              </div>
+              <p class="text-secondary small mb-4">
+                Es un sitio enfocado en el mundo tech, con artículos, tutoriales y herramientas para desarrolladores.
+              </p>
+              <div
+                class="mt-auto pt-3 border-top border-secondary border-opacity-10 small text-secondary d-flex flex-column gap-1">
+                <div><i class="fa-solid fa-users me-2 text-info"></i> Personas: </div>
+                <div><i class="fa-solid fa-image me-2 text-info"></i> Imágenes: </div>
+                <div><i class="fa-solid fa-code me-2 text-info"></i> Lenguaje: </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- IA 3  -->
+          <div class="col-lg-4 col-md-12">
+            <div
+              class="card cyber-stat-card p-3 border-secondary border-opacity-25 rounded-3 h-100 bg-black bg-opacity-25">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center gap-2 text-white fw-bold">
+                  <i class="fa-solid fa-infinity text-purple-neon fs-5"></i> IA 3
+                </div>
+                <span class="badge badge-purple-cyber px-2 py-1">Resumen</span>
+              </div>
+              <p class="text-secondary small mb-4">
+                Página dedicada a tecnología e innovación, con secciones de noticias, proyectos y contacto.
+              </p>
+              <div
+                class="mt-auto pt-3 border-top border-secondary border-opacity-10 small text-secondary d-flex flex-column gap-1">
+                <div><i class="fa-solid fa-users me-2 text-purple-neon"></i> Personas: </div>
+                <div><i class="fa-solid fa-image me-2 text-purple-neon"></i> Imágenes: </div>
+                <div><i class="fa-solid fa-code me-2 text-purple-neon"></i> Framework: </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- Gestion del usuario -->
+    <div class="container-fluid px-4 mb-4">
+      <div class="card cyber-stat-card p-4 border-secondary border-opacity-25 rounded-4">
+
+
+        <!-- Cabecera de la tabla  -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+          <h5 class="fw-bold m-0 d-flex align-items-center gap-2 text-white">
+            <i class="fa-solid fa-user-gear text-primary"></i> Gestión de Usuarios
+          </h5>
+          <div class="d-flex align-items-center gap-3">
+
+
+            <!-- Buscador -->
+            <div class="input-group grupo-entrada-oscuro cyber-search-box">
+              <span class="input-group-text bg-transparent border-end-0 text-secondary">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </span>
+              <input type="text" class="form-control bg-transparent text-white border-start-0 shadow-none ps-0 small"
+                     placeholder="Buscar por nombre o correo">
+            </div>
+
+
+            <!-- Botón Descargar Reporte -->
+            <button class="btn btn-primary d-flex align-items-center gap-2 px-3 text-nowrap">
+              <i class="fa-solid fa-download"></i> Descargar Reporte
+            </button>
+          </div>
+        </div>
+
+        <!-- Tabla de Datos  -->
+        <div class="table-responsive">
+          <table class="table table-dark table-borderless bg-transparent align-middle mb-0">
+            <thead class="text-secondary small border-bottom border-secondary border-opacity-25">
+            <tr>
+              <th class="py-3 bg-transparent">Nombre Completo</th>
+              <th class="py-3 bg-transparent">Correo Electrónico</th>
+              <th class="py-3 bg-transparent">Fecha de Creación</th>
+              <th class="py-3 bg-transparent">Ubicación</th>
+              <th class="py-3 bg-transparent">Rol</th>
+              <th class="py-3 bg-transparent text-end">Acciones / Rol</th>
+            </tr>
+            </thead>
+            <tbody class="small">
+
+            <!-- Fila 1 -->
+            <tr class="border-bottom border-secondary border-opacity-10">
+              <td class="py-3 bg-transparent d-flex align-items-center gap-2 text-white">
+                <div class="avatar-icon"><i class="fa-solid fa-user"></i></div>
+                Julio hernandez
+              </td>
+              <td class="bg-transparent text-secondary">julio@gmail.com</td>
+              <td class="bg-transparent text-secondary">10/11/2026 - 14:32</td>
+              <td class="bg-transparent text-secondary">Bogotá, CO</td>
+              <td class="bg-transparent"><span class="badge cyber-badge-role">Usuario</span></td>
+              <td class="bg-transparent text-end">
+                <div class="d-flex align-items-center justify-content-end gap-2">
+                  <select class="form-select form-select-sm bg-dark text-white border-secondary w-auto">
+                    <option>Cambiar Rol</option>
+                    <option>Admin</option>
+                    <option>Usuario</option>
+                  </select>
+                  <button class="btn btn-sm btn-outline-danger border-0 cyber-pdf-btn" title="Descargar PDF">
+                    <i class="fa-solid fa-file-pdf"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Fila 2 -->
+            <tr class="border-bottom border-secondary border-opacity-10">
+              <td class="py-3 bg-transparent d-flex align-items-center gap-2 text-white">
+                <div class="avatar-icon"><i class="fa-solid fa-user"></i></div>
+                Maríana Torres
+              </td>
+              <td class="bg-transparent text-secondary">mariana@gmail.com</td>
+              <td class="bg-transparent text-secondary">09/11/2026 - 18:20</td>
+              <td class="bg-transparent text-secondary">Medellín, CO</td>
+              <td class="bg-transparent"><span class="badge cyber-badge-admin">Admin</span></td>
+              <td class="bg-transparent text-end">
+                <div class="d-flex align-items-center justify-content-end gap-2">
+                  <select class="form-select form-select-sm bg-dark text-white border-secondary w-auto">
+                    <option>Cambiar Rol</option>
+                    <option>Admin</option>
+                    <option>Usuario</option>
+                  </select>
+                  <button class="btn btn-sm btn-outline-danger border-0 cyber-pdf-btn" title="Descargar PDF">
+                    <i class="fa-solid fa-file-pdf"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Fila 3 -->
+            <tr class="border-bottom border-secondary border-opacity-10">
+              <td class="py-3 bg-transparent d-flex align-items-center gap-2 text-white">
+                <div class="avatar-icon"><i class="fa-solid fa-user"></i></div>
+                Carlos Delgado
+              </td>
+              <td class="bg-transparent text-secondary">carlos@gmail.com</td>
+              <td class="bg-transparent text-secondary">08/11/2026 - 11:15</td>
+              <td class="bg-transparent text-secondary">Cali, CO</td>
+              <td class="bg-transparent"><span class="badge cyber-badge-role">Usuario</span></td>
+              <td class="bg-transparent text-end">
+                <div class="d-flex align-items-center justify-content-end gap-2">
+                  <select class="form-select form-select-sm bg-dark text-white border-secondary w-auto">
+                    <option>Cambiar Rol</option>
+                    <option>Admin</option>
+                    <option>Usuario</option>
+                  </select>
+                  <button class="btn btn-sm btn-outline-danger border-0 cyber-pdf-btn" title="Descargar PDF">
+                    <i class="fa-solid fa-file-pdf"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Fila 4 -->
+            <tr class="border-bottom border-secondary border-opacity-10">
+              <td class="py-3 bg-transparent d-flex align-items-center gap-2 text-white">
+                <div class="avatar-icon"><i class="fa-solid fa-user"></i></div>
+                Ana Gomez
+              </td>
+              <td class="bg-transparent text-secondary">ana@gmail.com</td>
+              <td class="bg-transparent text-secondary">07/11/2026 - 09:45</td>
+              <td class="bg-transparent text-secondary">Barranquilla, CO</td>
+              <td class="bg-transparent"><span class="badge cyber-badge-role">Usuario</span></td>
+              <td class="bg-transparent text-end">
+                <div class="d-flex align-items-center justify-content-end gap-2">
+                  <select class="form-select form-select-sm bg-dark text-white border-secondary w-auto">
+                    <option>Cambiar Rol</option>
+                    <option>Admin</option>
+                    <option>Usuario</option>
+                  </select>
+                  <button class="btn btn-sm btn-outline-danger border-0 cyber-pdf-btn" title="Descargar PDF">
+                    <i class="fa-solid fa-file-pdf"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Fila 5 -->
+            <tr>
+              <td class="py-3 bg-transparent d-flex align-items-center gap-2 text-white">
+                <div class="avatar-icon"><i class="fa-solid fa-user"></i></div>
+                Diego Rodriguez
+              </td>
+              <td class="bg-transparent text-secondary">diego@gmail.com</td>
+              <td class="bg-transparent text-secondary">06/11/2026 - 20:10</td>
+              <td class="bg-transparent text-secondary">Bogotá, CO</td>
+              <td class="bg-transparent"><span class="badge cyber-badge-admin">Admin</span></td>
+              <td class="bg-transparent text-end">
+                <div class="d-flex align-items-center justify-content-end gap-2">
+                  <select class="form-select form-select-sm bg-dark text-white border-secondary w-auto">
+                    <option>Cambiar Rol</option>
+                    <option>Admin</option>
+                    <option>Usuario</option>
+                  </select>
+                  <button class="btn btn-sm btn-outline-danger border-0 cyber-pdf-btn" title="Descargar PDF">
+                    <i class="fa-solid fa-file-pdf"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Cambiar de paginas tabla -->
+        <div
+          class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 pt-3 border-top border-secondary border-opacity-25 text-secondary small">
+          <span>Mostrando 1 - 5 de 124 usuarios</span>
+          <ul class="pagination pagination-sm m-0 gap-1">
+            <li class="page-item"><a class="page-link rounded bg-dark border-secondary text-secondary" href="#">«</a>
+            </li>
+            <li class="page-item"><a class="page-link rounded bg-dark border-secondary text-secondary" href="#">‹</a>
+            </li>
+            <li class="page-item active"><a class="page-link rounded bg-primary border-primary text-white"
+                                            href="#">1</a></li>
+            <li class="page-item"><a class="page-link rounded bg-dark border-secondary text-secondary" href="#">2</a>
+            </li>
+            <li class="page-item"><a class="page-link rounded bg-dark border-secondary text-secondary" href="#">3</a>
+            </li>
+            <li class="page-item disabled"><span class="page-link bg-dark border-secondary text-secondary">...</span>
+            </li>
+            <li class="page-item"><a class="page-link rounded bg-dark border-secondary text-secondary" href="#">25</a>
+            </li>
+            <li class="page-item"><a class="page-link rounded bg-dark border-secondary text-secondary" href="#">›</a>
+            </li>
+            <li class="page-item"><a class="page-link rounded bg-dark border-secondary text-secondary" href="#">»</a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- El drawer que dara la barra a la izquierda -->
+    <div class="offcanvas offcanvas-start cyber-drawer text-white" tabindex="-1" id="cyberDrawer"
+         aria-labelledby="cyberDrawerLabel">
+
+      <!--  Botón de cerrar Centrado y Cómodo -->
+      <div class="offcanvas-footer p-3 border-top border-secondary border-opacity-25 mt-auto">
+        <div class="d-grid">
+          <button type="button"
+                  class="btn btn-outline-danger py-2 d-flex align-items-center justify-content-center gap-2 rounded-3 cyber-close-action"
+                  data-bs-dismiss="offcanvas">
+            <i class="fa-solid fa-right-from-bracket"></i> Salir del menu de opciones
+          </button>
+        </div>
+      </div>
+
+      <!-- Cabecera del drawer -->
+      <img src="/imagenes/fotoPerfilAdmin.png" class="rounded-4" alt="Foto perfil del admin" width="270"
+           height="270">
+
+      <div class="offcanvas-header border-bottom border-secondary border-opacity-25 px-4 py-3">
+        <h5 class="offcanvas-title fw-bold d-flex align-items-center gap-2" id="cyberDrawerLabel">
+          <i class="fa-solid fa-shield-halved text-primary"></i> Barra <span
+          class="text-primary fs-7">Administrador</span>
+        </h5>
+      </div>
+
+      <!-- Opciones del Drawer -->
+      <div class="offcanvas-body px-4 py-4 d-flex flex-column justify-content-between">
+        <ul class="nav nav-pills flex-column gap-2">
+
+          <!-- General -->
+          <li class="nav-item">
+            <a routerLink="/inicioadmin"
+               class="nav-link active d-flex align-items-center gap-3 py-2 px-3 rounded-3 text-white text-decoration-none fw-semibold ms-1">
+              <i class="fa-solid fa-house"></i>
+              <span class="d-inline-flex gap-1">
+                <span class="animate__animated animate__slideInRight delay-1">General</span>
+              </span>
+            </a>
+          </li>
+
+          <!-- Gestión de Usuarios -->
+          <li class="nav-item">
+            <a href="#"
+               class="nav-link text-secondary d-flex align-items-center gap-3 py-2 px-3 rounded-3 cyber-nav-hover">
+              <i class="fa-solid fa-users"></i>
+              <span class="d-inline-flex gap-1">
+                <span class="animate__animated animate__slideInRight delay-1">Gestión</span>
+                <span class="animate__animated animate__slideInRight delay-2">de</span>
+                <span class="animate__animated animate__slideInRight delay-3">Usuarios</span>
+              </span>
+            </a>
+          </li>
+
+          <!-- Scans & Scraping -->
+          <li class="nav-item">
+            <a href="#"
+               class="nav-link text-secondary d-flex align-items-center gap-3 py-2 px-3 rounded-3 cyber-nav-hover">
+              <i class="fa-solid fa-robot"></i>
+              <span class="d-inline-flex gap-1">
+                <span class="animate__animated animate__slideInRight delay-1">Scans</span>
+                <span class="animate__animated animate__slideInRight delay-2">&</span>
+                <span class="animate__animated animate__slideInRight delay-3">Scraping</span>
+              </span>
+            </a>
+          </li>
+
+          <!-- Seguridad Web -->
+          <li class="nav-item">
+            <a href="#"
+               class="nav-link text-secondary d-flex align-items-center gap-3 py-2 px-3 rounded-3 cyber-nav-hover">
+              <i class="fa-solid fa-shield-dog"></i>
+              <span class="d-inline-flex gap-1">
+                <span class="animate__animated animate__slideInRight delay-1">Seguridad</span>
+                <span class="animate__animated animate__slideInRight delay-2">Web</span>
+              </span>
+            </a>
+          </li>
+
+          <!-- Configuración -->
+          <li class="nav-item">
+            <a href="#"
+               class="nav-link text-secondary d-flex align-items-center gap-3 py-2 px-3 rounded-3 cyber-nav-hover">
+              <i class="fa-solid fa-gear"></i>
+              <span class="d-inline-flex gap-1">
+                <span class="animate__animated animate__slideInRight delay-1">Configuración</span>
+              </span>
+            </a>
+          </li>
+        </ul>
+
+        <!-- Pie del Drawer  -->
+        <div class="pt-3 border-top border-secondary border-opacity-25">
+          <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-2">
+              <div class="avatar-icon"><i class="fa-solid fa-user"></i></div>
+              <div>
+                <h6 class="mb-0 small fw-bold d-inline-flex gap-1">
+                  <span class="animate__animated animate__slideInRight text-white delay-1">Julio</span>
+                  <span class="animate__animated animate__slideInRight text-white delay-2">Hernández</span>
+                </h6>
+                <span
+                  class="text-secondary fs-7 d-block animate__animated animate__slideInRight delay-3">Administrador</span>
+              </div>
+            </div>
+            <button class="btn btn-sm btn-outline-danger border-0" data-bs-dismiss="offcanvas">
+              <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</section>
