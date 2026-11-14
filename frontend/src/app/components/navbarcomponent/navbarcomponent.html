@@ -1,35 +1,141 @@
-<img class="avatar-img" src="https://github.com/mdo.png" alt="mdo" width="50" height="50">
+<!-- ------------------------ Navbar del Usuario --------------------------------------- -->
 
-<ul class="nav justify-content-center">
+<nav class="navbar navbar-expand-lg cyber-navbar px-4" data-bs-theme="dark">
+  <div class="container-fluid p-0 d-flex justify-content-between align-items-center w-100">
 
-  <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="#">Inicio</a>
-  </li>
+    <!-- Imagen pegada a la izquierda  -->
+    <div class="flex-shrink-0 d-flex align-items-center gap-3 animate__animated animate__fadeInRight animate__delay-08s">
+      <a class="navbar-brand d-flex align-items-center gap-3 text-decoration-none m-0" href="#">
+        <img class="avatar-img rounded-4 border border-primary border-opacity-50" src="/imagenes/logo.jpg" alt="Logo" width="50" height="50">
+        <h1 class="h4 mb-0 fw-bold text-white">Scraping-Doo</h1>
+      </a>
+    </div>
 
-  <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="#">Usuarios</a>
-  </li>
+    <!-- Centrar elementos de navegación -->
+    <div class="flex-grow-1 d-flex justify-content-center d-none d-lg-flex">
+      <ul class="nav align-items-center gap-2 mb-0">
 
-  <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="#">Estadísticas</a>
+        <!-- Inicio -->
+        <li class="nav-item">
+          <a class="nav-link active rounded-3 px-3 py-2 animate__animated animate__slideInDown animate__delay-08s" aria-current="page" href="#">
+            <i class="fa-solid fa-house me-1"></i>
+            Inicio
+          </a>
+        </li>
 
-  </li>
+        <!-- Scraping -->
+        <li class="nav-item">
+          <a class="nav-link rounded-3 px-3 py-2 cyber-nav-hover animate__animated animate__slideInDown animate__delay-08s" href="#">
+            <i class="fa-solid fa-magnifying-glass-location me-1"></i>
+            Scraping
+          </a>
+        </li>
+
+        <!-- Historial -->
+        <li class="nav-item">
+          <a class="nav-link rounded-3 px-3 py-2 cyber-nav-hover animate__animated animate__slideInDown animate__delay-08s" href="#">
+            <i class="fa-solid fa-clock-rotate-left me-1"></i>
+            Historial
+          </a>
+        </li>
+
+        <!-- Configuración -->
+        <li class="nav-item">
+          <a class="nav-link rounded-3 px-3 py-2 cyber-nav-hover animate__animated animate__slideInDown animate__delay-08s" href="#">
+            <i class="fa-solid fa-gear me-1"></i>
+            Configuración
+          </a>
+        </li>
+
+      </ul>
+    </div>
+
+    <!-- Foto de perfil  -->
+    <div class="flex-shrink-0 d-flex align-items-center gap-3 animate__animated animate__fadeInLeft animate__delay-08s">
+      <div class="text-end">
+        <h6 class="mb-0 small fw-bold text-white">xtuliox.x</h6>
+        <span class="text-secondary fs-7 d-block">usuario</span>
+      </div>
+      <img class="avatar-img rounded-circle border border-primary border-opacity-50" src="/imagenes/fotoperfildefault.png" alt="Perfil" width="45" height="45">
+    </div>
+
+  </div>
+</nav>
 
 
-  <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="#">Scrapping</a>
 
-  </li>
+<!-- ----------------------------------------------- Navbar de el administrator  ------------------------------------- -->
 
-  <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="#">Scrapping</a>
+<nav class="navbar navbar-expand-lg cyber-navbar px-4" data-bs-theme="dark">
+  <div class="container-fluid p-0 d-flex justify-content-between align-items-center w-100">
 
-  </li>
+    <!-- imagen pegada a la izquierda -->
+    <div class="flex-shrink-0 d-flex align-items-center gap-3 animate__animated animate__fadeInRight animate__delay-0.8">
+      <a class="navbar-brand d-flex align-items-center gap-3 text-decoration-none m-0">
+        <img class="avatar-img rounded-4 border border-primary border-opacity-50" src="/imagenes/logo.jpg" alt="Logo" width="50" height="50">
+        <h1 class="h4 mb-0 fw-bold text-white">Scraping-Doo</h1>
+      </a>
+    </div>
 
+    <!-- Centrar -->
+    <div class="flex-grow-1 d-flex justify-content-center d-none d-lg-flex">
+      <ul class="nav align-items-center gap-2 mb-0">
 
-  <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="#">Configuración del Perfil</a>
-  </li>
+        <!-- Opciones -->
+        <li class="nav-item">
+          <a class="nav-link active rounded-3 px-3 py-2 animate__animated animate__slideInDown animate__delay-0.8s" aria-current="page" href="#">
+            <i class="fa-solid fa-house me-1"></i>
+            Inicio
+          </a>
+        </li>
 
+        <li class="nav-item">
+          <a class="nav-link rounded-3 px-3 py-2 animate__animated animate__slideInDown animate__delay-0.8s" href="#">
+            <i class="fa-solid fa-user me-1"></i>
+            Usuarios
+          </a>
+        </li>
 
-</ul>
+        <li class="nav-item">
+          <a class="nav-link rounded-3 px-3 py-2 animate__animated animate__slideInDown animate__delay-0.8s" href="#">
+            <i class="fa-solid fa-chart-line me-1"></i>
+            Estadísticas
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link rounded-3 px-3 py-2 animate__animated animate__slideInDown animate__delay-0.8s" href="#">
+            <i class="fa-solid fa-magnifying-glass-location me-1"></i>
+            Scrapping
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link rounded-3 px-3 py-2 animate__animated animate__slideInDown animate__delay-0.8s" href="#">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+
+            Historial
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link rounded-3 px-3 py-2 animate__animated animate__slideInDown animate__delay-0.8s" href="#">
+            <i class="fa-solid fa-gear me-1"></i>
+            Configuración
+          </a>
+        </li>
+
+      </ul>
+    </div>
+
+    <!-- Foto de perfil  -->
+    <div class="flex-shrink-0 d-flex align-items-center gap-3 animate__animated animate__fadeInLeft animate__delay-0.8">
+      <div class="text-end">
+        <h6 class="mb-0 small fw-bold text-white">xtuliox.x</h6>
+        <span class="text-secondary fs-7 d-block">administrador</span>
+      </div>
+      <img class="avatar-img rounded-circle border border-primary border-opacity-50" src="/imagenes/fotoperfildefault.png" alt="Perfil" width="45" height="45">
+    </div>
+
+  </div>
+</nav>
