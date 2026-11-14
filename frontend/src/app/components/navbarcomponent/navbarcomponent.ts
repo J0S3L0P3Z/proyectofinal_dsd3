@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component , OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-navbarcomponent',
@@ -6,4 +6,13 @@ import { Component } from '@angular/core';
   styleUrl: './navbarcomponent.css',
   templateUrl: './navbarcomponent.html',
 })
-export class Navbarcomponent {}
+export class Navbarcomponent implements OnInit {
+
+  userRole: 'admin' | 'user' = 'admin';
+
+  constructor() { }
+
+  ngOnInit(): void {
+
+  }
+}
