@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "prograFront": {
+    "scrammer": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -66,10 +66,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "prograFront:build:production"
+              "buildTarget": "scrammer:build:production"
             },
             "development": {
-              "buildTarget": "prograFront:build:development"
+              "buildTarget": "scrammer:build:development"
             }
           },
           "defaultConfiguration": "development"

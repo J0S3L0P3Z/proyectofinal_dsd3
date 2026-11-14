@@ -1,0 +1,5 @@
+.aviso-correo {
+  background-color: rgba(29, 114, 254, 0.08);
+  border: 1px solid rgba(29, 114, 254, 0.25);
+  backdrop-filter: blur(10px);
+}
