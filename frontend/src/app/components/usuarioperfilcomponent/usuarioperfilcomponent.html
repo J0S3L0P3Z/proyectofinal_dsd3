@@ -1,0 +1,178 @@
+<div class="mb-4">
+  <h3 class="fw-bold text-white mb-1 d-flex align-items-center gap-2">
+    <i class="fa-solid fa-user text-primary"></i> Mi perfil
+  </h3>
+  <p class="text-secondary small mb-0">Consulta y administra tu información personal.</p>
+</div>
+
+<div class="row g-4">
+
+  <!-- Tarjeta de resumen -->
+  <div class="col-lg-4">
+    <div class="card cyber-stat-card rounded-4 p-4 text-center h-100">
+      <div class="zu-avatar zu-avatar-lg mx-auto mb-3">{{ iniciales }}</div>
+      <h5 class="fw-bold text-white mb-0">{{ datos.perfil().nombreCompleto }}</h5>
+      <span class="text-secondary small">&#64;{{ datos.perfil().nombreUsuario }}</span>
+
+      <div class="my-3">
+        <span class="zu-badge info"><i class="fa-solid fa-lock"></i> Rol: {{ datos.perfil().rol }}</span>
+      </div>
+
+      <div class="row g-2 text-center pt-3 border-top zu-borde mt-auto">
+        <div class="col-4">
+          <span class="d-block fw-bold">{{ datos.historial().length }}</span>
+          <span class="fs-7 text-secondary">Scraping</span>
+        </div>
+        <div class="col-4">
+          <span class="d-block fw-bold zu-tono-exito">{{ datos.totalExitosos() }}</span>
+          <span class="fs-7 text-secondary">Exitosos</span>
+        </div>
+        <div class="col-4">
+          <span class="d-block fw-bold zu-tono-error">{{ datos.totalFallidos() }}</span>
+          <span class="fs-7 text-secondary">Fallidos</span>
+        </div>
+      </div>
+      <span class="fs-7 text-secondary mt-3">Miembro desde {{ datos.perfil().miembroDesde | date: 'dd/MM/yyyy' }}</span>
+    </div>
+  </div>
+
+  <div class="col-lg-8 d-flex flex-column gap-4">
+
+    <!-- Datos personales -->
+    <div class="card cyber-stat-card rounded-4 p-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="fw-bold m-0 d-flex align-items-center gap-2">
+          <i class="fa-solid fa-id-card text-primary"></i> Datos personales
+        </h5>
+        @if (!editando) {
+          <button class="btn btn-sm btn-cyber-outline text-white" (click)="editar()">
+            <i class="fa-solid fa-pen text-primary me-1"></i> Editar
+          </button>
+        }
+      </div>
+
+      @if (!editando) {
+        <div class="row g-3">
+          <div class="col-md-6">
+            <span class="dato-etiqueta">Nombre completo</span>
+            <span class="dato-valor">{{ datos.perfil().nombreCompleto }}</span>
+          </div>
+          <div class="col-md-6">
+            <span class="dato-etiqueta">Nombre de usuario</span>
+            <span class="dato-valor">{{ datos.perfil().nombreUsuario }}</span>
+          </div>
+          <div class="col-md-6">
+            <span class="dato-etiqueta">Correo electrónico</span>
+            <span class="dato-valor">{{ datos.perfil().correo }}</span>
+          </div>
+          <div class="col-md-6">
+            <span class="dato-etiqueta">Rol</span>
+            <span class="dato-valor">{{ datos.perfil().rol }} <i class="fa-solid fa-lock fs-7 text-secondary ms-1" title="No editable"></i></span>
+          </div>
+        </div>
+      } @else {
+        <form (ngSubmit)="guardarDatos()" novalidate class="animate__animated animate__fadeIn">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="pNombre" class="form-label text-primary small fw-bold mb-1">Nombre completo</label>
+              <div class="input-group grupo-entrada-oscuro">
+                <span class="input-group-text text-secondary"><i class="fa-solid fa-user"></i></span>
+                <input id="pNombre" name="nombreCompleto" class="form-control shadow-none" [(ngModel)]="formulario.nombreCompleto">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label for="pUsuario" class="form-label text-primary small fw-bold mb-1">Nombre de usuario</label>
+              <div class="input-group grupo-entrada-oscuro">
+                <span class="input-group-text text-secondary"><i class="fa-solid fa-at"></i></span>
+                <input id="pUsuario" name="nombreUsuario" class="form-control shadow-none" [(ngModel)]="formulario.nombreUsuario">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label for="pCorreo" class="form-label text-primary small fw-bold mb-1">Correo electrónico</label>
+              <div class="input-group grupo-entrada-oscuro">
+                <span class="input-group-text text-secondary"><i class="fa-regular fa-envelope"></i></span>
+                <input id="pCorreo" name="correo" type="email" class="form-control shadow-none" [(ngModel)]="formulario.correo">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label for="pRol" class="form-label text-primary small fw-bold mb-1">Rol</label>
+              <div class="input-group grupo-entrada-oscuro">
+                <span class="input-group-text text-secondary"><i class="fa-solid fa-lock"></i></span>
+                <input id="pRol" class="form-control shadow-none" [value]="datos.perfil().rol" disabled>
+              </div>
+              <span class="fs-7 text-secondary">El rol no se puede modificar.</span>
+            </div>
+          </div>
+
+          @if (errorDatos) {
+            <div class="text-danger small mt-3"><i class="fa-solid fa-triangle-exclamation me-1"></i> {{ errorDatos }}</div>
+          }
+
+          <div class="d-flex justify-content-end gap-2 mt-4">
+            <button type="button" class="btn btn-cyber-outline text-white px-4" (click)="cancelarEdicion()">Cancelar</button>
+            <button type="submit" class="btn btn-primary px-4"><i class="fa-solid fa-floppy-disk me-1"></i> Guardar cambios</button>
+          </div>
+        </form>
+      }
+    </div>
+
+    <!-- Cambiar contraseña -->
+    <div class="card cyber-stat-card rounded-4 p-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="fw-bold m-0 d-flex align-items-center gap-2">
+          <i class="fa-solid fa-key text-primary"></i> Cambiar contraseña
+        </h5>
+        <button type="button" class="btn btn-sm text-secondary" (click)="verClaves = !verClaves"
+                [attr.aria-label]="verClaves ? 'Ocultar contraseñas' : 'Mostrar contraseñas'">
+          <i class="fa-solid" [class.fa-eye]="!verClaves" [class.fa-eye-slash]="verClaves"></i>
+        </button>
+      </div>
+
+      <form (ngSubmit)="cambiarClave()" novalidate>
+        <div class="row g-3">
+          <div class="col-12">
+            <label for="cActual" class="form-label text-primary small fw-bold mb-1">Contraseña actual</label>
+            <div class="input-group grupo-entrada-oscuro">
+              <span class="input-group-text text-secondary"><i class="fa-solid fa-lock"></i></span>
+              <input id="cActual" name="actual" [type]="verClaves ? 'text' : 'password'" class="form-control shadow-none"
+                     placeholder="••••••••" autocomplete="current-password" [(ngModel)]="clave.actual">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="cNueva" class="form-label text-primary small fw-bold mb-1">Nueva contraseña</label>
+            <div class="input-group grupo-entrada-oscuro">
+              <span class="input-group-text text-secondary"><i class="fa-solid fa-lock"></i></span>
+              <input id="cNueva" name="nueva" [type]="verClaves ? 'text' : 'password'" class="form-control shadow-none"
+                     placeholder="••••••••" autocomplete="new-password"
+                     [(ngModel)]="clave.nueva" (ngModelChange)="verificarFuerza($event)">
+            </div>
+            <div class="strength">
+              <div class="strength-segment" [class.active]="fuerza >= 1"></div>
+              <div class="strength-segment" [class.active]="fuerza >= 2"></div>
+              <div class="strength-segment" [class.active]="fuerza >= 3"></div>
+              <div class="strength-segment" [class.active]="fuerza >= 4"></div>
+            </div>
+            <span class="text-secondary fs-7 mt-1 d-block">{{ textoFuerza }}</span>
+          </div>
+          <div class="col-md-6">
+            <label for="cConfirmar" class="form-label text-primary small fw-bold mb-1">Confirmar nueva contraseña</label>
+            <div class="input-group grupo-entrada-oscuro">
+              <span class="input-group-text text-secondary"><i class="fa-solid fa-lock"></i></span>
+              <input id="cConfirmar" name="confirmar" [type]="verClaves ? 'text' : 'password'" class="form-control shadow-none"
+                     placeholder="••••••••" autocomplete="new-password" [(ngModel)]="clave.confirmar">
+            </div>
+          </div>
+        </div>
+
+        @if (errorClave) {
+          <div class="text-danger small mt-3"><i class="fa-solid fa-triangle-exclamation me-1"></i> {{ errorClave }}</div>
+        }
+
+        <div class="d-flex justify-content-end mt-4">
+          <button type="submit" class="btn btn-primary px-4"><i class="fa-solid fa-key me-1"></i> Actualizar contraseña</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>

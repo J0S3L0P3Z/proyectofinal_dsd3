@@ -1,0 +1,67 @@
+<div class="mb-4">
+  <h3 class="fw-bold text-white mb-1 d-flex align-items-center gap-2">
+    <i class="fa-solid fa-file-pdf text-primary"></i> Reportes PDF
+  </h3>
+  <p class="text-secondary small mb-0">
+    Cada scraping exitoso genera su propio reporte, que también se envía a tu correo electrónico.
+  </p>
+</div>
+
+<div class="aviso-correo rounded-4 p-3 mb-4 d-flex align-items-center gap-3">
+  <i class="fa-solid fa-envelope-circle-check fs-4 zu-tono-correo"></i>
+  <span class="small text-secondary">
+    Los reportes se envían a <span class="text-white fw-semibold">{{ datos.perfil().correo }}</span>.
+    Los análisis fallidos no generan reporte.
+  </span>
+</div>
+
+<div class="row g-4">
+  @for (a of conReporte(); track a.id) {
+    <div class="col-md-6 col-xxl-4">
+      <div class="card cyber-stat-card interactiva rounded-4 p-4 h-100">
+        <div class="d-flex align-items-start gap-3 mb-3">
+          <div class="zu-icono-stat zu-fondo-error"><i class="fa-solid fa-file-pdf"></i></div>
+          <div class="zu-min-0">
+            <span class="d-block fw-bold text-white text-truncate">{{ a.reporte!.nombreArchivo }}</span>
+            <span class="fs-7 text-secondary">Análisis #{{ a.id }} · {{ a.reporte!.tamano }}</span>
+          </div>
+        </div>
+
+        <ul class="list-unstyled small d-flex flex-column gap-2 mb-3">
+          <li class="d-flex gap-2 zu-min-0">
+            <i class="fa-solid fa-globe text-primary mt-1"></i>
+            <span class="text-secondary text-truncate" [title]="a.url">{{ a.url }}</span>
+          </li>
+          <li class="d-flex gap-2">
+            <i class="fa-solid fa-calendar text-primary mt-1"></i>
+            <span class="text-secondary">{{ a.fecha | date: 'dd/MM/yyyy - HH:mm' }}</span>
+          </li>
+        </ul>
+
+        <div class="d-flex flex-wrap gap-2 mb-4">
+          <span class="zu-badge exito"><i class="fa-solid fa-circle-check"></i> Disponible</span>
+          @if (a.reporte!.enviadoCorreo) {
+            <span class="zu-badge info"><i class="fa-solid fa-envelope"></i> Enviado al correo</span>
+          }
+        </div>
+
+        <div class="d-flex gap-2 mt-auto">
+          <button class="btn btn-sm cyber-pdf-btn flex-grow-1 py-2" (click)="datos.descargarReporte(a)">
+            <i class="fa-solid fa-download me-1"></i> Descargar PDF
+          </button>
+          <a [routerLink]="['../resultados', a.id]" class="btn btn-sm btn-cyber-outline text-white py-2" title="Ver análisis">
+            <i class="fa-solid fa-eye text-primary"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  } @empty {
+    <div class="col-12">
+      <div class="card cyber-stat-card rounded-4 p-5 text-center">
+        <div class="zu-icono-stat zu-fondo-primario mx-auto mb-3"><i class="fa-solid fa-file-circle-question"></i></div>
+        <p class="text-secondary small">Todavía no tienes reportes. Realiza tu primer scraping.</p>
+        <div><a routerLink="../scraping" class="btn btn-primary">Nuevo scraping</a></div>
+      </div>
+    </div>
+  }
+</div>

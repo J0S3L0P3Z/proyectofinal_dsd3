@@ -1,0 +1,158 @@
+/* Apartado USUARIO - componentes visuales compartidos (tarjetas, insignias, entradas, tablas). */
+
+/* ---------- Avatar ---------- */
+.zona-usuario .zu-avatar {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #0052cc, #00c3ff);
+  box-shadow: 0 0 10px rgba(0, 195, 255, 0.35);
+}
+
+.zona-usuario .zu-avatar-sm { width: 38px; height: 38px; font-size: 0.8rem; }
+.zona-usuario .zu-avatar-lg { width: 96px; height: 96px; font-size: 2rem; }
+
+/* ---------- Botones y tarjetas (iguales al panel existente) ---------- */
+.zona-usuario .btn-cyber-outline {
+  background-color: rgba(9, 16, 32, 0.85);
+  border: 1px solid rgba(0, 117, 255, 0.3);
+  border-radius: 10px;
+  padding: 8px 16px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.zona-usuario .btn-cyber-outline:hover {
+  border-color: #00c3ff;
+  box-shadow: 0 0 10px rgba(0, 195, 255, 0.3);
+}
+
+.zona-usuario .btn-primary {
+  background-color: #1d72fe;
+  border-color: #1d72fe;
+  transition: all 0.2s ease;
+}
+
+.zona-usuario .btn-primary:hover {
+  background-color: #0b5ed7;
+  border-color: #0b5ed7;
+  transform: translateY(-1px);
+}
+
+.zona-usuario .cyber-stat-card {
+  background-color: rgba(9, 16, 32, 0.85);
+  border: 1px solid rgba(108, 117, 125, 0.25);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  color: #fff;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.zona-usuario .cyber-stat-card.interactiva:hover {
+  border-color: rgba(0, 195, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.zona-usuario .cyber-pdf-btn {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+  border: 0;
+  border-radius: 6px;
+  padding: 5px 10px;
+  transition: all 0.2s ease;
+}
+
+.zona-usuario .cyber-pdf-btn:hover {
+  background-color: rgba(239, 68, 68, 0.25);
+  color: #fff;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+}
+
+.zona-usuario .text-purple-neon { color: #a855f7 !important; }
+
+/* ---------- Entradas oscuras (igual que inicio de sesión) ---------- */
+.zona-usuario .grupo-entrada-oscuro .form-control,
+.zona-usuario .grupo-entrada-oscuro .input-group-text {
+  border-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(17, 24, 39, 0.7) !important;
+  color: #fff;
+}
+
+.zona-usuario .grupo-entrada-oscuro .form-control:focus {
+  box-shadow: none;
+  border-color: #1d72fe;
+}
+
+.zona-usuario .grupo-entrada-oscuro .form-control::placeholder { color: #6c757d; }
+.zona-usuario .grupo-entrada-oscuro .form-control:disabled { opacity: 0.6; }
+
+/* ---------- Insignias de estado ---------- */
+.zona-usuario .zu-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 50rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+
+.zona-usuario .zu-badge.exito { background: rgba(16, 185, 129, 0.15); color: #34d399; border-color: rgba(52, 211, 153, 0.25); }
+.zona-usuario .zu-badge.error { background: rgba(239, 68, 68, 0.15); color: #f87171; border-color: rgba(248, 113, 113, 0.25); }
+.zona-usuario .zu-badge.info { background: rgba(29, 114, 254, 0.12); color: #00c3ff; border-color: rgba(29, 114, 254, 0.25); }
+.zona-usuario .zu-badge.purpura { background: rgba(168, 85, 247, 0.1); color: #a855f7; border-color: rgba(168, 85, 247, 0.25); }
+
+.zona-usuario .zu-tono-exito { color: #34d399; }
+.zona-usuario .zu-tono-error { color: #f87171; }
+.zona-usuario .zu-tono-info { color: #00c3ff; }
+.zona-usuario .zu-tono-correo { color: #1d72fe; }
+
+/* ---------- Ícono de estadística ---------- */
+.zona-usuario .zu-icono-stat {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.zona-usuario .zu-fondo-primario { background: rgba(29, 114, 254, 0.15); color: #1d72fe; }
+.zona-usuario .zu-fondo-exito { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+.zona-usuario .zu-fondo-error { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+.zona-usuario .zu-fondo-cian { background: rgba(0, 195, 255, 0.12); color: #00c3ff; }
+
+/* ---------- Barra de progreso ---------- */
+.zona-usuario .zu-progreso {
+  height: 6px;
+  border-radius: 3px;
+  background-color: #1a2b4c;
+  overflow: hidden;
+}
+
+.zona-usuario .zu-progreso > span {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #0052cc, #00c3ff);
+  box-shadow: 0 0 8px rgba(0, 195, 255, 0.4);
+  transition: width 0.5s ease;
+}
+
+/* ---------- Tablas ---------- */
+.zona-usuario .zu-tabla { width: 100%; color: #fff; }
+.zona-usuario .zu-tabla th { color: #9ca3af; font-weight: 600; font-size: 0.8rem; padding: 0.9rem 0.75rem; border-bottom: 1px solid rgba(108, 117, 125, 0.25); white-space: nowrap; }
+.zona-usuario .zu-tabla td { padding: 0.9rem 0.75rem; border-bottom: 1px solid rgba(108, 117, 125, 0.1); font-size: 0.875rem; vertical-align: middle; }
+.zona-usuario .zu-tabla tr:last-child td { border-bottom: 0; }
+.zona-usuario .zu-tabla tbody tr:hover td { background-color: rgba(255, 255, 255, 0.02); }
+

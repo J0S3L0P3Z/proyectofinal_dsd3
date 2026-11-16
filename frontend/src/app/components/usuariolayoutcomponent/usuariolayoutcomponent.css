@@ -1,0 +1,174 @@
+/* =========================================================
+   Apartado USUARIO - estilos compartidos.
+   Todo va bajo .zona-usuario para no afectar otras secciones.
+   Paleta tomada del proyecto (inicio / panel administrador).
+   ========================================================= */
+
+.zona-usuario {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  display: flex;
+  color: #fff;
+}
+
+.zona-usuario .imagen-fondo-hero {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.zona-usuario .fs-7 { font-size: 0.75rem; }
+.zona-usuario .zu-min-0 { min-width: 0; }
+.zona-usuario .zu-borde { border-color: rgba(255, 255, 255, 0.08) !important; }
+
+/* ---------- Menú lateral (mismo estilo del drawer) ---------- */
+.zu-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #070c16;
+  border-right: 1.5px solid rgba(0, 117, 255, 0.3);
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.8);
+  z-index: 1045;
+}
+
+.zu-etiqueta-menu {
+  padding: 0 0.75rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6c757d;
+}
+
+.zu-enlace {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.6rem 1rem;
+  border-radius: 0.6rem;
+  color: #9ca3af;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.zu-enlace i { width: 18px; text-align: center; }
+.zu-enlace:hover { background-color: rgba(255, 255, 255, 0.03); color: #fff; }
+
+.zu-enlace.activo {
+  background: linear-gradient(90deg, #0052cc, #0075ff);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 0 12px rgba(0, 117, 255, 0.5);
+}
+
+.zu-fondo-menu {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1040;
+}
+
+@media (max-width: 991.98px) {
+  .zu-sidebar {
+    position: fixed;
+    left: 0;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  .zu-sidebar.abierto { transform: none; }
+}
+
+.zu-contenido { flex: 1; min-width: 0; }
+
+/* ---------- Notificaciones ---------- */
+.zu-contador {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 10px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 20px;
+}
+
+.zu-panel-avisos {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: min(360px, calc(100vw - 32px));
+  max-height: 420px;
+  overflow: auto;
+  background-color: #070c16;
+  border: 1px solid rgba(0, 117, 255, 0.3);
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  z-index: 1030;
+}
+
+.zu-aviso {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.zu-aviso.sin-leer { background-color: rgba(29, 114, 254, 0.08); }
+
+.zu-toasts {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1060;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: min(360px, calc(100vw - 2rem));
+}
+
+.zu-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  background-color: rgba(13, 18, 30, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left-width: 4px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(16px);
+}
+
+.zu-borde-exito { border-left-color: #34d399; }
+.zu-borde-error { border-left-color: #f87171; }
+.zu-borde-info { border-left-color: #00c3ff; }
+.zu-borde-correo { border-left-color: #1d72fe; }
+
+/* ---------- Modal ---------- */
+.zu-modal-fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 1055;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+}
+
+.zu-modal { width: 100%; max-width: 400px; }
