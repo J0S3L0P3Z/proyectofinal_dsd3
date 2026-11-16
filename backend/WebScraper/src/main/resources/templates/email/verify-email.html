@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Verifica tu correo</title></head>
+<body style="margin:0;padding:0;background:#f3f5f9;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#1d2433;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f3f5f9;padding:24px 0;">
+<tr><td align="center">
+  <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="width:100%;max-width:600px;background:#ffffff;border-radius:14px;overflow:hidden;">
+    <tr><td style="background:#0f2a4a;padding:26px 30px;">
+      <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8fb4e8;">Web Scraper IA</div>
+      <div style="font-size:22px;font-weight:700;color:#ffffff;margin-top:6px;">Verifica tu correo</div>
+    </td></tr>
+    <tr><td style="padding:26px 30px;font-size:15px;line-height:1.55;">
+      <p style="margin:0 0 14px;">Hola <b th:text="${name}">Ana</b>,</p>
+      <p style="margin:0 0 14px;">Gracias por crear tu cuenta en Web Scraper IA. Confirma que este correo es tuyo para empezar a usar la aplicación.</p>
+      <p style="text-align:center;margin:26px 0;">
+        <a th:href="${link}" style="background:#1f5fbf;color:#ffffff;text-decoration:none;font-weight:600;padding:12px 24px;border-radius:8px;display:inline-block;">Verificar mi correo</a>
+      </p>
+      <p style="font-size:13px;color:#56627a;margin:0 0 8px;">El enlace es válido por <span th:text="${validFor}">30 minutos</span> y solo se puede usar una vez.</p>
+      <p style="font-size:13px;color:#56627a;margin:0;">Si no creaste esta cuenta, ignora este mensaje.</p>
+    </td></tr>
+  </table>
+</td></tr>
+</table>
+</body>
+</html>

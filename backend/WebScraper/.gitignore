@@ -1,0 +1,14 @@
+.env
+*.env.local
+
+target/
+build/
+.idea/
+*.iml
+.vscode/
+.DS_Store
+*.log
+
+# Configuración con usuario y contraseña de la base: no se sube.
+# Para crearla: copiar src/main/resources/application.properties.example
+src/main/resources/application.properties

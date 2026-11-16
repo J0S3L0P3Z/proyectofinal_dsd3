@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Análisis listo</title></head>
+<body style="margin:0;padding:0;background:#f3f5f9;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#1d2433;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f3f5f9;padding:24px 0;">
+<tr><td align="center">
+  <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="width:100%;max-width:600px;background:#ffffff;border-radius:14px;overflow:hidden;">
+    <tr><td style="background:#0f2a4a;padding:26px 30px;">
+      <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8fb4e8;">Web Scraper IA</div>
+      <div style="font-size:22px;font-weight:700;color:#ffffff;margin-top:6px;" th:text="${r.hasWarnings()} ? 'Tu análisis está listo (con advertencias)' : 'Tu análisis está listo'">Tu análisis está listo</div>
+    </td></tr>
+    <tr><td style="padding:26px 30px;font-size:15px;line-height:1.55;">
+      <p style="margin:0 0 14px;">Hola <b th:text="${name}">Ana</b>,</p>
+      <p style="margin:0 0 14px;">Terminamos de analizar <a th:href="${url}" style="color:#1f5fbf;word-break:break-all;" th:text="${url}">https://ejemplo.com</a>.
+         Adjuntamos el reporte en PDF con el análisis de las tres IAs.</p>
+
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:16px 0;">
+        <tr>
+          <td style="background:#f3f6fb;border-radius:8px;padding:12px;text-align:center;width:33%;"><div style="font-size:22px;font-weight:700;color:#0f2a4a;" th:text="${r.imageCount()}">0</div><div style="font-size:11px;color:#56627a;text-transform:uppercase;">Imágenes</div></td>
+          <td width="8"></td>
+          <td style="background:#f3f6fb;border-radius:8px;padding:12px;text-align:center;width:33%;"><div style="font-size:22px;font-weight:700;color:#0f2a4a;" th:text="${r.okCount()} + '/' + ${r.analyses().size()}">3/3</div><div style="font-size:11px;color:#56627a;text-transform:uppercase;">IAs respondieron</div></td>
+          <td width="8"></td>
+          <td style="background:#f3f6fb;border-radius:8px;padding:12px;text-align:center;width:33%;"><div style="font-size:22px;font-weight:700;color:#0f2a4a;" th:text="${r.externalLinks() + r.internalLinks()}">0</div><div style="font-size:11px;color:#56627a;text-transform:uppercase;">Enlaces</div></td>
+        </tr>
+      </table>
+
+      <div th:if="${!r.aiSummary().isEmpty()}" style="background:#0f2a4a;color:#ffffff;padding:14px 16px;margin:10px 0 16px;border-radius:8px;">
+        <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#8fb4e8;font-weight:700;">Resumen final</div>
+        <div style="font-size:14px;margin-top:6px;line-height:1.5;" th:text="${r.aiSummary()}">Resumen</div>
+      </div>
+
+      <div th:each="a : ${r.analyses()}" th:if="${a.ok()}" style="border-left:4px solid #1f5fbf;background:#f7f9fc;padding:10px 14px;margin:10px 0;border-radius:4px;">
+        <div style="font-size:12px;font-weight:700;color:#1f5fbf;" th:text="${a.provider()}">IA</div>
+        <div style="font-size:14px;" th:text="${#strings.abbreviate(a.summary(), 260)}">Resumen</div>
+      </div>
+
+      <div th:if="${r.hasWarnings()}" style="background:#fff7e0;border-left:4px solid #f0b429;padding:10px 14px;margin:16px 0;border-radius:4px;font-size:14px;">
+        <b>Ten en cuenta:</b>
+        <ul style="margin:6px 0 0 18px;padding:0;"><li th:each="w : ${r.warnings()}" th:text="${w}">Advertencia</li></ul>
+      </div>
+
+      <p style="text-align:center;margin:26px 0 8px;">
+        <a th:href="${historyUrl}" style="background:#1f5fbf;color:#ffffff;text-decoration:none;font-weight:600;padding:12px 24px;border-radius:8px;display:inline-block;">Ver mi historial</a>
+      </p>
+    </td></tr>
+    <tr><td style="padding:16px 30px;background:#f7f9fc;font-size:12px;color:#7a8499;text-align:center;">
+      Correo automático de Web Scraper IA. El reporte también queda disponible en tu historial.
+    </td></tr>
+  </table>
+</td></tr>
+</table>
+</body>
+</html>

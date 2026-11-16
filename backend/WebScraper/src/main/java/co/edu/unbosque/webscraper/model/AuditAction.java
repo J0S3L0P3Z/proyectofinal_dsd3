@@ -1,0 +1,11 @@
+package co.edu.unbosque.webscraper.model;
+
+/**
+ * Acciones que se registran en la auditoría.
+ */
+public enum AuditAction {
+    REGISTER, EMAIL_VERIFIED, LOGIN_SUCCESS, LOGIN_FAILED, LOGOUT,
+    PASSWORD_RESET_REQUESTED, PASSWORD_RESET_COMPLETED,
+    SCRAPE_REQUESTED, SCRAPE_REJECTED, HISTORY_VIEWED, PDF_DOWNLOADED,
+    ADMIN_USER_UPDATED, ADMIN_REPORT_EXPORTED
+}
