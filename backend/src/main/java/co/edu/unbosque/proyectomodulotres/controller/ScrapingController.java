@@ -13,45 +13,58 @@ import co.edu.unbosque.proyectomodulotres.service.ScrapingService;
 @CrossOrigin(origins = "http://localhost:4200")
 public class ScrapingController {
 
-    private final ScrapingService scrapingService;
+	private final ScrapingService scrapingService;
 
-    public ScrapingController(ScrapingService scrapingService) {
-        this.scrapingService = scrapingService;
-    }
+	public ScrapingController(ScrapingService scrapingService) {
+		this.scrapingService = scrapingService;
+	}
 
-    @PostMapping
-    public ResponseEntity<ScrapingDTO> guardar(@RequestBody ScrapingDTO scraping) {
-        return ResponseEntity.ok(scrapingService.guardar(scraping));
-    }
+	// EJECUTAR SCRAPING
+	@PostMapping("/ejecutar")
+	public ResponseEntity<ScrapingDTO> realizarScraping(@RequestBody ScrapingDTO scraping) {
+		return ResponseEntity.ok(scrapingService.realizarScraping(scraping));
+	}
 
-    @GetMapping
-    public ResponseEntity<List<ScrapingDTO>> buscarTodos() {
-        return ResponseEntity.ok(scrapingService.buscarTodos());
-    }
+	// REGISTRAR
+	@PostMapping
+	public ResponseEntity<ScrapingDTO> guardar(@RequestBody ScrapingDTO scraping) {
+		return ResponseEntity.ok(scrapingService.guardar(scraping));
+	}
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ScrapingDTO> buscarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(scrapingService.buscarPorId(id));
-    }
+	// BUSCAR TODOS
+	@GetMapping
+	public ResponseEntity<List<ScrapingDTO>> buscarTodos() {
+		return ResponseEntity.ok(scrapingService.buscarTodos());
+	}
 
-    @GetMapping("/usuario/{idUsuario}")
-    public ResponseEntity<List<ScrapingDTO>> buscarPorUsuario(@PathVariable Long idUsuario) {
-        return ResponseEntity.ok(scrapingService.buscarPorUsuario(idUsuario));
-    }
+	// BUSCAR POR ID
+	@GetMapping("/{id}")
+	public ResponseEntity<ScrapingDTO> buscarPorId(@PathVariable Long id) {
+		return ResponseEntity.ok(scrapingService.buscarPorId(id));
+	}
 
-    @GetMapping("/estado/{estado}")
-    public ResponseEntity<List<ScrapingDTO>> buscarPorEstado(@PathVariable String estado) {
-        return ResponseEntity.ok(scrapingService.buscarPorEstado(estado));
-    }
+	// BUSCAR POR USUARIO
+	@GetMapping("/usuario/{idUsuario}")
+	public ResponseEntity<List<ScrapingDTO>> buscarPorUsuario(@PathVariable Long idUsuario) {
+		return ResponseEntity.ok(scrapingService.buscarPorUsuario(idUsuario));
+	}
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ScrapingDTO> actualizar(@PathVariable Long id, @RequestBody ScrapingDTO scraping) {
-        return ResponseEntity.ok(scrapingService.actualizar(id, scraping));
-    }
+	// BUSCAR POR ESTADO
+	@GetMapping("/estado/{estado}")
+	public ResponseEntity<List<ScrapingDTO>> buscarPorEstado(@PathVariable String estado) {
+		return ResponseEntity.ok(scrapingService.buscarPorEstado(estado));
+	}
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        scrapingService.eliminar(id);
-        return ResponseEntity.noContent().build();
-    }
+	// ACTUALIZAR
+	@PutMapping("/{id}")
+	public ResponseEntity<ScrapingDTO> actualizar(@PathVariable Long id, @RequestBody ScrapingDTO scraping) {
+		return ResponseEntity.ok(scrapingService.actualizar(id, scraping));
+	}
+
+	// ELIMINAR
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+		scrapingService.eliminar(id);
+		return ResponseEntity.noContent().build();
+	}
 }
