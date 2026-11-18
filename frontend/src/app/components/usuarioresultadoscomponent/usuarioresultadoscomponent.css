@@ -33,7 +33,6 @@
   color: #1d72fe;
 }
 
-/* Cada IA conserva el color que ya usa el panel del proyecto */
 .tarjeta-ia { border-top: 3px solid var(--acento) !important; }
 .tarjeta-ia.ia-1 { --acento: #1d72fe; --acento-fondo: rgba(29, 114, 254, 0.15); }
 .tarjeta-ia.ia-2 { --acento: #0dcaf0; --acento-fondo: rgba(13, 202, 240, 0.15); }
@@ -51,7 +50,10 @@
   border: 1px solid var(--acento-fondo);
 }
 
-.zu-progreso > .barra {
+progress.barra-ia::-webkit-progress-value {
   background: var(--acento);
-  box-shadow: 0 0 8px var(--acento-fondo);
+}
+
+progress.barra-ia::-moz-progress-bar {
+  background: var(--acento);
 }

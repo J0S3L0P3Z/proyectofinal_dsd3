@@ -1,5 +1,7 @@
-import { Component , OnInit, inject } from '@angular/core';
-import { UsuarioDatosService } from '../usuariolayoutcomponent/usuario-datos.service';
+import { Component, inject, signal } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { UsuarioDatosService } from '../../services/usuario-datos.service';
+import { SesionService } from '../../services/sesion.service';
 
 @Component({
   selector: 'app-navbarcomponent',
@@ -7,16 +9,45 @@ import { UsuarioDatosService } from '../usuariolayoutcomponent/usuario-datos.ser
   styleUrl: './navbarcomponent.css',
   templateUrl: './navbarcomponent.html',
 })
-export class Navbarcomponent implements OnInit {
+export class Navbarcomponent {
 
-  userRole: 'admin' | 'user' = 'admin';
+  datosUsuario = inject(UsuarioDatosService);
+  sesion = inject(SesionService);
+  private router = inject(Router);
 
-  // Datos del usuario (nombre y rol) para el navbar del usuario
-  readonly datosUsuario = inject(UsuarioDatosService);
+  // Qué navbar se muestra: la del usuario, la del admin o la pública (login / crear cuenta)
+  seccion = signal<'usuario' | 'admin' | 'publica'>('publica');
 
-  constructor() { }
+  opcionesAdmin = [
+    { ruta: 'inicio', icono: 'fa-house', texto: 'Inicio' },
+    { ruta: 'scraping', icono: 'fa-magnifying-glass-location', texto: 'Scraping' },
+    { ruta: 'historial', icono: 'fa-clock-rotate-left', texto: 'Historial' },
+    { ruta: 'estadisticas', icono: 'fa-chart-line', texto: 'Estadísticas' },
+    { ruta: 'usuarios', icono: 'fa-users-gear', texto: 'Usuarios' },
+  ];
 
-  ngOnInit(): void {
+  constructor() {
+    this.revisarRuta(this.router.url);
 
+    this.router.events.subscribe(evento => {
+      if (evento instanceof NavigationEnd) {
+        this.revisarRuta(evento.urlAfterRedirects);
+      }
+    });
+  }
+
+  revisarRuta(url: string) {
+    if (url.startsWith('/usuario')) {
+      this.seccion.set('usuario');
+    } else if (url.startsWith('/admin')) {
+      this.seccion.set('admin');
+    } else {
+      this.seccion.set('publica');
+    }
+  }
+
+  cerrarSesion() {
+    this.sesion.cerrarSesion();
+    this.router.navigate(['/inicio']);
   }
 }

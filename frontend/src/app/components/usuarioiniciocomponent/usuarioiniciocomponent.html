@@ -1,12 +1,10 @@
-<!-- Bienvenida -->
 <div class="card cyber-stat-card rounded-4 p-4 p-md-5 mb-4 bienvenida animate__animated animate__fadeIn">
   <div class="row align-items-center g-4">
     <div class="col-lg-8">
       <span class="zu-badge info mb-3"><i class="fa-solid fa-calendar-day"></i> {{ hoy | date: 'dd/MM/yyyy' }}</span>
-      <h2 class="fw-bold text-white mb-2">Hola, <span class="text-primary">{{ primerNombre() }}</span> 👋</h2>
+      <h2 class="fw-bold text-white mb-2">Hola, <span class="text-primary">{{ primerNombre() }}</span></h2>
       <p class="text-secondary mb-4">
-        Bienvenido a tu espacio de trabajo. Analiza cualquier página web y compara lo que encuentran nuestras
-        tres inteligencias artificiales.
+        Desde aquí puedes analizar una página nueva o revisar lo que ya has buscado.
       </p>
       <div class="d-flex flex-wrap gap-2">
         <a routerLink="../scraping" class="btn btn-primary d-flex align-items-center gap-2 px-4">
@@ -23,7 +21,6 @@
   </div>
 </div>
 
-<!-- Resumen -->
 <div class="row g-3 g-md-4 mb-4">
   <div class="col-6 col-xl-3">
     <div class="card cyber-stat-card interactiva rounded-4 p-3 p-md-4 h-100">
@@ -56,7 +53,6 @@
 </div>
 
 <div class="row g-4">
-  <!-- Actividad reciente -->
   <div class="col-xl-8">
     <div class="card cyber-stat-card rounded-4 p-4 h-100">
       <div class="d-flex justify-content-between align-items-center mb-3">
@@ -89,7 +85,6 @@
     </div>
   </div>
 
-  <!-- Tasa de éxito y acceso rápido -->
   <div class="col-xl-4">
     <div class="card cyber-stat-card rounded-4 p-4 mb-4">
       <h6 class="fw-bold mb-3 d-flex align-items-center gap-2">
@@ -99,8 +94,9 @@
         <span class="display-6 fw-bold">{{ tasaExito() }}%</span>
         <span class="text-secondary small mb-2">de tus análisis</span>
       </div>
-      <div class="zu-progreso mb-2"><span [style.width.%]="tasaExito()"></span></div>
-      <span class="fs-7 text-secondary">{{ datos.totalExitosos() }} exitosos · {{ datos.totalFallidos() }} fallidos</span>
+      <progress class="zu-progreso mb-2" max="100" [value]="tasaExito()"></progress>
+      <span class="fs-7 text-secondary">{{ datos.totalExitosos() }} exitosos · {{ datos.totalFallidos() }}
+        fallidos</span>
     </div>
 
     <a routerLink="../scraping" class="card cyber-stat-card interactiva rounded-4 p-4 text-decoration-none acceso">

@@ -16,7 +16,6 @@
   word-break: break-word;
 }
 
-/* Medidor de fuerza: mismo estilo que el registro de cuenta */
 .strength {
   display: flex;
   gap: 6px;

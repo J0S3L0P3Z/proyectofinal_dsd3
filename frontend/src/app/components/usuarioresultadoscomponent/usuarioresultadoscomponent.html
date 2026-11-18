@@ -1,6 +1,5 @@
 @if (analisis; as a) {
 
-  <!-- Cabecera -->
   <div class="card cyber-stat-card rounded-4 p-4 mb-4">
     <div class="d-flex flex-column flex-lg-row justify-content-between gap-3">
       <div class="zu-min-0">
@@ -11,7 +10,8 @@
           <i class="fa-solid fa-chart-bar text-primary"></i> Resultados del análisis
           <span class="fs-7 text-secondary fw-normal">#{{ a.id }}</span>
         </h4>
-        <a [href]="a.url" target="_blank" rel="noopener noreferrer" class="url d-inline-flex align-items-center gap-2 small">
+        <a [href]="a.url" target="_blank" rel="noopener noreferrer"
+           class="url d-inline-flex align-items-center gap-2 small">
           <i class="fa-solid fa-globe"></i> <span class="text-truncate">{{ a.url }}</span>
           <i class="fa-solid fa-arrow-up-right-from-square fs-7"></i>
         </a>
@@ -44,11 +44,11 @@
   </div>
 
   @if (a.estado === 'fallido') {
-    <!-- Análisis fallido -->
     <div class="card cyber-stat-card rounded-4 p-4 p-md-5 text-center">
       <div class="zu-icono-stat zu-fondo-error mx-auto mb-3"><i class="fa-solid fa-triangle-exclamation"></i></div>
       <h5 class="fw-bold text-white">Este análisis no se completó</h5>
-      <p class="text-secondary small mb-1">No se pudo extraer la información de la página, por eso no hay resultados ni reporte PDF.</p>
+      <p class="text-secondary small mb-1">No se pudo extraer la información de la página, por eso no hay resultados ni
+        reporte PDF.</p>
       @if (a.motivoFallo) {
         <p class="small zu-tono-error mb-4"><strong>Motivo:</strong> {{ a.motivoFallo }}</p>
       }
@@ -60,30 +60,32 @@
     </div>
   } @else {
 
-    <!-- Datos clave -->
     <div class="row g-3 g-md-4 mb-4">
       <div class="col-sm-4">
         <div class="card cyber-stat-card rounded-4 p-3 h-100 d-flex flex-row align-items-center gap-3">
           <div class="zu-icono-stat zu-fondo-cian"><i class="fa-solid fa-image"></i></div>
-          <div><span class="h4 fw-bold d-block mb-0">{{ a.imagenes }}</span><span class="fs-7 text-secondary">Imágenes encontradas</span></div>
+          <div><span class="h4 fw-bold d-block mb-0">{{ a.imagenes }}</span><span class="fs-7 text-secondary">Imágenes encontradas</span>
+          </div>
         </div>
       </div>
       <div class="col-sm-4">
         <div class="card cyber-stat-card rounded-4 p-3 h-100 d-flex flex-row align-items-center gap-3">
           <div class="zu-icono-stat zu-fondo-primario"><i class="fa-solid fa-users"></i></div>
-          <div><span class="h4 fw-bold d-block mb-0">{{ a.personas.length }}</span><span class="fs-7 text-secondary">Personas identificadas</span></div>
+          <div><span class="h4 fw-bold d-block mb-0">{{ a.personas.length }}</span><span class="fs-7 text-secondary">Personas identificadas</span>
+          </div>
         </div>
       </div>
       <div class="col-sm-4">
         <div class="card cyber-stat-card rounded-4 p-3 h-100 d-flex flex-row align-items-center gap-3">
           <div class="zu-icono-stat zu-fondo-exito"><i class="fa-solid fa-code"></i></div>
-          <div class="zu-min-0"><span class="h6 fw-bold d-block mb-0 text-truncate">{{ a.tecnologias[0] || 'No identificado' }}</span><span class="fs-7 text-secondary">Lenguaje / framework probable</span></div>
+          <div class="zu-min-0"><span
+            class="h6 fw-bold d-block mb-0 text-truncate">{{ a.tecnologias[0] || 'No identificado' }}</span><span
+            class="fs-7 text-secondary">Lenguaje / framework probable</span></div>
         </div>
       </div>
     </div>
 
     <div class="row g-4 mb-4">
-      <!-- Descripción y tema -->
       <div class="col-lg-7">
         <div class="card cyber-stat-card rounded-4 p-4 h-100">
           <h6 class="titulo"><i class="fa-solid fa-align-left text-primary"></i> Descripción general</h6>
@@ -95,13 +97,14 @@
           <h6 class="titulo"><i class="fa-solid fa-lightbulb text-primary"></i> Información relevante</h6>
           <ul class="list-unstyled mb-0 d-flex flex-column gap-2">
             @for (dato of a.informacionRelevante; track dato) {
-              <li class="small text-secondary d-flex gap-2"><i class="fa-solid fa-angle-right text-primary mt-1"></i> {{ dato }}</li>
+              <li class="small text-secondary d-flex gap-2"><i
+                class="fa-solid fa-angle-right text-primary mt-1"></i> {{ dato }}
+              </li>
             }
           </ul>
         </div>
       </div>
 
-      <!-- Personas y tecnologías -->
       <div class="col-lg-5">
         <div class="card cyber-stat-card rounded-4 p-4 mb-4">
           <h6 class="titulo"><i class="fa-solid fa-users text-primary"></i> Personas identificadas</h6>
@@ -126,17 +129,16 @@
       </div>
     </div>
 
-    <!-- Respuestas de las tres IA -->
     <h5 class="fw-bold text-white mb-3 d-flex align-items-center gap-2">
       <i class="fa-solid fa-robot text-primary"></i> Respuestas de las inteligencias artificiales
     </h5>
     <div class="row g-4 mb-4">
       @for (ia of a.respuestasIA; track ia.numero) {
         <div class="col-lg-4" [class.col-md-6]="ia.numero < 3">
-          <div class="card cyber-stat-card interactiva rounded-4 p-4 h-100 tarjeta-ia {{ estiloIA[ia.numero].clase }}">
+          <div class="card cyber-stat-card interactiva rounded-4 p-4 h-100 tarjeta-ia ia-{{ ia.numero }}">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <span class="d-flex align-items-center gap-2 fw-bold text-white">
-                <i class="fa-solid {{ estiloIA[ia.numero].icono }} acento fs-5"></i> IA {{ ia.numero }}
+                <i class="fa-solid {{ iconoIA(ia.numero) }} acento fs-5"></i> IA {{ ia.numero }}
               </span>
               <span class="etiqueta">{{ ia.enfoque }}</span>
             </div>
@@ -150,14 +152,13 @@
               <div class="d-flex justify-content-between fs-7 text-secondary mb-1">
                 <span>Nivel de confianza</span><span class="acento fw-semibold">{{ ia.confianza }}%</span>
               </div>
-              <div class="zu-progreso"><span class="barra" [style.width.%]="ia.confianza"></span></div>
+              <progress class="zu-progreso barra-ia" max="100" [value]="ia.confianza"></progress>
             </div>
           </div>
         </div>
       }
     </div>
 
-    <!-- Reporte PDF -->
     @if (a.reporte; as r) {
       <div class="card cyber-stat-card rounded-4 p-4">
         <div class="d-flex flex-column flex-md-row align-items-md-center gap-3">
@@ -180,7 +181,6 @@
   }
 
 } @else {
-  <!-- No encontrado (o no pertenece al usuario) -->
   <div class="card cyber-stat-card rounded-4 p-5 text-center">
     <div class="zu-icono-stat zu-fondo-primario mx-auto mb-3"><i class="fa-solid fa-magnifying-glass"></i></div>
     <h5 class="fw-bold text-white">Análisis no encontrado</h5>
