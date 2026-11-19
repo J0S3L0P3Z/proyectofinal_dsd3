@@ -1,0 +1,145 @@
+.seccion-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 100vh;
+  color: #fff;
+}
+
+.imagen-fondo-hero {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.fs-7 {
+  font-size: 0.75rem;
+}
+
+.cyber-stat-card {
+  background-color: rgba(9, 16, 32, 0.85);
+  border: 1px solid rgba(108, 117, 125, 0.25);
+  backdrop-filter: blur(12px);
+  color: #fff;
+}
+
+/* Botones */
+.btn-primary {
+  background-color: #1d72fe;
+  border-color: #1d72fe;
+}
+
+.btn-primary:hover {
+  background-color: #0052cc;
+  box-shadow: 0 0 12px rgba(0, 117, 255, 0.5);
+}
+
+.btn-cyber-outline {
+  background-color: rgba(9, 16, 32, 0.85);
+  border: 1px solid rgba(0, 117, 255, 0.3);
+}
+
+.btn-cyber-outline:hover {
+  border-color: #00c3ff;
+}
+
+/* Campos del formulario */
+.grupo-entrada-oscuro .form-control,
+.grupo-entrada-oscuro .input-group-text {
+  background-color: rgba(17, 24, 39, 0.7);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.grupo-entrada-oscuro .form-control:focus {
+  border-color: #1d72fe;
+}
+
+.grupo-entrada-oscuro .form-control:disabled {
+  opacity: 0.6;
+}
+
+/* Foto de perfil */
+.foto-perfil {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #a855f7;
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+}
+
+/* Insignias */
+.za-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 50rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.za-badge.exito {
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.15);
+}
+
+.za-badge.admin {
+  color: #c084fc;
+  background: rgba(168, 85, 247, 0.12);
+}
+
+.za-tono-exito {
+  color: #34d399;
+}
+
+.za-tono-error {
+  color: #f87171;
+}
+
+.za-borde {
+  border-color: rgba(108, 117, 125, 0.25) !important;
+}
+
+/* Datos (cuando no se está editando) */
+.dato-etiqueta {
+  display: block;
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin-bottom: 0.2rem;
+}
+
+.dato-valor {
+  display: block;
+  padding: 0.6rem 0.9rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  background-color: rgba(17, 24, 39, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  word-break: break-word;
+}
+
+/* Barra de fuerza de la contraseña */
+.strength {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.strength-segment {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background-color: #1a2b4c;
+  transition: background-color 0.3s;
+}
+
+.strength-segment.active {
+  background-color: #00c3ff;
+}

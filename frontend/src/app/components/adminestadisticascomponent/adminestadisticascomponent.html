@@ -1,0 +1,128 @@
+<section class="seccion-hero container-fluid px-4 py-4">
+
+  <img
+    src="/imagenes/fondoadmin.png"
+    class="imagen-fondo-hero"
+    alt="Fondo del administrador"
+  >
+
+  <!-- Encabezado -->
+  <div class="mb-4 animate__animated animate__fadeInDown">
+    <h2 class="fw-bold d-flex align-items-center gap-2 mb-1">
+      <i class="fa-solid fa-chart-line text-primary"></i> Estadísticas
+    </h2>
+    <p class="text-secondary small mb-0">Las personas que han hecho los scrapings los que se han registrado los veras
+      todos. </p>
+  </div>
+
+  <!-- Tarjetas de números -->
+  <div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-3 animate__animated animate__zoomIn ">
+      <div class="card cyber-stat-card interactiva rounded-4 p-4 h-100">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <span class="za-icono">
+            <i class="fa-solid fa-users"></i>
+          </span>
+
+        </div>
+        <span class="d-block display-6 fw-bold">{{ sesion.cuentas.length }}</span>
+        <span class="text-secondary small">Cuentas registradas</span>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3 animate__animated animate__zoomIn retraso-1">
+      <div class="card cyber-stat-card interactiva rounded-4 p-4 h-100">
+        <div class="mb-3"><span class="za-icono morado"><i class="fa-solid fa-user-shield"></i></span></div>
+        <span class="d-block display-6 fw-bold">{{ admins.length }}</span>
+        <span class="text-secondary small">Administradores</span>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3 animate__animated animate__zoomIn retraso-2">
+      <div class="card cyber-stat-card interactiva rounded-4 p-4 h-100">
+        <div class="mb-3"><span class="za-icono"><i class="fa-solid fa-user"></i></span></div>
+        <span class="d-block display-6 fw-bold">{{ usuarios.length }}</span>
+        <span class="text-secondary small">Usuarios</span>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3 animate__animated animate__zoomIn retraso-3">
+      <div class="card cyber-stat-card interactiva rounded-4 p-4 h-100">
+        <div class="mb-3"><span class="za-icono verde"><i class="fa-solid fa-spider"></i></span></div>
+        <span class="d-block display-6 fw-bold">{{ totalScrapings }}</span>
+        <span class="text-secondary small">Scrapings realizados</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Barra -->
+  <div class="row g-3 mb-4">
+    <div class="animate__animated animate__fadeInLeft">
+      <div class="card cyber-stat-card interactiva rounded-4 p-4 ">
+        <h6 class="fw-bold mb-3">
+
+          <i class="fa-solid fa-scale-balanced text-primary me-2"></i>
+          Admins vs usuarios</h6>
+
+
+        <div class="d-flex justify-content-between small mb-1">
+          <span class="za-tono-admin">Admins {{ porcentajeAdmins }}%</span>
+          <span class="text-info">Usuarios {{ 100 - porcentajeAdmins }}%</span>
+        </div>
+        <progress class="za-barra" max="100" [value]="porcentajeAdmins"></progress>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Listas de admins y usuarios -->
+  <div class="row g-3">
+    <div class="col-lg-6 animate__animated animate__fadeInUp">
+      <div class="card cyber-stat-card rounded-4 p-4 h-100">
+        <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+          <i class="fa-solid fa-user-shield za-tono-admin"></i> Administradores
+          <span class="za-badge admin ms-auto">{{ admins.length }}</span>
+        </h5>
+        <ul class="list-unstyled mb-0">
+          @for (c of admins; track c.correo) {
+            <li class="d-flex align-items-center gap-3 py-2 border-bottom za-borde">
+              <img src="/imagenes/fotoperfildefault.png" class="foto-perfil admin" alt="Foto de perfil">
+              <div class="overflow-hidden">
+                <span class="d-block fw-semibold small text-truncate">{{ c.nombreCompleto }}</span>
+                <span class="d-block fs-7 text-secondary text-truncate">{{ c.correo }}</span>
+              </div>
+              <span class="fs-7 text-secondary ms-auto text-nowrap">{{ c.ciudad }}</span>
+            </li>
+          } @empty {
+            <li class="text-secondary small">No hay administradores.</li>
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-lg-6 animate__animated animate__fadeInUp retraso-1">
+      <div class="card cyber-stat-card rounded-4 p-4 h-100">
+        <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+          <i class="fa-solid fa-user text-info"></i> Usuarios
+          <span class="za-badge info ms-auto">{{ usuarios.length }}</span>
+        </h5>
+        <ul class="list-unstyled mb-0">
+          @for (c of usuarios; track c.correo) {
+            <li class="d-flex align-items-center gap-3 py-2 border-bottom za-borde">
+              <img src="/imagenes/fotoperfildefault.png" class="foto-perfil" alt="Foto de perfil">
+              <div class="overflow-hidden">
+                <span class="d-block fw-semibold small text-truncate">{{ c.nombreCompleto }}</span>
+                <span class="d-block fs-7 text-secondary text-truncate">{{ c.correo }}</span>
+              </div>
+              <span class="fs-7 text-secondary ms-auto text-nowrap">{{ c.ciudad }}</span>
+            </li>
+          } @empty {
+            <li class="text-secondary small">No hay usuarios.</li>
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</section>

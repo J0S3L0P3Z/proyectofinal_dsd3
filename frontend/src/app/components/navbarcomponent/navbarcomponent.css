@@ -1,5 +1,17 @@
-.navbar{
- background-color: #070c16;
+.navbar {
+  background-color: #070c16;
 }
 
+.fs-7 {
+  font-size: 0.75rem;
+}
 
+.nav-link {
+  color: #9ca3af;
+}
+
+.nav-link.active,
+.cyber-nav-hover:hover {
+  color: #fff;
+  background-color: rgba(29, 114, 254, 0.15);
+}

@@ -20,81 +20,89 @@
 
           <!-- Descripción -->
           <p class="text-light lead mb-5 fs-6">
-            Analiza cualquier URL, detecta amenazas y descubre qué hay detrás de cada enlace en segundos.
+            Pega la URL de una página y tres IAs te dicen de qué trata, quiénes aparecen y con qué está hecha.
           </p>
 
-          <!-- Decorativos  -->
+          <!-- Lo que ofrece la página -->
           <div class="row g-4 border-top border-secondary border-opacity-25 pt-4">
             <div class="col-4">
-              <div class="h3 fw-bold mb-1 text-white">2.4M+</div>
-              <p class="text-secondary small mb-0">URLs analizadas</p>
+              <div class="h3 fw-bold mb-1 text-white">3 IAs</div>
+              <p class="text-secondary small mb-0">Revisan cada página</p>
             </div>
             <div class="col-4">
-              <div class="h3 fw-bold mb-1 text-white">99.9%</div>
-              <p class="text-secondary small mb-0">Precisión</p>
+              <div class="h3 fw-bold mb-1 text-white">PDF</div>
+              <p class="text-secondary small mb-0">Reporte a tu correo</p>
             </div>
             <div class="col-4">
-              <div class="h3 fw-bold mb-1 text-white">< 3s</div>
-              <p class="text-secondary small mb-0">Respuesta</p>
+              <div class="h3 fw-bold mb-1 text-white">Historial</div>
+              <p class="text-secondary small mb-0">De tus análisis</p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Columna de la derecha del gormulario -->
+      <!-- Columna de la derecha del formulario -->
       <div class="col-lg-5 offset-lg-1">
         <div class="card tarjeta-login border-secondary border-opacity-25 rounded-4 p-4 p-sm-5">
           <div class="card-body p-0">
             <h3 class="text-primary h4 fw-bold mb-1">Bienvenido de nuevo</h3>
             <p class="text-secondary small mb-4">Ingresa tus datos para continuar.</p>
 
-            <form>
-
+            <form (ngSubmit)="iniciarSesion()" novalidate>
 
               <!-- Usuario -->
-              <div class="input-group mb-3">
+              <div class="mb-3">
                 <label for="email" class="form-label text-primary h6 fw-bold mb-1">Correo electrónico</label>
                 <div class="input-group grupo-entrada-oscuro">
-
-              <span class="input-group-text bg-transparent border-end-0 text-secondary" id="basic-addon1">
-
-                <i class="fa-regular fa-envelope"></i>
-              </span>
-                  <input type="email" class="form-control bg-transparent  text-white" id="email"
-                         placeholder="Eje: julioesteban@correo" aria-label="Eje:julioesteban@correo" required>
+                  <span class="input-group-text bg-transparent border-end-0 text-secondary">
+                    <i class="fa-regular fa-envelope"></i>
+                  </span>
+                  <input type="email" class="form-control bg-transparent text-white" id="email" name="correo"
+                         placeholder="Eje: julioesteban@correo.com" autocomplete="email"
+                         [(ngModel)]="correo" (ngModelChange)="error = ''">
                 </div>
               </div>
-
 
               <!-- Contraseña -->
               <div class="mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                   <label for="password" class="form-label text-primary h6 fw-bold mb-1">Contraseña</label>
-                  <a routerLink="crearcuentacomponent" class="text-primary text-decoration-none small">¿Olvidaste tu contraseña?</a>
+                  <button type="button" class="btn btn-link p-0 text-primary text-decoration-none small" (click)="olvideClave()">
+                    ¿Olvidaste tu contraseña?
+                  </button>
                 </div>
                 <div class="input-group grupo-entrada-oscuro">
-                      <span class="input-group-text bg-transparent border-end-0 text-secondary" id="basic-addon2">
-                        <i class="fa-solid fa-lock"></i>
-                       </span>
-                  <input type="password" class="form-control bg-transparent text-white" id="password"
-                         placeholder="••••••••" required>
+                  <span class="input-group-text bg-transparent border-end-0 text-secondary">
+                    <i class="fa-solid fa-lock"></i>
+                  </span>
+                  <input [type]="verClave ? 'text' : 'password'" class="form-control bg-transparent text-white" id="password"
+                         name="clave" placeholder="••••••••" autocomplete="current-password"
+                         [(ngModel)]="clave" (ngModelChange)="error = ''">
+                  <button type="button" class="input-group-text bg-transparent text-secondary" (click)="verClave = !verClave"
+                          [title]="verClave ? 'Ocultar contraseña' : 'Ver contraseña'">
+                    <i class="fa-solid" [class.fa-eye]="!verClave" [class.fa-eye-slash]="verClave"></i>
+                  </button>
                 </div>
               </div>
 
+              @if (error) {
+                <div class="text-danger small mb-3"><i class="fa-solid fa-triangle-exclamation me-1"></i> {{ error }}</div>
+              }
+              @if (aviso) {
+                <div class="text-info small mb-3"><i class="fa-solid fa-circle-info me-1"></i> {{ aviso }}</div>
+              }
+
               <!-- Botón de inicio de Sesión -->
               <button type="submit"
-                      class="btn btn-primary w-100 py-2.5 fw-semibold d-flex align-items-center justify-content-center gap-2 mb-4">
-                <a routerLink="/inicioadmin" class="text-white text-decoration-none fw-semibold ms-1">Iniciar sesión </a>
-                <i class="bi bi-arrow-right"></i>
+                      class="btn btn-primary w-100 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2 mb-4">
+                Iniciar sesión
+                <i class="fa-solid fa-arrow-right"></i>
               </button>
 
-              <!-- Link del egistro -->
+              <!-- Link del registro -->
               <div class="text-center small">
                 <span class="text-secondary">¿No tienes una cuenta?</span>
                 <a routerLink="/crearcuentacomponent" class="text-white text-decoration-none fw-semibold ms-1">Crear cuenta</a>
-
-
-
               </div>
             </form>
           </div>

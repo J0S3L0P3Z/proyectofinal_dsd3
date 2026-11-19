@@ -16,71 +16,78 @@
         <div class="card tarjeta-login border-secondary border-opacity-25 rounded-4 p-4 p-sm-5">
 
           <div class="card-body p-0">
-            <h3 class="text-primary h4 fw-bold mb-1">Bienvenido de nuevo</h3>
+            <h3 class="text-primary h4 fw-bold mb-1">Crea tu cuenta</h3>
             <p class="text-secondary small mb-4">Ingresa tus datos para que tengas una cuenta con nosotros.</p>
 
-            <form>
+            <form (ngSubmit)="crearCuenta()" novalidate>
 
+              <!-- Nombre completo -->
+              <div class="mb-3">
+                <label for="nombreCompleto" class="form-label text-primary h6 fw-bold mb-1">Nombre completo</label>
+                <div class="input-group grupo-entrada-oscuro">
+                  <span class="input-group-text bg-transparent text-secondary">
+                    <i class="fa-solid fa-id-card"></i>
+                  </span>
+                  <input type="text" class="form-control bg-transparent text-white" id="nombreCompleto" name="nombreCompleto"
+                         placeholder="Eje: Julio Esteban Hernández" autocomplete="name"
+                         [(ngModel)]="nombreCompleto" (ngModelChange)="error = ''">
+                </div>
+              </div>
 
               <!-- Usuario -->
-              <div class="input-group mb-3">
-                <label for="email" class="form-label text-primary h6 fw-bold mb-1">Nombre de Usuario:</label>
+              <div class="mb-3">
+                <label for="nombreUsuario" class="form-label text-primary h6 fw-bold mb-1">Nombre de usuario</label>
                 <div class="input-group grupo-entrada-oscuro">
-
-              <span class="input-group-text bg-transparent border-end-0 text-secondary" id="basic-addon1">
-                <i class="fa-solid fa-user"></i>
-              </span>
-                  <input type="text" class="form-control bg-transparent  text-white" id="email"
-                         placeholder="Eje: xtuliox.x" aria-label="Eje: xtuliox.x" required>
+                  <span class="input-group-text bg-transparent text-secondary">
+                    <i class="fa-solid fa-user"></i>
+                  </span>
+                  <input type="text" class="form-control bg-transparent text-white" id="nombreUsuario" name="nombreUsuario"
+                         placeholder="Eje: xtuliox.x" autocomplete="username"
+                         [(ngModel)]="nombreUsuario" (ngModelChange)="error = ''">
                 </div>
               </div>
 
               <!-- Correo electronico -->
-              <div class="input-group mb-3">
-                <label for="email" class="form-label text-primary h6 fw-bold mb-1">Correo electrónico</label>
-                <div class="input-group grupo-entrada-oscuro">
-
-              <span class="input-group-text bg-transparent  text-secondary" id="basic-addon1">
-
-                <i class="fa-regular fa-envelope"></i>
-              </span>
-                  <input type="email" class="form-control bg-transparent  text-white" id="email"
-                         placeholder="Eje: julioesteban@correo" aria-label="Eje:julioesteban@correo" required>
-                </div>
-              </div>
-
-              <!-- Fecha De Nacimiento Estilizada -->
               <div class="mb-3">
-                <label for="datepicker2" class="form-label text-primary h6 fw-bold mb-1">Fecha De Nacimiento</label>
+                <label for="correo" class="form-label text-primary h6 fw-bold mb-1">Correo electrónico</label>
                 <div class="input-group grupo-entrada-oscuro">
-                     <span class="input-group-text bg-transparent text-secondary" id="basic-addon1">
-                           <i class="fa-solid fa-calendar"></i>
-                      </span>
-                        <input type="text" class="form-control bg-transparent text-white  shadow-none" id="datepicker2"
-                         data-bs-toggle="datepicker" autocomplete="off" placeholder="DD / MM / AAAA" required>
+                  <span class="input-group-text bg-transparent text-secondary">
+                    <i class="fa-regular fa-envelope"></i>
+                  </span>
+                  <input type="email" class="form-control bg-transparent text-white" id="correo" name="correo"
+                         placeholder="Eje: julioesteban@correo.com" autocomplete="email"
+                         [(ngModel)]="correo" (ngModelChange)="error = ''">
                 </div>
               </div>
 
+              <!-- Fecha De Nacimiento -->
+              <div class="mb-3">
+                <label for="fechaNacimiento" class="form-label text-primary h6 fw-bold mb-1">Fecha de nacimiento</label>
+                <div class="input-group grupo-entrada-oscuro">
+                  <span class="input-group-text bg-transparent text-secondary">
+                    <i class="fa-solid fa-calendar"></i>
+                  </span>
+                  <input type="date" class="form-control bg-transparent text-white shadow-none" id="fechaNacimiento"
+                         name="fechaNacimiento" [max]="hoy"
+                         [(ngModel)]="fechaNacimiento" (ngModelChange)="error = ''">
+                </div>
+              </div>
 
               <!-- Contraseña con Medidor de Fuerza -->
               <div class="mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-1">
-                  <label for="password" class="form-label text-primary h6 fw-bold mb-1">Contraseña</label>
-
-                </div>
-
+                <label for="password" class="form-label text-primary h6 fw-bold mb-1">Contraseña</label>
                 <div class="input-group grupo-entrada-oscuro">
-                     <span class="input-group-text bg-transparent  text-secondary">
-                      <i class="fa-solid fa-lock"></i>
+                  <span class="input-group-text bg-transparent text-secondary">
+                    <i class="fa-solid fa-lock"></i>
                   </span>
-
                   <!-- tiempo real con la función -->
-                  <input type="password" class="form-control bg-transparent text-white shadow-none"
-                         id="password" placeholder="••••••••" (input)="verificarFuerza($event)" required>
+                  <input type="password" class="form-control bg-transparent text-white shadow-none" id="password"
+                         name="clave" placeholder="••••••••" autocomplete="new-password"
+                         [(ngModel)]="clave" (ngModelChange)="verificarFuerza($event); error = ''">
                 </div>
 
                 <!-- fuerza de la contraseña -->
-                <div class="strength mt-2" data-bs-strength>
+                <div class="strength mt-2">
                   <div class="strength-segment" [class.active]="fuerza >= 1"></div>
                   <div class="strength-segment" [class.active]="fuerza >= 2"></div>
                   <div class="strength-segment" [class.active]="fuerza >= 3"></div>
@@ -90,27 +97,40 @@
                 <span class="strength-text text-secondary small mt-1 d-block">{{ textoFuerza }}</span>
               </div>
 
-
+              <!-- Confirmar contraseña -->
               <div class="mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-1">
-                  <label for="password" class="form-label text-primary h6 fw-bold mb-1">Confirmar contraseña</label>
-                </div>
+                <label for="confirmar-password" class="form-label text-primary h6 fw-bold mb-1">Confirmar contraseña</label>
                 <div class="input-group grupo-entrada-oscuro">
-                      <span class="input-group-text bg-transparent border-end-0 text-secondary" id="basic-addon2">
-                        <i class="fa-solid fa-lock"></i>
-                       </span>
+                  <span class="input-group-text bg-transparent text-secondary">
+                    <i class="fa-solid fa-lock"></i>
+                  </span>
                   <input type="password" class="form-control bg-transparent text-white" id="confirmar-password"
-                         placeholder="••••••••" required>
+                         name="confirmarClave" placeholder="••••••••" autocomplete="new-password"
+                         [(ngModel)]="confirmarClave" (ngModelChange)="error = ''">
                 </div>
+                @if (confirmarClave && clave !== confirmarClave) {
+                  <span class="text-warning small mt-1 d-block">Todavía no coinciden.</span>
+                }
               </div>
-              <br>
-              <!-- Botón de inicio de Sesión -->
 
-              <button type="submit"
-                      class="btn btn-primary w-100 py-2.5 fw-semibold d-flex align-items-center justify-content-center gap-2 mb-4">
-                Iniciar sesión
-                <i class="bi bi-arrow-right"></i>
+              @if (error) {
+                <div class="text-danger small mb-3"><i class="fa-solid fa-triangle-exclamation me-1"></i> {{ error }}</div>
+              }
+              @if (exito) {
+                <div class="text-success small mb-3"><i class="fa-solid fa-circle-check me-1"></i> {{ exito }}</div>
+              }
+
+              <!-- Botón para crear la cuenta -->
+              <button type="submit" [disabled]="exito !== ''"
+                      class="btn btn-primary w-100 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2 mb-4">
+                Crear cuenta
+                <i class="fa-solid fa-arrow-right"></i>
               </button>
+
+              <div class="text-center small">
+                <span class="text-secondary">¿Ya tienes cuenta?</span>
+                <a routerLink="/inicio" class="text-white text-decoration-none fw-semibold ms-1">Inicia sesión</a>
+              </div>
 
             </form>
           </div>

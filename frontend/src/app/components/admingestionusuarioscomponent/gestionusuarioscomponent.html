@@ -1,0 +1,161 @@
+<section class="seccion-hero container-fluid px-4 py-4 text-white">
+
+  <img
+    src="/imagenes/fondoadmin.png"
+    class="imagen-fondo-hero"
+    alt="Fondo del administrador"
+  >
+
+
+  <!--- ------- Encabezado de la vista ----------- -->
+  <div class="mb-4 animate__animated animate__fadeInDown">
+    <h2 class="fw-bold d-flex align-items-center gap-2 mb-1">
+      <i class="fa-solid fa-users-gear text-primary"></i> Gestión de Usuarios
+    </h2>
+    <p class="text-secondary small mb-0">
+      Aquí están la informacion de los usuario que usaron la plataforma y todo lo demás.
+    </p>
+  </div>
+
+
+  <!-- ---------------------- Contenedor  ----------------------------- -->
+  <div class="card cyber-stat-card p-4 border-secondary border-opacity-25 rounded-4 animate__animated animate__fadeIn">
+
+    <!-- Barra de herramientas -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+      <span class="text-secondary small">
+
+
+        Total de registros: <strong class="text-white">{{ sesion.cuentas.length }}</strong> usuarios
+
+
+        @if (busqueda) {
+          · mostrando <strong class="text-white">{{ lista.length }}</strong>
+        }
+      </span>
+
+      <!--  ---------  Buscador --------------- -->
+      <div class="input-group grupo-entrada-oscuro w-auto">
+        <span class="input-group-text bg-transparent border-end-0 text-secondary">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </span>
+        <input type="text"
+               class="form-control bg-transparent text-white border-start-0 shadow-none ps-0 small"
+               placeholder="Buscar nombre, correo o apodo..."
+               [(ngModel)]="busqueda">
+      </div>
+    </div>
+
+    @if (mensaje) {
+      <div
+        class="alert bg-transparent small d-flex justify-content-between align-items-center py-2 animate__animated animate__fadeIn"
+        [class.alert-danger]="error" [class.text-danger]="error" [class.border-danger]="error"
+        [class.alert-info]="!error" [class.text-info]="!error" [class.border-info]="!error">
+        <span>
+          <i class="fa-solid me-1" [class.fa-triangle-exclamation]="error" [class.fa-circle-check]="!error"></i>
+          {{ mensaje }}
+        </span>
+        <button type="button" class="btn btn-sm p-0 text-reset" (click)="mensaje = ''" aria-label="Cerrar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    }
+
+    <!-- --------  Tabla -------------   -->
+    <div class="table-responsive">
+      <table class="table table-dark table-borderless bg-transparent align-middle mb-0">
+        <thead class="text-secondary small border-bottom border-secondary border-opacity-25 text-nowrap">
+        <tr>
+          <th class="py-3 bg-transparent">Nombre Completo</th>
+          <th class="py-3 bg-transparent">Correo</th>
+          <th class="py-3 bg-transparent">Usuario (Apodo)</th>
+          <th class="py-3 bg-transparent">Rol</th>
+          <th class="py-3 bg-transparent">Fecha de Nacimiento</th>
+          <th class="py-3 bg-transparent">Creación de Cuenta</th>
+          <th class="py-3 bg-transparent">Lugar de Creación</th>
+        </tr>
+        </thead>
+
+        <tbody class="small">
+          @for (u of lista; track u.correo) {
+            <tr class="border-bottom border-secondary border-opacity-10 cyber-table-row">
+
+              <!-- Nombre Completo -->
+              <td class="py-3 bg-transparent text-white fw-semibold text-nowrap">
+                <div class="d-flex align-items-center gap-2">
+                  <img src="/imagenes/fotoperfildefault.png" class="foto-perfil" [class.admin]="u.rol === 'admin'"
+                       alt="Foto de perfil">
+                  {{ u.nombreCompleto }}
+                  @if (esYo(u)) {
+                    <span class="badge text-bg-secondary fs-7">Tú</span>
+                  }
+                </div>
+              </td>
+
+              <!-- --------------- Correo ------------- -->
+              <td class="bg-transparent text-secondary">{{ u.correo }}</td>
+
+              <!-- Usuario -->
+              <td class="bg-transparent text-info fw-semibold">&#64;{{ u.nombreUsuario }}</td>
+
+              <!-- Rol  -->
+              <td class="bg-transparent text-nowrap">
+                <div class="d-flex align-items-center gap-2">
+                <span class="badge" [class.cyber-badge-admin]="u.rol === 'admin'"
+                      [class.cyber-badge-role]="u.rol !== 'admin'">
+                  {{ u.rol === 'admin' ? 'Admin' : 'Usuario' }}
+                </span>
+
+
+                  <select class="form-select form-select-sm bg-dark text-white border-secondary w-auto shadow-none"
+                          #rolSelect [disabled]="esYo(u)"
+                          [title]="esYo(u) ? 'No puedes cambiar tu propio rol' : 'Cambiar rol'"
+                          (change)="cambiarRol(u, rolSelect.value); rolSelect.value = u.rol">
+                    <option value="admin" [selected]="u.rol === 'admin'">Admin</option>
+                    <option value="usuario" [selected]="u.rol === 'usuario'">Usuario</option>
+                  </select>
+                </div>
+              </td>
+
+              <!-- Fecha de Nacimiento -->
+              <td class="bg-transparent text-secondary text-nowrap">
+                <i class="fa-regular fa-calendar me-1 text-primary"></i>
+                {{ u.fechaNacimiento | date: 'dd/MM/yyyy' }}
+              </td>
+
+              <!-- Fecha de Creación de la Cuenta -->
+              <td class="bg-transparent text-secondary text-nowrap">
+                {{ u.fechaCreacion | date: 'dd/MM/yyyy - HH:mm' }}
+              </td>
+
+              <!-- Lugar de Creación -->
+              <td class="bg-transparent text-secondary text-nowrap">
+                <i class="fa-solid fa-location-dot me-1 text-primary"></i>
+                {{ u.ciudad }}
+              </td>
+
+            </tr>
+          } @empty {
+
+            <!-- el try -->
+            <tr>
+              <td colspan="7" class="text-center py-4 text-secondary bg-transparent">
+                No se encontraron usuarios que coincidan con "{{ busqueda }}".
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- --------------Descargar Reportes -------------- -->
+    <div class="d-flex justify-content-end mt-4 pt-3 border-top border-secondary border-opacity-25">
+      <button type="button"
+              class="btn btn-primary d-flex align-items-center gap-2 px-4 animate__animated animate__pulse animate__delay-1s"
+              (click)="descargarReporte()">
+        <i class="fa-solid fa-file-arrow-down"></i> Descargar reporte de usuario
+      </button>
+    </div>
+
+  </div>
+</section>

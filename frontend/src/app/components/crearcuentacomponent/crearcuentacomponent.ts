@@ -1,6 +1,7 @@
-import {AfterViewInit, Component} from '@angular/core';
-
-declare var bootstrap: any;
+import {Component, inject} from '@angular/core';
+import {Router} from '@angular/router';
+import {SesionService} from '../../services/sesion.service';
+import {calcularFuerza} from '../../utils/fuerza-clave';
 
 @Component({
   selector: 'app-crearcuentacomponent',
@@ -8,34 +9,92 @@ declare var bootstrap: any;
   styleUrl: './crearcuentacomponent.css',
   templateUrl: './crearcuentacomponent.html',
 })
+export class Crearcuentacomponent {
 
+  private sesion = inject(SesionService);
+  private router = inject(Router);
 
-export class Crearcuentacomponent  {
+  nombreCompleto = '';
+  nombreUsuario = '';
+  correo = '';
+  fechaNacimiento = '';
+  clave = '';
+  confirmarClave = '';
 
   fuerza: number = 0;
   textoFuerza: string = '';
+  error = '';
+  exito = '';
 
-  verificarFuerza(event: any) {
-    const valor = event.target.value;
-    let score = 0;
+  // fecha máxima del calendario (no se puede nacer en el futuro)
+  hoy = new Date().toISOString().substring(0, 10);
 
-    if (valor.length === 0) {
-      this.fuerza = 0;
-      this.textoFuerza = '';
+  verificarFuerza(valor: string) {
+    const resultado = calcularFuerza(valor);
+    this.fuerza = resultado.puntos;
+    this.textoFuerza = resultado.texto;
+  }
+
+  crearCuenta() {
+    this.error = this.validar();
+    if (this.error) return;
+
+    const mensaje = this.sesion.registrar({
+      nombreCompleto: this.nombreCompleto.trim(),
+      nombreUsuario: this.nombreUsuario.trim(),
+      correo: this.correo.trim().toLowerCase(),
+      clave: this.clave,
+      rol: 'usuario',
+      fechaNacimiento: this.fechaNacimiento,
+      fechaCreacion: new Date().toISOString(),
+      ciudad: 'Sin registrar',
+    });
+
+    if (mensaje) {
+      this.error = mensaje;
       return;
     }
 
-    if (valor.length >= 6) score++;
-    if (valor.length >= 10) score++;
-    if (/[A-Z]/.test(valor) && /[0-9]/.test(valor)) score++;
-    if (/[^A-Za-z0-9]/.test(valor)) score++;
+    // Si se creó bien, se inicia sesión de una vez
+    this.exito = 'Cuenta creada. Entrando...';
+    this.sesion.iniciarSesion(this.correo, this.clave);
+    setTimeout(() => this.router.navigate(['/usuario']), 1200);
+  }
 
-    this.fuerza = score;
+  private validar(): string {
+    if (!this.nombreCompleto.trim() || !this.nombreUsuario.trim() || !this.correo.trim()
+      || !this.fechaNacimiento || !this.clave || !this.confirmarClave) {
+      return 'Llena todos los campos.';
+    }
+    if (/\s/.test(this.nombreUsuario.trim())) {
+      return 'El nombre de usuario no puede tener espacios.';
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.correo.trim())) {
+      return 'El correo no es válido.';
+    }
+    if (this.calcularEdad(this.fechaNacimiento) < 14) {
+      return 'Debes tener al menos 14 años para crear una cuenta.';
+    }
+    if (this.clave.length < 8) {
+      return 'La contraseña debe tener mínimo 8 caracteres.';
+    }
+    if (this.fuerza < 2) {
+      return 'La contraseña es muy débil, combina mayúsculas, números o símbolos.';
+    }
+    if (this.clave !== this.confirmarClave) {
+      return 'Las contraseñas no coinciden.';
+    }
+    return '';
+  }
 
-    if (score <= 1) this.textoFuerza = 'Contraseña muy débil';
-    else if (score === 2) this.textoFuerza = 'Contraseña moderada';
-    else if (score === 3) this.textoFuerza = 'Buena contraseña';
-    else this.textoFuerza = 'Contraseña excelente';
+  private calcularEdad(fecha: string): number {
+    const nacimiento = new Date(fecha);
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - nacimiento.getFullYear();
+    const mes = hoy.getMonth() - nacimiento.getMonth();
+    if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
+      edad--;
+    }
+    return edad;
   }
 }
-
