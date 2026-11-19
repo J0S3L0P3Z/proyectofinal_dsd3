@@ -1,0 +1,60 @@
+.url {
+  max-width: 100%;
+  color: #00c3ff;
+  text-decoration: none;
+}
+
+.url:hover {
+  color: #1d72fe;
+}
+
+.titulo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.75rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 50rem;
+  font-size: 0.8rem;
+  color: #d1d5db;
+  background-color: rgba(17, 24, 39, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chip i {
+  color: #1d72fe;
+}
+
+/* Colores de cada IA */
+.tarjeta-ia { border-top: 3px solid var(--acento) !important; }
+.tarjeta-ia.ia-1 { --acento: #1d72fe; --acento-fondo: rgba(29, 114, 254, 0.15); }
+.tarjeta-ia.ia-2 { --acento: #0dcaf0; --acento-fondo: rgba(13, 202, 240, 0.15); }
+.tarjeta-ia.ia-3 { --acento: #a855f7; --acento-fondo: rgba(168, 85, 247, 0.12); }
+
+.acento { color: var(--acento); }
+
+.etiqueta {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.4rem;
+  color: var(--acento);
+  background-color: var(--acento-fondo);
+  border: 1px solid var(--acento-fondo);
+}
+
+progress.barra-ia::-webkit-progress-value {
+  background: var(--acento);
+}
+
+progress.barra-ia::-moz-progress-bar {
+  background: var(--acento);
+}
