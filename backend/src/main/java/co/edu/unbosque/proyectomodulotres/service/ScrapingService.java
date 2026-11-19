@@ -21,11 +21,15 @@ public class ScrapingService {
 
 	private final ScrapingRepository scrapingRepository;
 	private final ObjectProvider<WebDriver> webDriverProvider;
+	private final IAService iaService;
 
-	public ScrapingService(ScrapingRepository scrapingRepository, ObjectProvider<WebDriver> webDriverProvider) {
+	// Constructor para conectar los servicios y el repositorio.
+	public ScrapingService(ScrapingRepository scrapingRepository, ObjectProvider<WebDriver> webDriverProvider,
+			IAService iaService) {
 
 		this.scrapingRepository = scrapingRepository;
 		this.webDriverProvider = webDriverProvider;
+		this.iaService = iaService;
 	}
 
 	// REALIZAR SCRAPING Y GUARDAR LA INFORMACION
@@ -36,6 +40,7 @@ public class ScrapingService {
 		}
 
 		if (!datos.getUrl().startsWith("http://") && !datos.getUrl().startsWith("https://")) {
+
 			throw new RuntimeException("La URL debe comenzar con http:// o https://");
 		}
 
@@ -47,35 +52,39 @@ public class ScrapingService {
 
 		try {
 
-			// Crear una nueva instancia de Microsoft Edge
+			// Crear una nueva instancia de Microsoft Edge.
 			navegador = webDriverProvider.getObject();
 
 			navegador.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(40));
 
-			// Abrir la página web
+			// Abrir la pagina web.
 			navegador.get(datos.getUrl());
 
-			// Obtener el título de la página
+			// Obtener el titulo de la pagina.
 			String titulo = navegador.getTitle();
 
-			// Obtener todo el texto visible de la página
+			// Obtener todo el texto visible de la pagina.
 			WebElement cuerpo = navegador.findElement(By.tagName("body"));
 			String contenido = cuerpo.getText();
 
-			// Contar imágenes
+			// Contar imagenes.
 			int cantidadImagenes = navegador.findElements(By.tagName("img")).size();
 
-			// Contar enlaces
+			// Contar enlaces.
 			int cantidadEnlaces = navegador.findElements(By.tagName("a")).size();
 
-			// Contar palabras
+			// Contar palabras.
 			int cantidadPalabras = 0;
 
 			if (contenido != null && !contenido.isBlank()) {
 				cantidadPalabras = contenido.trim().split("\\s+").length;
 			}
 
-			// Crear el registro del scraping
+			// Cerrar Microsoft Edge despues de extraer la informacion.
+			navegador.quit();
+			navegador = null;
+
+			// Crear el registro del scraping.
 			Scraping scraping = new Scraping(datos.getUrl(), datos.getIdUsuario());
 
 			scraping.setTituloPagina(titulo);
@@ -84,19 +93,26 @@ public class ScrapingService {
 			scraping.setCantidadEnlaces(cantidadEnlaces);
 			scraping.setCantidadPalabras(cantidadPalabras);
 
-			// Guardar información adicional en formato JSON
+			// Guardar informacion adicional en formato JSON.
 			String datosJson = "{" + "\"titulo\":\"" + escaparJSON(titulo) + "\"," + "\"url\":\""
 					+ escaparJSON(datos.getUrl()) + "\"," + "\"cantidadImagenes\":" + cantidadImagenes + ","
 					+ "\"cantidadEnlaces\":" + cantidadEnlaces + "," + "\"cantidadPalabras\":" + cantidadPalabras + "}";
 
 			scraping.setDatosJson(datosJson);
 
-			// Marcar el scraping como completado
+			// Marcar el scraping como completado.
 			scraping.setEstado("COMPLETADO");
 
-			// Guardar en la base de datos
+			// Guardar el scraping en la base de datos.
 			Scraping guardado = scrapingRepository.save(scraping);
 
+			// Ejecutar las tres IA y guardar sus resultados.
+			if (contenido != null && !contenido.isBlank()) {
+
+				iaService.analizarYGuardar(guardado.getIdScraping(), contenido);
+			}
+
+			// Devolver la informacion del scraping.
 			return convertirDTO(guardado);
 
 		} catch (Exception e) {
@@ -105,7 +121,7 @@ public class ScrapingService {
 
 		} finally {
 
-			// Cerrar Microsoft Edge
+			// Cerrar Microsoft Edge si todavia esta abierto.
 			if (navegador != null) {
 				navegador.quit();
 			}
@@ -224,9 +240,12 @@ public class ScrapingService {
 
 	// ESCAPAR CARACTERES PARA GUARDAR JSON
 	private String escaparJSON(String texto) {
+
 		if (texto == null) {
 			return "";
 		}
-		return texto.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r").replace("\t","\\t");
+
+		return texto.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r").replace("\t",
+				"\\t");
 	}
 }

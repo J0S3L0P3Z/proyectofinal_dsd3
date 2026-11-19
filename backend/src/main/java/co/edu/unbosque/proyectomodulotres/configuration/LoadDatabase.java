@@ -40,12 +40,13 @@ public class LoadDatabase {
 				return rolRepository.save(nuevoRol);
 			});
 
-			if (!userRepository.existsByUsername(correoAdministrador)) {
+			User administrador = userRepository.findByUsername(correoAdministrador).orElse(null);
 
-				User administrador = new User();
+			if (administrador == null) {
+
+				administrador = new User();
 
 				administrador.setUsername(correoAdministrador);
-				administrador.setPassword(passwordEncoder.encode(contrasenaAdministrador));
 				administrador.setNombre("Administrador");
 				administrador.setApellido("Sistema");
 				administrador.setRole(rolAdmin);
@@ -57,13 +58,16 @@ public class LoadDatabase {
 				administrador.setAccountNonLocked(true);
 				administrador.setCredentialsNonExpired(true);
 
-				userRepository.save(administrador);
-
 				System.out.println("Administrador inicial creado correctamente.");
 
 			} else {
-				System.out.println("El administrador inicial ya existe.");
+
+				System.out.println("Administrador inicial encontrado. Actualizando contraseña.");
 			}
+
+			administrador.setPassword(passwordEncoder.encode(contrasenaAdministrador));
+
+			userRepository.save(administrador);
 
 			System.out.println("Roles ADMIN y USER verificados correctamente.");
 		};
