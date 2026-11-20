@@ -18,6 +18,9 @@ import co.edu.unbosque.proyectomodulotres.dto.ReporteDTO;
 import co.edu.unbosque.proyectomodulotres.dto.ResultadoDTO;
 import co.edu.unbosque.proyectomodulotres.entity.Reporte;
 import co.edu.unbosque.proyectomodulotres.entity.Scraping;
+import co.edu.unbosque.proyectomodulotres.exception.DatoInvalidoException;
+import co.edu.unbosque.proyectomodulotres.exception.RecursoNoEncontradoException;
+import co.edu.unbosque.proyectomodulotres.exception.ScrapingException;
 import co.edu.unbosque.proyectomodulotres.repository.ReporteRepository;
 import co.edu.unbosque.proyectomodulotres.repository.ScrapingRepository;
 import co.edu.unbosque.proyectomodulotres.util.GeneradorPDF;
@@ -41,38 +44,33 @@ public class ReporteService {
 		this.resultadoService = resultadoService;
 	}
 
-	// Genera y guarda el PDF de un scraping.
 	public ReporteDTO generarPDF(Long idScraping) {
 
-		// Buscar el scraping.
-		Scraping scraping = scrapingRepository.findById(idScraping)
-				.orElseThrow(() -> new RuntimeException("Scraping no encontrado"));
+		if (idScraping == null || idScraping <= 0) {
+			throw new DatoInvalidoException("El identificador del scraping es obligatorio y debe ser válido");
+		}
 
-		// Obtener las respuestas de las IA ya descifradas.
+		Scraping scraping = scrapingRepository.findById(idScraping)
+				.orElseThrow(() -> new RecursoNoEncontradoException("Scraping no encontrado"));
+
 		List<ResultadoDTO> resultados = resultadoService.buscarPorScraping(idScraping);
 
 		try {
 
-			// Generar el documento PDF.
 			GeneradorPDF generador = new GeneradorPDF();
 
 			byte[] contenidoPDF = generador.generarPDF(scraping, resultados);
 
-			// Crear la carpeta donde se guardarán los PDF.
 			Path carpeta = Paths.get(rutaReportes).toAbsolutePath();
 
 			Files.createDirectories(carpeta);
 
-			// Crear un nombre único para el archivo.
 			String nombreArchivo = "reporte_" + idScraping + "_" + UUID.randomUUID() + ".pdf";
 
-			// Definir la ubicación del archivo.
 			Path archivo = carpeta.resolve(nombreArchivo);
 
-			// Guardar el PDF.
 			Files.write(archivo, contenidoPDF);
 
-			// Registrar la información del reporte.
 			Reporte reporte = new Reporte(nombreArchivo, archivo.toString(), idScraping);
 
 			reporte.setEstado("GENERADO");
@@ -81,12 +79,27 @@ public class ReporteService {
 
 		} catch (DocumentException | IOException e) {
 
-			throw new RuntimeException("Error al generar el PDF: " + e.getMessage(), e);
+			throw new ScrapingException("Error al generar el PDF: " + e.getMessage());
 		}
 	}
 
-	// Guarda manualmente los datos de un reporte.
 	public ReporteDTO guardar(ReporteDTO datos) {
+
+		if (datos == null) {
+			throw new DatoInvalidoException("Los datos del reporte son obligatorios");
+		}
+
+		if (datos.getNombreArchivo() == null || datos.getNombreArchivo().isBlank()) {
+			throw new DatoInvalidoException("El nombre del archivo es obligatorio");
+		}
+
+		if (datos.getRutaArchivo() == null || datos.getRutaArchivo().isBlank()) {
+			throw new DatoInvalidoException("La ruta del archivo es obligatoria");
+		}
+
+		if (datos.getIdScraping() == null) {
+			throw new DatoInvalidoException("El identificador del scraping es obligatorio");
+		}
 
 		Reporte reporte = new Reporte(datos.getNombreArchivo(), datos.getRutaArchivo(), datos.getIdScraping());
 
@@ -97,39 +110,54 @@ public class ReporteService {
 		return convertirDTO(reporteRepository.save(reporte));
 	}
 
-	// Busca un reporte por su identificador.
 	public ReporteDTO buscarPorId(Long id) {
 
+		if (id == null || id <= 0) {
+			throw new DatoInvalidoException("El identificador del reporte es inválido");
+		}
+
 		Reporte reporte = reporteRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Reporte no encontrado"));
+				.orElseThrow(() -> new RecursoNoEncontradoException("Reporte no encontrado"));
 
 		return convertirDTO(reporte);
 	}
 
-	// Consulta todos los reportes.
 	public List<ReporteDTO> buscarTodos() {
 
 		return reporteRepository.findAll().stream().map(this::convertirDTO).collect(Collectors.toList());
 	}
 
-	// Busca los reportes de un scraping.
 	public List<ReporteDTO> buscarPorScraping(Long idScraping) {
+
+		if (idScraping == null || idScraping <= 0) {
+			throw new DatoInvalidoException("El identificador del scraping es inválido");
+		}
 
 		return reporteRepository.findByIdScraping(idScraping).stream().map(this::convertirDTO)
 				.collect(Collectors.toList());
 	}
 
-	// Busca los reportes por su estado.
 	public List<ReporteDTO> buscarPorEstado(String estado) {
+
+		if (estado == null || estado.isBlank()) {
+			throw new DatoInvalidoException("El estado del reporte es obligatorio");
+		}
 
 		return reporteRepository.findByEstado(estado).stream().map(this::convertirDTO).collect(Collectors.toList());
 	}
 
-	// Actualiza la información de un reporte.
 	public ReporteDTO actualizar(Long id, ReporteDTO datos) {
 
+		if (id == null || id <= 0) {
+			throw new DatoInvalidoException("El identificador del reporte es inválido");
+		}
+
+		if (datos == null) {
+			throw new DatoInvalidoException("Los datos para actualizar el reporte son obligatorios");
+		}
+
 		Reporte reporte = reporteRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Reporte no encontrado"));
+				.orElseThrow(() -> new RecursoNoEncontradoException("Reporte no encontrado"));
 
 		if (datos.getNombreArchivo() != null) {
 			reporte.setNombreArchivo(datos.getNombreArchivo());
@@ -146,39 +174,44 @@ public class ReporteService {
 		return convertirDTO(reporteRepository.save(reporte));
 	}
 
-	// Descarga el contenido de un PDF guardado.
 	public byte[] descargarPDF(Long idReporte) {
 
+		if (idReporte == null || idReporte <= 0) {
+			throw new DatoInvalidoException("El identificador del reporte es inválido");
+		}
+
 		Reporte reporte = reporteRepository.findById(idReporte)
-				.orElseThrow(() -> new RuntimeException("Reporte no encontrado"));
+				.orElseThrow(() -> new RecursoNoEncontradoException("Reporte no encontrado"));
 
 		try {
 
 			Path archivo = Paths.get(reporte.getRutaArchivo());
 
 			if (!Files.exists(archivo)) {
-				throw new RuntimeException("El archivo PDF no existe");
+				throw new RecursoNoEncontradoException("El archivo PDF no existe");
 			}
 
 			return Files.readAllBytes(archivo);
 
 		} catch (IOException e) {
 
-			throw new RuntimeException("Error al leer el archivo PDF: " + e.getMessage(), e);
+			throw new ScrapingException("Error al leer el archivo PDF: " + e.getMessage());
 		}
 	}
 
-	// Elimina un reporte de la base de datos.
 	public void eliminar(Long id) {
 
+		if (id == null || id <= 0) {
+			throw new DatoInvalidoException("El identificador del reporte es inválido");
+		}
+
 		if (!reporteRepository.existsById(id)) {
-			throw new RuntimeException("Reporte no encontrado");
+			throw new RecursoNoEncontradoException("Reporte no encontrado");
 		}
 
 		reporteRepository.deleteById(id);
 	}
 
-	// Convierte la entidad Reporte en ReporteDTO.
 	private ReporteDTO convertirDTO(Reporte reporte) {
 
 		return new ReporteDTO(reporte.getIdReporte(), reporte.getNombreArchivo(), reporte.getRutaArchivo(),

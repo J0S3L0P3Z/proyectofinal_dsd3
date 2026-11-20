@@ -9,6 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import co.edu.unbosque.proyectomodulotres.dto.UserDTO;
 import co.edu.unbosque.proyectomodulotres.entity.Rol;
 import co.edu.unbosque.proyectomodulotres.entity.User;
+import co.edu.unbosque.proyectomodulotres.exception.DatoInvalidoException;
+import co.edu.unbosque.proyectomodulotres.exception.RecursoNoEncontradoException;
+import co.edu.unbosque.proyectomodulotres.exception.UsuarioYaExisteException;
 import co.edu.unbosque.proyectomodulotres.repository.RolRepository;
 import co.edu.unbosque.proyectomodulotres.repository.UserRepository;
 
@@ -26,15 +29,24 @@ public class UserService {
 
 	public UserDTO buscarPorId(Long id) {
 
-		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+		if (id == null || id <= 0) {
+			throw new DatoInvalidoException("El identificador del usuario es inválido");
+		}
+
+		User user = userRepository.findById(id)
+				.orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado"));
 
 		return convertirDTO(user);
 	}
 
 	public UserDTO buscarPorUsername(String username) {
 
+		if (username == null || username.isBlank()) {
+			throw new DatoInvalidoException("El correo del usuario es obligatorio");
+		}
+
 		User user = userRepository.findByUsername(username)
-				.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+				.orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado"));
 
 		return convertirDTO(user);
 	}
@@ -46,12 +58,25 @@ public class UserService {
 
 	public UserDTO actualizar(Long id, UserDTO datos) {
 
-		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+		if (id == null || id <= 0) {
+			throw new DatoInvalidoException("El identificador del usuario es inválido");
+		}
+
+		if (datos == null) {
+			throw new DatoInvalidoException("Los datos del usuario son obligatorios");
+		}
+
+		User user = userRepository.findById(id)
+				.orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado"));
 
 		if (datos.getUsername() != null && !datos.getUsername().equals(user.getUsername())) {
 
+			if (datos.getUsername().isBlank()) {
+				throw new DatoInvalidoException("El correo no puede estar vacío");
+			}
+
 			if (userRepository.existsByUsername(datos.getUsername())) {
-				throw new RuntimeException("El correo ya está registrado");
+				throw new UsuarioYaExisteException("El correo ya está registrado");
 			}
 
 			user.setUsername(datos.getUsername());
@@ -68,7 +93,7 @@ public class UserService {
 		if (datos.getRole() != null) {
 
 			Rol rol = rolRepository.findByNombreIgnoreCase(datos.getRole())
-					.orElseThrow(() -> new RuntimeException("El rol no existe"));
+					.orElseThrow(() -> new RecursoNoEncontradoException("El rol no existe"));
 
 			user.setRole(rol);
 		}
@@ -86,8 +111,12 @@ public class UserService {
 
 	public void eliminar(Long id) {
 
+		if (id == null || id <= 0) {
+			throw new DatoInvalidoException("El identificador del usuario es inválido");
+		}
+
 		if (!userRepository.existsById(id)) {
-			throw new RuntimeException("Usuario no encontrado");
+			throw new RecursoNoEncontradoException("Usuario no encontrado");
 		}
 
 		userRepository.deleteById(id);
@@ -100,7 +129,7 @@ public class UserService {
 	public long contarAdministradores() {
 
 		Rol rolAdmin = rolRepository.findByNombreIgnoreCase("ADMIN")
-				.orElseThrow(() -> new RuntimeException("No existe el rol ADMIN"));
+				.orElseThrow(() -> new RecursoNoEncontradoException("No existe el rol ADMIN"));
 
 		return userRepository.countByRole(rolAdmin);
 	}
@@ -108,7 +137,7 @@ public class UserService {
 	public long contarUsuarios() {
 
 		Rol rolUsuario = rolRepository.findByNombreIgnoreCase("USER")
-				.orElseThrow(() -> new RuntimeException("No existe el rol USER"));
+				.orElseThrow(() -> new RecursoNoEncontradoException("No existe el rol USER"));
 
 		return userRepository.countByRole(rolUsuario);
 	}

@@ -16,6 +16,8 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import co.edu.unbosque.proyectomodulotres.dto.ResultadoDTO;
+import co.edu.unbosque.proyectomodulotres.exception.AnalisisIAException;
+import co.edu.unbosque.proyectomodulotres.exception.DatoInvalidoException;
 
 @Service
 public class IAService {
@@ -71,31 +73,33 @@ public class IAService {
 				codigoHTML));
 
 		resultados.put("GPT",
-				analizarConModelo(modeloGpt, "Eres un especialista en reconocimiento de nombres propios "
-						+ "de personas dentro de textos y paginas web. "
-						+ "Analiza cuidadosamente TODO el contenido proporcionado "
-						+ "y extrae los nombres de todas las personas mencionadas. "
+				analizarConModelo(modeloGpt,
+						"Eres un especialista en reconocimiento de nombres propios "
+								+ "de personas dentro de textos y paginas web. "
+								+ "Analiza cuidadosamente TODO el contenido proporcionado "
+								+ "y extrae los nombres de todas las personas mencionadas. "
 
-						+ "Debes identificar nombres y apellidos de personas, "
-						+ "cientificos, investigadores, escritores, autores, "
-						+ "fundadores, personajes historicos y cualquier otra " + "persona mencionada en el texto. "
+								+ "Debes identificar nombres y apellidos de personas, "
+								+ "cientificos, investigadores, escritores, autores, "
+								+ "fundadores, personajes historicos y cualquier otra persona mencionada en el texto. "
 
-						+ "No limites la busqueda a la seccion de autores. "
-						+ "Revisa tambien los parrafos, ejemplos, referencias " + "y explicaciones del contenido. "
+								+ "No limites la busqueda a la seccion de autores. "
+								+ "Revisa tambien los parrafos, ejemplos, referencias y explicaciones del contenido. "
 
-						+ "Si aparece solamente un nombre o un apellido y "
-						+ "puedes reconocer que corresponde a una persona, " + "tambien debes incluirlo. "
+								+ "Si aparece solamente un nombre o un apellido y "
+								+ "puedes reconocer que corresponde a una persona, tambien debes incluirlo. "
 
-						+ "No incluyas empresas, marcas, organizaciones, "
-						+ "instituciones, lugares ni nombres de tecnologias. "
+								+ "No incluyas empresas, marcas, organizaciones, "
+								+ "instituciones, lugares ni nombres de tecnologias. "
 
-						+ "No inventes personas que no aparezcan mencionadas. "
+								+ "No inventes personas que no aparezcan mencionadas. "
 
-						+ "Devuelve exclusivamente los nombres identificados, "
-						+ "separados por comas, sin explicaciones, descripciones " + "ni texto adicional. "
+								+ "Devuelve exclusivamente los nombres identificados, "
+								+ "separados por comas, sin explicaciones, descripciones ni texto adicional. "
 
-						+ "Si no encuentras ningun nombre de persona, " + "responde exactamente: "
-						+ "No se identificaron nombres de personas.", contenido));
+								+ "Si no encuentras ningun nombre de persona, responde exactamente: "
+								+ "No se identificaron nombres de personas.",
+						contenido));
 
 		return resultados;
 	}
@@ -125,7 +129,7 @@ public class IAService {
 						+ "6. CONCLUSION: presenta una conclusion general que resuma "
 						+ "el contenido y la finalidad de la pagina. "
 
-						+ "Organiza el resultado con titulos, subtitulos y tablas " + "cuando sea conveniente. "
+						+ "Organiza el resultado con titulos, subtitulos y tablas cuando sea conveniente. "
 
 						+ "Utiliza un lenguaje claro, profesional y detallado. "
 						+ "No inventes informacion ni agregues datos externos. "
@@ -165,7 +169,8 @@ public class IAService {
 					.doPost(baseUrl + "/chat/completions", cuerpo, encabezados, Duration.ofSeconds(timeoutSeconds));
 
 			if (!respuesta.isSuccess()) {
-				return "Error del modelo. Codigo HTTP: " + respuesta.statusCode() + ". Respuesta: " + respuesta.body();
+				throw new AnalisisIAException("Error del modelo. Codigo HTTP: " + respuesta.statusCode()
+						+ ". Respuesta: " + respuesta.body());
 			}
 
 			JsonNode jsonRespuesta = objectMapper.readTree(respuesta.body());
@@ -173,7 +178,7 @@ public class IAService {
 			JsonNode contenidoRespuesta = jsonRespuesta.path("choices").path(0).path("message").path("content");
 
 			if (contenidoRespuesta.isMissingNode() || contenidoRespuesta.isNull()) {
-				return "Error: el modelo no devolvio una respuesta valida.";
+				throw new AnalisisIAException("El modelo no devolvio una respuesta valida.");
 			}
 
 			return contenidoRespuesta.asText();
@@ -182,6 +187,10 @@ public class IAService {
 
 			Thread.currentThread().interrupt();
 			return "Error: la solicitud al modelo fue interrumpida.";
+
+		} catch (AnalisisIAException e) {
+
+			return "Error: " + e.getMessage();
 
 		} catch (IOException e) {
 
@@ -194,6 +203,10 @@ public class IAService {
 	}
 
 	public List<ResultadoDTO> analizarYGuardar(Long idScraping, String datosJson, String codigoHTML, String contenido) {
+
+		if (idScraping == null) {
+			throw new DatoInvalidoException("El identificador del scraping es obligatorio.");
+		}
 
 		List<ResultadoDTO> resultados = new ArrayList<>();
 

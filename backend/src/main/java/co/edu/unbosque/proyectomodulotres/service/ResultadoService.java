@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import co.edu.unbosque.proyectomodulotres.dto.ResultadoDTO;
 import co.edu.unbosque.proyectomodulotres.entity.Resultado;
+import co.edu.unbosque.proyectomodulotres.exception.DatoInvalidoException;
+import co.edu.unbosque.proyectomodulotres.exception.RecursoNoEncontradoException;
 import co.edu.unbosque.proyectomodulotres.repository.ResultadoRepository;
 import co.edu.unbosque.proyectomodulotres.util.AESUtil;
 
@@ -27,6 +29,22 @@ public class ResultadoService {
 
 	public ResultadoDTO guardar(ResultadoDTO datos) {
 
+		if (datos == null) {
+			throw new DatoInvalidoException("Los datos del resultado son obligatorios");
+		}
+
+		if (datos.getNombreIA() == null || datos.getNombreIA().isBlank()) {
+			throw new DatoInvalidoException("El nombre de la IA es obligatorio");
+		}
+
+		if (datos.getModelo() == null || datos.getModelo().isBlank()) {
+			throw new DatoInvalidoException("El modelo de IA es obligatorio");
+		}
+
+		if (datos.getIdScraping() == null) {
+			throw new DatoInvalidoException("El identificador del scraping es obligatorio");
+		}
+
 		Resultado resultado = new Resultado(datos.getNombreIA(), datos.getModelo(), datos.getIdScraping());
 
 		if (datos.getRespuesta() != null) {
@@ -42,8 +60,12 @@ public class ResultadoService {
 
 	public ResultadoDTO buscarPorId(Long id) {
 
+		if (id == null || id <= 0) {
+			throw new DatoInvalidoException("El identificador del resultado es inválido");
+		}
+
 		Resultado resultado = resultadoRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Resultado no encontrado"));
+				.orElseThrow(() -> new RecursoNoEncontradoException("Resultado no encontrado"));
 
 		return convertirDTO(resultado);
 	}
@@ -55,11 +77,19 @@ public class ResultadoService {
 
 	public List<ResultadoDTO> buscarPorScraping(Long idScraping) {
 
+		if (idScraping == null || idScraping <= 0) {
+			throw new DatoInvalidoException("El identificador del scraping es inválido");
+		}
+
 		return resultadoRepository.findByIdScraping(idScraping).stream().map(this::convertirDTO)
 				.collect(Collectors.toList());
 	}
 
 	public List<ResultadoDTO> buscarPorNombreIA(String nombreIA) {
+
+		if (nombreIA == null || nombreIA.isBlank()) {
+			throw new DatoInvalidoException("El nombre de la IA es obligatorio");
+		}
 
 		return resultadoRepository.findByNombreIA(nombreIA).stream().map(this::convertirDTO)
 				.collect(Collectors.toList());
@@ -67,13 +97,25 @@ public class ResultadoService {
 
 	public List<ResultadoDTO> buscarPorEstado(String estado) {
 
+		if (estado == null || estado.isBlank()) {
+			throw new DatoInvalidoException("El estado del resultado es obligatorio");
+		}
+
 		return resultadoRepository.findByEstado(estado).stream().map(this::convertirDTO).collect(Collectors.toList());
 	}
 
 	public ResultadoDTO actualizar(Long id, ResultadoDTO datos) {
 
+		if (id == null || id <= 0) {
+			throw new DatoInvalidoException("El identificador del resultado es inválido");
+		}
+
+		if (datos == null) {
+			throw new DatoInvalidoException("Los datos para actualizar el resultado son obligatorios");
+		}
+
 		Resultado resultado = resultadoRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Resultado no encontrado"));
+				.orElseThrow(() -> new RecursoNoEncontradoException("Resultado no encontrado"));
 
 		if (datos.getNombreIA() != null) {
 			resultado.setNombreIA(datos.getNombreIA());
@@ -96,8 +138,12 @@ public class ResultadoService {
 
 	public void eliminar(Long id) {
 
+		if (id == null || id <= 0) {
+			throw new DatoInvalidoException("El identificador del resultado es inválido");
+		}
+
 		if (!resultadoRepository.existsById(id)) {
-			throw new RuntimeException("Resultado no encontrado");
+			throw new RecursoNoEncontradoException("Resultado no encontrado");
 		}
 
 		resultadoRepository.deleteById(id);
@@ -117,7 +163,6 @@ public class ResultadoService {
 			return aesUtil.descifrar(respuesta.substring(PREFIJO_AES.length()));
 		}
 
-		// Permite consultar resultados antiguos que todavía están en texto plano.
 		return respuesta;
 	}
 

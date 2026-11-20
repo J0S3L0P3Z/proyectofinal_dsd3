@@ -4,7 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 import co.edu.unbosque.proyectomodulotres.dto.UserDTO;
 import co.edu.unbosque.proyectomodulotres.entity.Rol;
 import co.edu.unbosque.proyectomodulotres.entity.User;
+import co.edu.unbosque.proyectomodulotres.exception.AccesoNoAutorizadoException;
+import co.edu.unbosque.proyectomodulotres.exception.CredencialesInvalidasException;
+import co.edu.unbosque.proyectomodulotres.exception.DatoInvalidoException;
+import co.edu.unbosque.proyectomodulotres.exception.RecursoNoEncontradoException;
+import co.edu.unbosque.proyectomodulotres.exception.UsuarioYaExisteException;
 import co.edu.unbosque.proyectomodulotres.repository.RolRepository;
 import co.edu.unbosque.proyectomodulotres.repository.UserRepository;
 import co.edu.unbosque.proyectomodulotres.security.JwtUtil;
@@ -38,28 +47,32 @@ public class AuthService {
 
 	public Map<String, Object> registrar(User user) {
 
+		if (user == null) {
+			throw new DatoInvalidoException("Los datos del usuario son obligatorios");
+		}
+
 		if (user.getUsername() == null || user.getUsername().isBlank()) {
-			throw new RuntimeException("El correo es obligatorio");
+			throw new DatoInvalidoException("El correo es obligatorio");
 		}
 
 		if (user.getNombre() == null || user.getNombre().isBlank()) {
-			throw new RuntimeException("El nombre es obligatorio");
+			throw new DatoInvalidoException("El nombre es obligatorio");
 		}
 
 		if (user.getApellido() == null || user.getApellido().isBlank()) {
-			throw new RuntimeException("El apellido es obligatorio");
+			throw new DatoInvalidoException("El apellido es obligatorio");
 		}
 
 		if (user.getPassword() == null || user.getPassword().length() < 8) {
-			throw new RuntimeException("La contraseña debe tener mínimo 8 caracteres");
+			throw new DatoInvalidoException("La contraseña debe tener mínimo 8 caracteres");
 		}
 
 		if (userRepository.existsByUsername(user.getUsername())) {
-			throw new RuntimeException("Este correo ya está registrado");
+			throw new UsuarioYaExisteException("Este correo ya está registrado");
 		}
 
 		Rol rolUsuario = rolRepository.findByNombreIgnoreCase("USER")
-				.orElseThrow(() -> new RuntimeException("No existe el rol USER"));
+				.orElseThrow(() -> new RecursoNoEncontradoException("No existe el rol USER"));
 
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setRole(rolUsuario);
@@ -79,10 +92,37 @@ public class AuthService {
 
 	public Map<String, Object> iniciarSesion(String username, String password) {
 
-		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+		if (username == null || username.isBlank()) {
+			throw new DatoInvalidoException("El correo es obligatorio");
+		}
+
+		if (password == null || password.isBlank()) {
+			throw new DatoInvalidoException("La contraseña es obligatoria");
+		}
+
+		try {
+
+			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+
+		} catch (BadCredentialsException e) {
+
+			throw new CredencialesInvalidasException("Correo o contraseña incorrectos");
+
+		} catch (DisabledException | LockedException e) {
+
+			throw new AccesoNoAutorizadoException("La cuenta está deshabilitada o bloqueada");
+
+		} catch (AuthenticationException e) {
+
+			throw new CredencialesInvalidasException("No fue posible autenticar al usuario");
+		}
 
 		User user = userRepository.findByUsername(username)
-				.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+				.orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado"));
+
+		if (!user.isEnabled() || !user.isActivo()) {
+			throw new AccesoNoAutorizadoException("La cuenta está deshabilitada o inactiva");
+		}
 
 		String token = jwtUtil.generateToken(user);
 

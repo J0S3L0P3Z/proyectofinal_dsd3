@@ -1,4 +1,3 @@
-
 package co.edu.unbosque.proyectomodulotres.service;
 
 import java.io.File;
@@ -27,6 +26,9 @@ import co.edu.unbosque.proyectomodulotres.entity.Scraping;
 import co.edu.unbosque.proyectomodulotres.entity.User;
 import co.edu.unbosque.proyectomodulotres.repository.ScrapingRepository;
 import co.edu.unbosque.proyectomodulotres.repository.UserRepository;
+import co.edu.unbosque.proyectomodulotres.exception.DatoInvalidoException;
+import co.edu.unbosque.proyectomodulotres.exception.RecursoNoEncontradoException;
+import co.edu.unbosque.proyectomodulotres.exception.ScrapingException;
 
 @Service
 @Transactional
@@ -57,16 +59,24 @@ public class ScrapingService {
 
 	public ScrapingDTO realizarScraping(ScrapingDTO datos) {
 
+		if (datos == null) {
+			throw new DatoInvalidoException("Debe ingresar los datos del scraping.");
+		}
+
 		if (datos.getUrl() == null || datos.getUrl().isBlank()) {
-			throw new RuntimeException("Debe ingresar una URL");
+			throw new DatoInvalidoException("Debe ingresar una URL.");
 		}
 
 		if (!datos.getUrl().startsWith("http://") && !datos.getUrl().startsWith("https://")) {
-			throw new RuntimeException("La URL debe comenzar con http:// o https://");
+			throw new DatoInvalidoException("La URL debe comenzar con http:// o https://.");
 		}
 
 		if (datos.getIdUsuario() == null) {
-			throw new RuntimeException("Debe ingresar el ID del usuario");
+			throw new DatoInvalidoException("Debe ingresar el ID del usuario.");
+		}
+
+		if (!userRepository.existsById(datos.getIdUsuario())) {
+			throw new RecursoNoEncontradoException("No se encontro el usuario indicado.");
 		}
 
 		WebDriver navegador = null;
@@ -159,7 +169,7 @@ public class ScrapingService {
 			try {
 
 				User usuario = userRepository.findById(guardado.getIdUsuario())
-						.orElseThrow(() -> new RuntimeException("No se encontro el usuario del scraping"));
+						.orElseThrow(() -> new RecursoNoEncontradoException("No se encontro el usuario del scraping."));
 
 				File archivoPDF = Paths.get(reporte.getRutaArchivo()).toFile();
 
@@ -177,9 +187,13 @@ public class ScrapingService {
 
 			return convertirDTO(guardado);
 
+		} catch (ScrapingException e) {
+
+			throw e;
+
 		} catch (Exception e) {
 
-			throw new RuntimeException("Error al realizar el scraping: " + e.getMessage(), e);
+			throw new ScrapingException("Error al realizar el scraping: " + e.getMessage());
 
 		} finally {
 
@@ -226,7 +240,7 @@ public class ScrapingService {
 		} catch (InterruptedException e) {
 
 			Thread.currentThread().interrupt();
-			throw new RuntimeException("Se interrumpio la carga del contenido de la pagina", e);
+			throw new ScrapingException("Se interrumpio la carga del contenido de la pagina.");
 		}
 	}
 
@@ -269,6 +283,18 @@ public class ScrapingService {
 
 	public ScrapingDTO guardar(ScrapingDTO datos) {
 
+		if (datos == null) {
+			throw new DatoInvalidoException("Debe ingresar los datos del scraping.");
+		}
+
+		if (datos.getUrl() == null || datos.getUrl().isBlank()) {
+			throw new DatoInvalidoException("La URL del scraping es obligatoria.");
+		}
+
+		if (datos.getIdUsuario() == null) {
+			throw new DatoInvalidoException("El ID del usuario es obligatorio.");
+		}
+
 		Scraping scraping = new Scraping(datos.getUrl(), datos.getIdUsuario());
 
 		scraping.setTituloPagina(datos.getTituloPagina());
@@ -288,8 +314,14 @@ public class ScrapingService {
 	}
 
 	public ScrapingDTO buscarPorId(Long id) {
+
+		if (id == null) {
+			throw new DatoInvalidoException("El ID del scraping es obligatorio.");
+		}
+
 		Scraping scraping = scrapingRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Scraping no encontrado"));
+				.orElseThrow(() -> new RecursoNoEncontradoException("Scraping no encontrado."));
+
 		return convertirDTO(scraping);
 	}
 
@@ -298,18 +330,36 @@ public class ScrapingService {
 	}
 
 	public List<ScrapingDTO> buscarPorUsuario(Long idUsuario) {
+
+		if (idUsuario == null) {
+			throw new DatoInvalidoException("El ID del usuario es obligatorio.");
+		}
+
 		return scrapingRepository.findByIdUsuario(idUsuario).stream().map(this::convertirDTO)
 				.collect(Collectors.toList());
 	}
 
 	public List<ScrapingDTO> buscarPorEstado(String estado) {
+
+		if (estado == null || estado.isBlank()) {
+			throw new DatoInvalidoException("El estado del scraping es obligatorio.");
+		}
+
 		return scrapingRepository.findByEstado(estado).stream().map(this::convertirDTO).collect(Collectors.toList());
 	}
 
 	public ScrapingDTO actualizar(Long id, ScrapingDTO datos) {
 
+		if (id == null) {
+			throw new DatoInvalidoException("El ID del scraping es obligatorio.");
+		}
+
+		if (datos == null) {
+			throw new DatoInvalidoException("Debe ingresar los datos para actualizar el scraping.");
+		}
+
 		Scraping scraping = scrapingRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Scraping no encontrado"));
+				.orElseThrow(() -> new RecursoNoEncontradoException("Scraping no encontrado."));
 
 		if (datos.getUrl() != null) {
 			scraping.setUrl(datos.getUrl());
@@ -348,8 +398,12 @@ public class ScrapingService {
 
 	public void eliminar(Long id) {
 
+		if (id == null) {
+			throw new DatoInvalidoException("El ID del scraping es obligatorio.");
+		}
+
 		if (!scrapingRepository.existsById(id)) {
-			throw new RuntimeException("Scraping no encontrado");
+			throw new RecursoNoEncontradoException("Scraping no encontrado.");
 		}
 
 		scrapingRepository.deleteById(id);
