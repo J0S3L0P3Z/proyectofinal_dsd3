@@ -32,14 +32,14 @@ public class IAService {
 	@Value("${app.ai.openrouter.model-dots}")
 	private String modeloDots;
 
-	@Value("${app.ai.openrouter.model-cohere}")
-	private String modeloCohere;
+	@Value("${app.ai.openrouter.model-gemini}")
+	private String modeloGemini;
 
 	@Value("${app.ai.openrouter.model-particle}")
 	private String modeloParticle;
 
-	@Value("${app.ai.openrouter.model-ling}")
-	private String modeloLing;
+	@Value("${app.ai.openrouter.model-gpt-oss}")
+	private String modeloGpt;
 
 	@Value("${app.ai.timeout-seconds:60}")
 	private int timeoutSeconds;
@@ -52,17 +52,14 @@ public class IAService {
 		this.resultadoService = resultadoService;
 	}
 
-	// EJECUTAR LAS CINCO IA SECUENCIALMENTE
 	public Map<String, String> analizarContenido(String datosJson, String codigoHTML, String contenido) {
 
 		Map<String, String> resultados = new LinkedHashMap<>();
 
-		// Tres IA para el analisis general.
 		resultados.put("NVIDIA", analizarConModelo(modeloNvidia, datosJson));
 		resultados.put("DOTS", analizarConModelo(modeloDots, datosJson));
-		resultados.put("COHERE", analizarConModelo(modeloCohere, datosJson));
+		resultados.put("GEMINI", analizarConModelo(modeloGemini, datosJson));
 
-		// IA especializada en tecnologias.
 		resultados.put("PARTICLE", analizarConModelo(modeloParticle,
 				"Identifica las tecnologias, frameworks, " + "bibliotecas y lenguajes de programacion que puedas "
 						+ "reconocer en el codigo HTML proporcionado. "
@@ -73,9 +70,8 @@ public class IAService {
 						+ "No se pudieron identificar las tecnologías utilizadas.",
 				codigoHTML));
 
-		// IA especializada en nombres de personas.
-		resultados.put("LING",
-				analizarConModelo(modeloLing, "Eres un especialista en reconocimiento de nombres propios "
+		resultados.put("GPT",
+				analizarConModelo(modeloGpt, "Eres un especialista en reconocimiento de nombres propios "
 						+ "de personas dentro de textos y paginas web. "
 						+ "Analiza cuidadosamente TODO el contenido proporcionado "
 						+ "y extrae los nombres de todas las personas mencionadas. "
@@ -104,13 +100,39 @@ public class IAService {
 		return resultados;
 	}
 
-	// ENVIAR INFORMACION A UN MODELO ESPECIFICO
 	private String analizarConModelo(String modelo, String datos) {
-		return analizarConModelo(modelo, "Eres un analista especializado en paginas web. "
-				+ "Analiza la informacion proporcionada sin inventar datos.", datos);
+		return analizarConModelo(modelo,
+				"Eres un analista especializado en paginas web. "
+						+ "Analiza detalladamente la informacion proporcionada y presenta un informe organizado. "
+
+						+ "Debes incluir los siguientes apartados: "
+
+						+ "1. TEMA PRINCIPAL: explica de que trata la pagina web. "
+
+						+ "2. INFORMACION QUE CONTIENE: describe los temas, datos y contenidos "
+						+ "mas importantes encontrados en la pagina. "
+
+						+ "3. NOMBRES DE PERSONAS: identifica los nombres de personas "
+						+ "que aparecen mencionadas en el contenido. "
+
+						+ "4. CANTIDAD DE IMAGENES: indica cuantas imagenes contiene "
+						+ "la pagina utilizando los datos proporcionados. "
+
+						+ "5. TECNOLOGIAS: identifica, cuando existan evidencias, "
+						+ "los posibles lenguajes, frameworks y tecnologias utilizados "
+						+ "para desarrollar la pagina web. No inventes tecnologias. "
+
+						+ "6. CONCLUSION: presenta una conclusion general que resuma "
+						+ "el contenido y la finalidad de la pagina. "
+
+						+ "Organiza el resultado con titulos, subtitulos y tablas " + "cuando sea conveniente. "
+
+						+ "Utiliza un lenguaje claro, profesional y detallado. "
+						+ "No inventes informacion ni agregues datos externos. "
+						+ "Si algun dato no se encuentra disponible, indicalo claramente.",
+				datos);
 	}
 
-	// ENVIAR INFORMACION CON UN PROMPT ESPECIFICO
 	private String analizarConModelo(String modelo, String instrucciones, String datos) {
 
 		try {
@@ -171,7 +193,6 @@ public class IAService {
 		}
 	}
 
-	// ANALIZAR CON LAS CINCO IA Y GUARDAR LOS RESULTADOS
 	public List<ResultadoDTO> analizarYGuardar(Long idScraping, String datosJson, String codigoHTML, String contenido) {
 
 		List<ResultadoDTO> resultados = new ArrayList<>();
@@ -192,14 +213,14 @@ public class IAService {
 			} else if (entrada.getKey().equals("DOTS")) {
 				resultado.setModelo(modeloDots);
 
-			} else if (entrada.getKey().equals("COHERE")) {
-				resultado.setModelo(modeloCohere);
+			} else if (entrada.getKey().equals("GEMINI")) {
+				resultado.setModelo(modeloGemini);
 
 			} else if (entrada.getKey().equals("PARTICLE")) {
 				resultado.setModelo(modeloParticle);
 
-			} else if (entrada.getKey().equals("LING")) {
-				resultado.setModelo(modeloLing);
+			} else if (entrada.getKey().equals("GPT")) {
+				resultado.setModelo(modeloGpt);
 			}
 
 			if (entrada.getValue().startsWith("Error")) {

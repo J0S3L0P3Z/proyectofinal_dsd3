@@ -1,39 +1,60 @@
+
 package co.edu.unbosque.proyectomodulotres.service;
 
+import java.io.File;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import co.edu.unbosque.proyectomodulotres.dto.ScrapingDTO;
 import co.edu.unbosque.proyectomodulotres.dto.ResultadoDTO;
+import co.edu.unbosque.proyectomodulotres.dto.ReporteDTO;
+import co.edu.unbosque.proyectomodulotres.dto.HistorialDTO;
 import co.edu.unbosque.proyectomodulotres.entity.Scraping;
+import co.edu.unbosque.proyectomodulotres.entity.User;
 import co.edu.unbosque.proyectomodulotres.repository.ScrapingRepository;
+import co.edu.unbosque.proyectomodulotres.repository.UserRepository;
 
 @Service
 @Transactional
 public class ScrapingService {
 
+	private static final Logger logger = LoggerFactory.getLogger(ScrapingService.class);
+
 	private final ScrapingRepository scrapingRepository;
 	private final ObjectProvider<WebDriver> webDriverProvider;
 	private final IAService iaService;
+	private final ReporteService reporteService;
+	private final UserRepository userRepository;
+	private final NotificacionEmailService notificacionEmailService;
+	private final HistorialService historialService;
 
-	// Constructor para conectar los servicios y el repositorio.
 	public ScrapingService(ScrapingRepository scrapingRepository, ObjectProvider<WebDriver> webDriverProvider,
-			IAService iaService) {
+			IAService iaService, ReporteService reporteService, UserRepository userRepository,
+			NotificacionEmailService notificacionEmailService, HistorialService historialService) {
 
 		this.scrapingRepository = scrapingRepository;
 		this.webDriverProvider = webDriverProvider;
 		this.iaService = iaService;
+		this.reporteService = reporteService;
+		this.userRepository = userRepository;
+		this.notificacionEmailService = notificacionEmailService;
+		this.historialService = historialService;
 	}
 
-	// REALIZAR SCRAPING Y GUARDAR LA INFORMACION
 	public ScrapingDTO realizarScraping(ScrapingDTO datos) {
 
 		if (datos.getUrl() == null || datos.getUrl().isBlank()) {
@@ -52,42 +73,38 @@ public class ScrapingService {
 
 		try {
 
-			// Crear una nueva instancia de Microsoft Edge.
 			navegador = webDriverProvider.getObject();
 
 			navegador.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(40));
 
-			// Abrir la pagina web.
-			navegador.get(datos.getUrl());
+			try {
+				navegador.get(datos.getUrl());
+			} catch (TimeoutException e) {
+			}
 
-			// Obtener el titulo de la pagina.
+			esperarCarga(navegador);
+
+			cargarContenidoAdicional(navegador);
+
 			String titulo = navegador.getTitle();
 
-			// Obtener todo el texto visible de la pagina.
-			WebElement cuerpo = navegador.findElement(By.tagName("body"));
-			String contenido = cuerpo.getText();
+			String contenido = obtenerTextoVisible(navegador);
 
-			// Obtener el codigo HTML de la pagina.
 			String codigoHTML = navegador.getPageSource();
 
-			// Contar imagenes.
 			int cantidadImagenes = navegador.findElements(By.tagName("img")).size();
 
-			// Contar enlaces.
 			int cantidadEnlaces = navegador.findElements(By.tagName("a")).size();
 
-			// Contar palabras.
 			int cantidadPalabras = 0;
 
 			if (contenido != null && !contenido.isBlank()) {
 				cantidadPalabras = contenido.trim().split("\\s+").length;
 			}
 
-			// Cerrar Microsoft Edge despues de extraer la informacion.
 			navegador.quit();
 			navegador = null;
 
-			// Crear el registro del scraping.
 			Scraping scraping = new Scraping(datos.getUrl(), datos.getIdUsuario());
 
 			scraping.setTituloPagina(titulo);
@@ -96,12 +113,9 @@ public class ScrapingService {
 			scraping.setCantidadEnlaces(cantidadEnlaces);
 			scraping.setCantidadPalabras(cantidadPalabras);
 
-			// Valores iniciales mientras se realiza el analisis con IA.
 			scraping.setTecnologiasIdentificadas("No se pudieron identificar las tecnologías utilizadas.");
-
 			scraping.setNombresPersonas("No se identificaron nombres de personas.");
 
-			// Guardar la informacion adicional en formato JSON.
 			String datosJson = "{" + "\"titulo\":\"" + escaparJSON(titulo) + "\"," + "\"url\":\""
 					+ escaparJSON(datos.getUrl()) + "\"," + "\"contenido\":\"" + escaparJSON(contenido) + "\","
 					+ "\"cantidadImagenes\":" + cantidadImagenes + "," + "\"cantidadEnlaces\":" + cantidadEnlaces + ","
@@ -109,40 +123,58 @@ public class ScrapingService {
 
 			scraping.setDatosJson(datosJson);
 
-			// Marcar el scraping como completado.
 			scraping.setEstado("COMPLETADO");
 
-			// Guardar el scraping en la base de datos.
 			Scraping guardado = scrapingRepository.save(scraping);
 
-			// Enviar la informacion a las cinco IA de manera secuencial.
 			if (datosJson != null && !datosJson.isBlank()) {
 
 				List<ResultadoDTO> resultadosIA = iaService.analizarYGuardar(guardado.getIdScraping(), datosJson,
 						codigoHTML, contenido);
 
-				// Recuperar las respuestas de las IA especializadas.
 				for (ResultadoDTO resultado : resultadosIA) {
 
 					if (resultado.getRespuesta() != null && !resultado.getRespuesta().startsWith("Error")) {
 
-						// Guardar las tecnologias identificadas por PARTICLE.
 						if ("PARTICLE".equals(resultado.getNombreIA())) {
 							guardado.setTecnologiasIdentificadas(resultado.getRespuesta());
 						}
 
-						// Guardar los nombres identificados por LING.
-						if ("LING".equals(resultado.getNombreIA())) {
+						if ("GPT".equals(resultado.getNombreIA())) {
 							guardado.setNombresPersonas(resultado.getRespuesta());
 						}
 					}
 				}
 
-				// Actualizar el scraping con los resultados de las IA.
 				guardado = scrapingRepository.save(guardado);
 			}
 
-			// Devolver la informacion del scraping.
+			HistorialDTO historial = new HistorialDTO(null, null, "Scraping realizado: " + guardado.getUrl(),
+					guardado.getEstado(), guardado.getIdUsuario(), guardado.getIdScraping());
+
+			historialService.guardar(historial);
+
+			ReporteDTO reporte = reporteService.generarPDF(guardado.getIdScraping());
+
+			try {
+
+				User usuario = userRepository.findById(guardado.getIdUsuario())
+						.orElseThrow(() -> new RuntimeException("No se encontro el usuario del scraping"));
+
+				File archivoPDF = Paths.get(reporte.getRutaArchivo()).toFile();
+
+				String nombreUsuario = usuario.getNombre() + " " + usuario.getApellido();
+
+				notificacionEmailService.enviarNotificacion(usuario.getUsername(), nombreUsuario, guardado.getUrl(),
+						guardado.getEstado(),
+						"El scraping, el analisis de inteligencia artificial y la generacion del reporte finalizaron correctamente.",
+						archivoPDF);
+
+			} catch (Exception e) {
+
+				logger.error("El scraping termino correctamente, pero no se pudo enviar el correo.", e);
+			}
+
 			return convertirDTO(guardado);
 
 		} catch (Exception e) {
@@ -151,14 +183,90 @@ public class ScrapingService {
 
 		} finally {
 
-			// Cerrar Microsoft Edge si todavia esta abierto.
 			if (navegador != null) {
 				navegador.quit();
 			}
 		}
 	}
 
-	// REGISTRAR UN SCRAPING MANUALMENTE
+	private void esperarCarga(WebDriver navegador) {
+
+		try {
+
+			WebDriverWait espera = new WebDriverWait(navegador, Duration.ofSeconds(15));
+
+			espera.until(driver -> {
+
+				String estado = (String) ((JavascriptExecutor) driver).executeScript("return document.readyState");
+
+				return "complete".equals(estado) || "interactive".equals(estado);
+			});
+
+		} catch (TimeoutException e) {
+		}
+	}
+
+	private void cargarContenidoAdicional(WebDriver navegador) {
+
+		try {
+
+			JavascriptExecutor javascript = (JavascriptExecutor) navegador;
+
+			for (int i = 0; i < 8; i++) {
+
+				javascript.executeScript("window.scrollBy(0, Math.max(window.innerHeight * 0.8, 500));");
+
+				Thread.sleep(700);
+			}
+
+			javascript.executeScript("window.scrollTo(0, 0);");
+
+			Thread.sleep(500);
+
+		} catch (InterruptedException e) {
+
+			Thread.currentThread().interrupt();
+			throw new RuntimeException("Se interrumpio la carga del contenido de la pagina", e);
+		}
+	}
+
+	private String obtenerTextoVisible(WebDriver navegador) {
+
+		JavascriptExecutor javascript = (JavascriptExecutor) navegador;
+
+		String contenido = (String) javascript.executeScript("return document.body ? document.body.innerText : '';");
+
+		if (contenido != null && !contenido.isBlank()) {
+			return contenido.trim();
+		}
+
+		String scriptSecciones = "var elementos = document.querySelectorAll('main, article, [role=\"main\"]');"
+				+ "for (var i = 0; i < elementos.length; i++) {" + "  var elemento = elementos[i];"
+				+ "  if (elemento.getClientRects().length > 0 && elemento.innerText.trim() !== '') {"
+				+ "    return elemento.innerText;" + "  }" + "}" + "return '';";
+
+		contenido = (String) javascript.executeScript(scriptSecciones);
+
+		if (contenido != null && !contenido.isBlank()) {
+			return contenido.trim();
+		}
+
+		String scriptElementos = "var elementos = document.querySelectorAll("
+				+ "'h1, h2, h3, h4, h5, h6, p, li, blockquote');" + "var textos = [];"
+				+ "for (var i = 0; i < elementos.length; i++) {" + "  var elemento = elementos[i];"
+				+ "  var texto = elemento.innerText.trim();"
+				+ "  if (elemento.getClientRects().length > 0 && texto !== '') {" + "    textos.push(texto);" + "  }"
+				+ "}" + "return textos.join('\\n');";
+
+		contenido = (String) javascript.executeScript(scriptElementos);
+
+		if (contenido != null) {
+			return contenido.trim();
+		}
+
+		return "";
+	}
+
 	public ScrapingDTO guardar(ScrapingDTO datos) {
 
 		Scraping scraping = new Scraping(datos.getUrl(), datos.getIdUsuario());
@@ -179,35 +287,25 @@ public class ScrapingService {
 		return convertirDTO(scrapingRepository.save(scraping));
 	}
 
-	// BUSCAR POR ID
 	public ScrapingDTO buscarPorId(Long id) {
-
 		Scraping scraping = scrapingRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Scraping no encontrado"));
-
 		return convertirDTO(scraping);
 	}
 
-	// BUSCAR TODOS
 	public List<ScrapingDTO> buscarTodos() {
-
 		return scrapingRepository.findAll().stream().map(this::convertirDTO).collect(Collectors.toList());
 	}
 
-	// BUSCAR POR USUARIO
 	public List<ScrapingDTO> buscarPorUsuario(Long idUsuario) {
-
 		return scrapingRepository.findByIdUsuario(idUsuario).stream().map(this::convertirDTO)
 				.collect(Collectors.toList());
 	}
 
-	// BUSCAR POR ESTADO
 	public List<ScrapingDTO> buscarPorEstado(String estado) {
-
 		return scrapingRepository.findByEstado(estado).stream().map(this::convertirDTO).collect(Collectors.toList());
 	}
 
-	// ACTUALIZAR
 	public ScrapingDTO actualizar(Long id, ScrapingDTO datos) {
 
 		Scraping scraping = scrapingRepository.findById(id)
@@ -248,7 +346,6 @@ public class ScrapingService {
 		return convertirDTO(scrapingRepository.save(scraping));
 	}
 
-	// ELIMINAR
 	public void eliminar(Long id) {
 
 		if (!scrapingRepository.existsById(id)) {
@@ -258,7 +355,6 @@ public class ScrapingService {
 		scrapingRepository.deleteById(id);
 	}
 
-	// CONVERTIR ENTIDAD A DTO
 	private ScrapingDTO convertirDTO(Scraping scraping) {
 
 		return new ScrapingDTO(scraping.getIdScraping(), scraping.getUrl(), scraping.getTituloPagina(),
@@ -268,13 +364,10 @@ public class ScrapingService {
 				scraping.getIdUsuario());
 	}
 
-	// ESCAPAR CARACTERES PARA GUARDAR JSON
 	private String escaparJSON(String texto) {
-
 		if (texto == null) {
 			return "";
 		}
-
 		return texto.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r").replace("\t",
 				"\\t");
 	}

@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import co.edu.unbosque.proyectomodulotres.dto.UserDTO;
+import co.edu.unbosque.proyectomodulotres.entity.Rol;
 import co.edu.unbosque.proyectomodulotres.entity.User;
+import co.edu.unbosque.proyectomodulotres.repository.RolRepository;
 import co.edu.unbosque.proyectomodulotres.repository.UserRepository;
 import co.edu.unbosque.proyectomodulotres.security.JwtUtil;
 
@@ -19,14 +21,16 @@ import co.edu.unbosque.proyectomodulotres.security.JwtUtil;
 public class AuthService {
 
 	private final UserRepository userRepository;
+	private final RolRepository rolRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final AuthenticationManager authenticationManager;
 	private final JwtUtil jwtUtil;
 
-	public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+	public AuthService(UserRepository userRepository, RolRepository rolRepository, PasswordEncoder passwordEncoder,
 			AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
 
 		this.userRepository = userRepository;
+		this.rolRepository = rolRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.authenticationManager = authenticationManager;
 		this.jwtUtil = jwtUtil;
@@ -54,8 +58,11 @@ public class AuthService {
 			throw new RuntimeException("Este correo ya está registrado");
 		}
 
+		Rol rolUsuario = rolRepository.findByNombreIgnoreCase("USER")
+				.orElseThrow(() -> new RuntimeException("No existe el rol USER"));
+
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		user.setRole(User.Role.USER);
+		user.setRole(rolUsuario);
 		user.setEnabled(true);
 		user.setActivo(true);
 
@@ -92,6 +99,6 @@ public class AuthService {
 	private UserDTO convertirDTO(User user) {
 
 		return new UserDTO(user.getId(), user.getUsername(), user.getNombre(), user.getApellido(),
-				user.getRole().name(), user.getFechaRegistro(), user.isEnabled(), user.isActivo());
+				user.getRole().getNombre(), user.getFechaRegistro(), user.isEnabled(), user.isActivo());
 	}
 }

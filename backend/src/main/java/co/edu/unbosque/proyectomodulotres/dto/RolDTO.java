@@ -1,4 +1,3 @@
-
 package co.edu.unbosque.proyectomodulotres.dto;
 
 public class RolDTO {

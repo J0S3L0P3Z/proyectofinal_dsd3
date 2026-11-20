@@ -15,11 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lowagie.text.DocumentException;
 
 import co.edu.unbosque.proyectomodulotres.dto.ReporteDTO;
+import co.edu.unbosque.proyectomodulotres.dto.ResultadoDTO;
 import co.edu.unbosque.proyectomodulotres.entity.Reporte;
-import co.edu.unbosque.proyectomodulotres.entity.Resultado;
 import co.edu.unbosque.proyectomodulotres.entity.Scraping;
 import co.edu.unbosque.proyectomodulotres.repository.ReporteRepository;
-import co.edu.unbosque.proyectomodulotres.repository.ResultadoRepository;
 import co.edu.unbosque.proyectomodulotres.repository.ScrapingRepository;
 import co.edu.unbosque.proyectomodulotres.util.GeneradorPDF;
 
@@ -28,18 +27,18 @@ import co.edu.unbosque.proyectomodulotres.util.GeneradorPDF;
 public class ReporteService {
 
 	private final ReporteRepository reporteRepository;
-	private final ResultadoRepository resultadoRepository;
 	private final ScrapingRepository scrapingRepository;
+	private final ResultadoService resultadoService;
 
 	@Value("${app.reportes.ruta:reportes}")
 	private String rutaReportes;
 
-	public ReporteService(ReporteRepository reporteRepository, ResultadoRepository resultadoRepository,
-			ScrapingRepository scrapingRepository) {
+	public ReporteService(ReporteRepository reporteRepository, ScrapingRepository scrapingRepository,
+			ResultadoService resultadoService) {
 
 		this.reporteRepository = reporteRepository;
-		this.resultadoRepository = resultadoRepository;
 		this.scrapingRepository = scrapingRepository;
+		this.resultadoService = resultadoService;
 	}
 
 	// Genera y guarda el PDF de un scraping.
@@ -49,8 +48,8 @@ public class ReporteService {
 		Scraping scraping = scrapingRepository.findById(idScraping)
 				.orElseThrow(() -> new RuntimeException("Scraping no encontrado"));
 
-		// Buscar los resultados de las IA.
-		List<Resultado> resultados = resultadoRepository.findByIdScraping(idScraping);
+		// Obtener las respuestas de las IA ya descifradas.
+		List<ResultadoDTO> resultados = resultadoService.buscarPorScraping(idScraping);
 
 		try {
 

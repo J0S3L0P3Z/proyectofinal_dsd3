@@ -7,8 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import co.edu.unbosque.proyectomodulotres.dto.UserDTO;
+import co.edu.unbosque.proyectomodulotres.entity.Rol;
 import co.edu.unbosque.proyectomodulotres.entity.User;
-import co.edu.unbosque.proyectomodulotres.entity.User.Role;
+import co.edu.unbosque.proyectomodulotres.repository.RolRepository;
 import co.edu.unbosque.proyectomodulotres.repository.UserRepository;
 
 @Service
@@ -16,9 +17,11 @@ import co.edu.unbosque.proyectomodulotres.repository.UserRepository;
 public class UserService {
 
 	private final UserRepository userRepository;
+	private final RolRepository rolRepository;
 
-	public UserService(UserRepository userRepository) {
+	public UserService(UserRepository userRepository, RolRepository rolRepository) {
 		this.userRepository = userRepository;
+		this.rolRepository = rolRepository;
 	}
 
 	public UserDTO buscarPorId(Long id) {
@@ -64,14 +67,10 @@ public class UserService {
 
 		if (datos.getRole() != null) {
 
-			try {
-				Role nuevoRol = Role.valueOf(datos.getRole().trim().toUpperCase());
+			Rol rol = rolRepository.findByNombreIgnoreCase(datos.getRole())
+					.orElseThrow(() -> new RuntimeException("El rol no existe"));
 
-				user.setRole(nuevoRol);
-
-			} catch (IllegalArgumentException e) {
-				throw new RuntimeException("El rol ingresado no es válido");
-			}
+			user.setRole(rol);
 		}
 
 		if (datos.getEnabled() != null) {
@@ -99,16 +98,24 @@ public class UserService {
 	}
 
 	public long contarAdministradores() {
-		return userRepository.countByRole(Role.ADMIN);
+
+		Rol rolAdmin = rolRepository.findByNombreIgnoreCase("ADMIN")
+				.orElseThrow(() -> new RuntimeException("No existe el rol ADMIN"));
+
+		return userRepository.countByRole(rolAdmin);
 	}
 
 	public long contarUsuarios() {
-		return userRepository.countByRole(Role.USER);
+
+		Rol rolUsuario = rolRepository.findByNombreIgnoreCase("USER")
+				.orElseThrow(() -> new RuntimeException("No existe el rol USER"));
+
+		return userRepository.countByRole(rolUsuario);
 	}
 
 	private UserDTO convertirDTO(User user) {
 
 		return new UserDTO(user.getId(), user.getUsername(), user.getNombre(), user.getApellido(),
-				user.getRole().name(), user.getFechaRegistro(), user.isEnabled(), user.isActivo());
+				user.getRole().getNombre(), user.getFechaRegistro(), user.isEnabled(), user.isActivo());
 	}
 }

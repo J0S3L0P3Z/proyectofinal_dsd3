@@ -40,6 +40,8 @@ public class SecurityConfig {
 
 				.requestMatchers("/usuarios/**").hasRole("ADMIN")
 
+				.requestMatchers("/rol/**").hasRole("ADMIN")
+
 				.requestMatchers("/scraping/**").hasAnyRole("USER", "ADMIN")
 
 				.requestMatchers("/resultado/**").hasAnyRole("USER", "ADMIN")
@@ -49,11 +51,8 @@ public class SecurityConfig {
 				.requestMatchers("/historial/**").hasAnyRole("USER", "ADMIN")
 
 				.anyRequest().authenticated())
-
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
 				.authenticationProvider(authenticationProvider())
-
 				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
