@@ -9,22 +9,29 @@ import org.springframework.transaction.annotation.Transactional;
 import co.edu.unbosque.proyectomodulotres.dto.ResultadoDTO;
 import co.edu.unbosque.proyectomodulotres.entity.Resultado;
 import co.edu.unbosque.proyectomodulotres.repository.ResultadoRepository;
+import co.edu.unbosque.proyectomodulotres.util.AESUtil;
 
 @Service
 @Transactional
 public class ResultadoService {
 
-	private final ResultadoRepository resultadoRepository;
+	private static final String PREFIJO_AES = "AES:";
 
-	public ResultadoService(ResultadoRepository resultadoRepository) {
+	private final ResultadoRepository resultadoRepository;
+	private final AESUtil aesUtil;
+
+	public ResultadoService(ResultadoRepository resultadoRepository, AESUtil aesUtil) {
 		this.resultadoRepository = resultadoRepository;
+		this.aesUtil = aesUtil;
 	}
 
 	public ResultadoDTO guardar(ResultadoDTO datos) {
 
 		Resultado resultado = new Resultado(datos.getNombreIA(), datos.getModelo(), datos.getIdScraping());
 
-		resultado.setRespuesta(datos.getRespuesta());
+		if (datos.getRespuesta() != null) {
+			resultado.setRespuesta(cifrarRespuesta(datos.getRespuesta()));
+		}
 
 		if (datos.getEstado() != null) {
 			resultado.setEstado(datos.getEstado());
@@ -77,7 +84,7 @@ public class ResultadoService {
 		}
 
 		if (datos.getRespuesta() != null) {
-			resultado.setRespuesta(datos.getRespuesta());
+			resultado.setRespuesta(cifrarRespuesta(datos.getRespuesta()));
 		}
 
 		if (datos.getEstado() != null) {
@@ -96,10 +103,28 @@ public class ResultadoService {
 		resultadoRepository.deleteById(id);
 	}
 
+	private String cifrarRespuesta(String respuesta) {
+		return PREFIJO_AES + aesUtil.cifrar(respuesta);
+	}
+
+	private String descifrarRespuesta(String respuesta) {
+
+		if (respuesta == null) {
+			return null;
+		}
+
+		if (respuesta.startsWith(PREFIJO_AES)) {
+			return aesUtil.descifrar(respuesta.substring(PREFIJO_AES.length()));
+		}
+
+		// Permite consultar resultados antiguos que todavía están en texto plano.
+		return respuesta;
+	}
+
 	private ResultadoDTO convertirDTO(Resultado resultado) {
 
 		return new ResultadoDTO(resultado.getIdResultado(), resultado.getNombreIA(), resultado.getModelo(),
-				resultado.getRespuesta(), resultado.getFechaAnalisis(), resultado.getEstado(),
+				descifrarRespuesta(resultado.getRespuesta()), resultado.getFechaAnalisis(), resultado.getEstado(),
 				resultado.getIdScraping());
 	}
 }

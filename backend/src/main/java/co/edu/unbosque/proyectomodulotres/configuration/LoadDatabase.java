@@ -8,9 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import co.edu.unbosque.proyectomodulotres.entity.Rol;
 import co.edu.unbosque.proyectomodulotres.entity.User;
-import co.edu.unbosque.proyectomodulotres.repository.RolRepository;
 import co.edu.unbosque.proyectomodulotres.repository.UserRepository;
 
 @Configuration
@@ -23,22 +21,9 @@ public class LoadDatabase {
 	private String contrasenaAdministrador;
 
 	@Bean
-	public CommandLineRunner inicializarAdministrador(UserRepository userRepository, RolRepository rolRepository,
-			PasswordEncoder passwordEncoder) {
+	public CommandLineRunner inicializarAdministrador(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 
 		return args -> {
-
-			Rol rolAdmin = rolRepository.findByNombreIgnoreCase("ADMIN").orElseGet(() -> {
-				Rol nuevoRol = new Rol();
-				nuevoRol.setNombre("ADMIN");
-				return rolRepository.save(nuevoRol);
-			});
-
-			rolRepository.findByNombreIgnoreCase("USER").orElseGet(() -> {
-				Rol nuevoRol = new Rol();
-				nuevoRol.setNombre("USER");
-				return rolRepository.save(nuevoRol);
-			});
 
 			User administrador = userRepository.findByUsername(correoAdministrador).orElse(null);
 
@@ -49,9 +34,8 @@ public class LoadDatabase {
 				administrador.setUsername(correoAdministrador);
 				administrador.setNombre("Administrador");
 				administrador.setApellido("Sistema");
-				administrador.setRole(rolAdmin);
+				administrador.setRole(User.Role.ADMIN);
 				administrador.setFechaRegistro(LocalDate.now());
-
 				administrador.setEnabled(true);
 				administrador.setActivo(true);
 				administrador.setAccountNonExpired(true);
@@ -62,14 +46,17 @@ public class LoadDatabase {
 
 			} else {
 
+				administrador.setRole(User.Role.ADMIN);
+
 				System.out.println("Administrador inicial encontrado. Actualizando contraseña.");
+
 			}
 
 			administrador.setPassword(passwordEncoder.encode(contrasenaAdministrador));
 
 			userRepository.save(administrador);
 
-			System.out.println("Roles ADMIN y USER verificados correctamente.");
+			System.out.println("Administrador inicial verificado correctamente.");
 		};
 	}
 }

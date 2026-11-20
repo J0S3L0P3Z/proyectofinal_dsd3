@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import co.edu.unbosque.proyectomodulotres.dto.ScrapingDTO;
+import co.edu.unbosque.proyectomodulotres.dto.ResultadoDTO;
 import co.edu.unbosque.proyectomodulotres.entity.Scraping;
 import co.edu.unbosque.proyectomodulotres.repository.ScrapingRepository;
 
@@ -40,7 +41,6 @@ public class ScrapingService {
 		}
 
 		if (!datos.getUrl().startsWith("http://") && !datos.getUrl().startsWith("https://")) {
-
 			throw new RuntimeException("La URL debe comenzar con http:// o https://");
 		}
 
@@ -66,6 +66,9 @@ public class ScrapingService {
 			// Obtener todo el texto visible de la pagina.
 			WebElement cuerpo = navegador.findElement(By.tagName("body"));
 			String contenido = cuerpo.getText();
+
+			// Obtener el codigo HTML de la pagina.
+			String codigoHTML = navegador.getPageSource();
 
 			// Contar imagenes.
 			int cantidadImagenes = navegador.findElements(By.tagName("img")).size();
@@ -93,10 +96,16 @@ public class ScrapingService {
 			scraping.setCantidadEnlaces(cantidadEnlaces);
 			scraping.setCantidadPalabras(cantidadPalabras);
 
-			// Guardar informacion adicional en formato JSON.
+			// Valores iniciales mientras se realiza el analisis con IA.
+			scraping.setTecnologiasIdentificadas("No se pudieron identificar las tecnologías utilizadas.");
+
+			scraping.setNombresPersonas("No se identificaron nombres de personas.");
+
+			// Guardar la informacion adicional en formato JSON.
 			String datosJson = "{" + "\"titulo\":\"" + escaparJSON(titulo) + "\"," + "\"url\":\""
-					+ escaparJSON(datos.getUrl()) + "\"," + "\"cantidadImagenes\":" + cantidadImagenes + ","
-					+ "\"cantidadEnlaces\":" + cantidadEnlaces + "," + "\"cantidadPalabras\":" + cantidadPalabras + "}";
+					+ escaparJSON(datos.getUrl()) + "\"," + "\"contenido\":\"" + escaparJSON(contenido) + "\","
+					+ "\"cantidadImagenes\":" + cantidadImagenes + "," + "\"cantidadEnlaces\":" + cantidadEnlaces + ","
+					+ "\"cantidadPalabras\":" + cantidadPalabras + "}";
 
 			scraping.setDatosJson(datosJson);
 
@@ -106,10 +115,31 @@ public class ScrapingService {
 			// Guardar el scraping en la base de datos.
 			Scraping guardado = scrapingRepository.save(scraping);
 
-			// Ejecutar las tres IA y guardar sus resultados.
-			if (contenido != null && !contenido.isBlank()) {
+			// Enviar la informacion a las cinco IA de manera secuencial.
+			if (datosJson != null && !datosJson.isBlank()) {
 
-				iaService.analizarYGuardar(guardado.getIdScraping(), contenido);
+				List<ResultadoDTO> resultadosIA = iaService.analizarYGuardar(guardado.getIdScraping(), datosJson,
+						codigoHTML, contenido);
+
+				// Recuperar las respuestas de las IA especializadas.
+				for (ResultadoDTO resultado : resultadosIA) {
+
+					if (resultado.getRespuesta() != null && !resultado.getRespuesta().startsWith("Error")) {
+
+						// Guardar las tecnologias identificadas por PARTICLE.
+						if ("PARTICLE".equals(resultado.getNombreIA())) {
+							guardado.setTecnologiasIdentificadas(resultado.getRespuesta());
+						}
+
+						// Guardar los nombres identificados por LING.
+						if ("LING".equals(resultado.getNombreIA())) {
+							guardado.setNombresPersonas(resultado.getRespuesta());
+						}
+					}
+				}
+
+				// Actualizar el scraping con los resultados de las IA.
+				guardado = scrapingRepository.save(guardado);
 			}
 
 			// Devolver la informacion del scraping.

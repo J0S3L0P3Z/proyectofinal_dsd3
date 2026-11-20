@@ -20,115 +20,137 @@ import co.edu.unbosque.proyectomodulotres.dto.ResultadoDTO;
 @Service
 public class IAService {
 
-	// Direccion base de OpenRouter.
 	@Value("${app.ai.openrouter.base-url}")
 	private String baseUrl;
 
-	// API Key de OpenRouter.
 	@Value("${app.ai.openrouter.api-key}")
 	private String apiKey;
 
-	// Modelos que vamos a utilizar.
 	@Value("${app.ai.openrouter.model-nvidia}")
 	private String modeloNvidia;
 
-	@Value("${app.ai.openrouter.model-qwen}")
-	private String modeloQwen;
+	@Value("${app.ai.openrouter.model-dots}")
+	private String modeloDots;
 
 	@Value("${app.ai.openrouter.model-cohere}")
 	private String modeloCohere;
 
-	// Tiempo maximo de espera.
+	@Value("${app.ai.openrouter.model-particle}")
+	private String modeloParticle;
+
+	@Value("${app.ai.openrouter.model-ling}")
+	private String modeloLing;
+
 	@Value("${app.ai.timeout-seconds:60}")
 	private int timeoutSeconds;
 
-	// Objeto para construir y leer JSON.
 	private final ObjectMapper objectMapper;
-
-	// Servicio encargado de guardar los resultados.
 	private final ResultadoService resultadoService;
 
-	// Constructor para recibir las dependencias.
 	public IAService(ResultadoService resultadoService) {
 		this.objectMapper = new ObjectMapper();
 		this.resultadoService = resultadoService;
 	}
 
-	// Ejecuta el analisis con los tres modelos.
-	public Map<String, String> analizarContenido(String contenido) {
+	// EJECUTAR LAS CINCO IA SECUENCIALMENTE
+	public Map<String, String> analizarContenido(String datosJson, String codigoHTML, String contenido) {
 
 		Map<String, String> resultados = new LinkedHashMap<>();
 
-		resultados.put("NVIDIA", analizarConModelo(modeloNvidia, contenido));
+		// Tres IA para el analisis general.
+		resultados.put("NVIDIA", analizarConModelo(modeloNvidia, datosJson));
+		resultados.put("DOTS", analizarConModelo(modeloDots, datosJson));
+		resultados.put("COHERE", analizarConModelo(modeloCohere, datosJson));
 
-		resultados.put("BAIDU", analizarConModelo(modeloQwen, contenido));
+		// IA especializada en tecnologias.
+		resultados.put("PARTICLE", analizarConModelo(modeloParticle,
+				"Identifica las tecnologias, frameworks, " + "bibliotecas y lenguajes de programacion que puedas "
+						+ "reconocer en el codigo HTML proporcionado. "
+						+ "Puedes incluir tecnologias que consideres probables "
+						+ "aunque no puedas confirmarlas completamente. "
+						+ "Devuelve solamente sus nombres separados por comas. " + "No incluyas explicaciones. "
+						+ "Si no identificas ninguna, responde exactamente: "
+						+ "No se pudieron identificar las tecnologías utilizadas.",
+				codigoHTML));
 
-		resultados.put("COHERE", analizarConModelo(modeloCohere, contenido));
+		// IA especializada en nombres de personas.
+		resultados.put("LING",
+				analizarConModelo(modeloLing, "Eres un especialista en reconocimiento de nombres propios "
+						+ "de personas dentro de textos y paginas web. "
+						+ "Analiza cuidadosamente TODO el contenido proporcionado "
+						+ "y extrae los nombres de todas las personas mencionadas. "
+
+						+ "Debes identificar nombres y apellidos de personas, "
+						+ "cientificos, investigadores, escritores, autores, "
+						+ "fundadores, personajes historicos y cualquier otra " + "persona mencionada en el texto. "
+
+						+ "No limites la busqueda a la seccion de autores. "
+						+ "Revisa tambien los parrafos, ejemplos, referencias " + "y explicaciones del contenido. "
+
+						+ "Si aparece solamente un nombre o un apellido y "
+						+ "puedes reconocer que corresponde a una persona, " + "tambien debes incluirlo. "
+
+						+ "No incluyas empresas, marcas, organizaciones, "
+						+ "instituciones, lugares ni nombres de tecnologias. "
+
+						+ "No inventes personas que no aparezcan mencionadas. "
+
+						+ "Devuelve exclusivamente los nombres identificados, "
+						+ "separados por comas, sin explicaciones, descripciones " + "ni texto adicional. "
+
+						+ "Si no encuentras ningun nombre de persona, " + "responde exactamente: "
+						+ "No se identificaron nombres de personas.", contenido));
 
 		return resultados;
 	}
 
-	// Envia el contenido a un modelo especifico.
-	private String analizarConModelo(String modelo, String contenido) {
+	// ENVIAR INFORMACION A UN MODELO ESPECIFICO
+	private String analizarConModelo(String modelo, String datos) {
+		return analizarConModelo(modelo, "Eres un analista especializado en paginas web. "
+				+ "Analiza la informacion proporcionada sin inventar datos.", datos);
+	}
+
+	// ENVIAR INFORMACION CON UN PROMPT ESPECIFICO
+	private String analizarConModelo(String modelo, String instrucciones, String datos) {
 
 		try {
 
-			// Construimos el cuerpo de la solicitud.
 			ObjectNode solicitud = objectMapper.createObjectNode();
 
 			solicitud.put("model", modelo);
 			solicitud.put("temperature", 0.2);
 
-			// Creamos los mensajes.
 			ArrayNode mensajes = objectMapper.createArrayNode();
 
 			ObjectNode mensajeSistema = objectMapper.createObjectNode();
-
 			mensajeSistema.put("role", "system");
-
-			mensajeSistema.put("content",
-					"Eres un analista especializado en analizar contenido de paginas web. "
-							+ "Identifica el tema principal, resume la informacion, "
-							+ "extrae los puntos importantes y presenta conclusiones. "
-							+ "No inventes informacion que no aparezca en el contenido.");
-
+			mensajeSistema.put("content", instrucciones);
 			mensajes.add(mensajeSistema);
 
 			ObjectNode mensajeUsuario = objectMapper.createObjectNode();
-
 			mensajeUsuario.put("role", "user");
-
-			mensajeUsuario.put("content", "Analiza el siguiente contenido extraido de una pagina web:\n\n" + contenido);
-
+			mensajeUsuario.put("content", datos == null ? "" : datos);
 			mensajes.add(mensajeUsuario);
 
 			solicitud.set("messages", mensajes);
 
-			// Convertimos la solicitud a JSON.
 			String cuerpo = objectMapper.writeValueAsString(solicitud);
 
-			// Configuramos la autorizacion.
 			Map<String, String> encabezados = new LinkedHashMap<>();
-
 			encabezados.put("Authorization", "Bearer " + apiKey);
 
-			// Enviamos la solicitud a OpenRouter.
 			ExternalHTTPRequestHandler.ExternalResponse respuesta = ExternalHTTPRequestHandler
 					.doPost(baseUrl + "/chat/completions", cuerpo, encabezados, Duration.ofSeconds(timeoutSeconds));
 
-			// Verificamos si la solicitud fue exitosa.
 			if (!respuesta.isSuccess()) {
-
 				return "Error del modelo. Codigo HTTP: " + respuesta.statusCode() + ". Respuesta: " + respuesta.body();
 			}
 
-			// Leemos la respuesta JSON.
 			JsonNode jsonRespuesta = objectMapper.readTree(respuesta.body());
 
 			JsonNode contenidoRespuesta = jsonRespuesta.path("choices").path(0).path("message").path("content");
 
 			if (contenidoRespuesta.isMissingNode() || contenidoRespuesta.isNull()) {
-
 				return "Error: el modelo no devolvio una respuesta valida.";
 			}
 
@@ -137,7 +159,6 @@ public class IAService {
 		} catch (InterruptedException e) {
 
 			Thread.currentThread().interrupt();
-
 			return "Error: la solicitud al modelo fue interrumpida.";
 
 		} catch (IOException e) {
@@ -150,50 +171,43 @@ public class IAService {
 		}
 	}
 
-	// Analiza el contenido con las tres IA y guarda sus resultados.
-	public List<ResultadoDTO> analizarYGuardar(Long idScraping, String contenido) {
+	// ANALIZAR CON LAS CINCO IA Y GUARDAR LOS RESULTADOS
+	public List<ResultadoDTO> analizarYGuardar(Long idScraping, String datosJson, String codigoHTML, String contenido) {
 
 		List<ResultadoDTO> resultados = new ArrayList<>();
 
-		// Ejecutamos el analisis con los tres modelos.
-		Map<String, String> respuestas = analizarContenido(contenido);
+		Map<String, String> respuestas = analizarContenido(datosJson, codigoHTML, contenido);
 
-		// Recorremos las respuestas obtenidas.
 		for (Map.Entry<String, String> entrada : respuestas.entrySet()) {
 
 			ResultadoDTO resultado = new ResultadoDTO();
 
 			resultado.setNombreIA(entrada.getKey());
-
 			resultado.setRespuesta(entrada.getValue());
-
 			resultado.setIdScraping(idScraping);
 
-			// Identificamos el modelo utilizado.
 			if (entrada.getKey().equals("NVIDIA")) {
-
 				resultado.setModelo(modeloNvidia);
 
-			} else if (entrada.getKey().equals("BAIDU")) {
-
-				resultado.setModelo(modeloQwen);
+			} else if (entrada.getKey().equals("DOTS")) {
+				resultado.setModelo(modeloDots);
 
 			} else if (entrada.getKey().equals("COHERE")) {
-
 				resultado.setModelo(modeloCohere);
+
+			} else if (entrada.getKey().equals("PARTICLE")) {
+				resultado.setModelo(modeloParticle);
+
+			} else if (entrada.getKey().equals("LING")) {
+				resultado.setModelo(modeloLing);
 			}
 
-			// Determinamos si el analisis fue exitoso.
 			if (entrada.getValue().startsWith("Error")) {
-
 				resultado.setEstado("ERROR");
-
 			} else {
-
 				resultado.setEstado("COMPLETADO");
 			}
 
-			// Guardamos el resultado en MySQL.
 			ResultadoDTO resultadoGuardado = resultadoService.guardar(resultado);
 
 			resultados.add(resultadoGuardado);

@@ -1,4 +1,3 @@
-
 package co.edu.unbosque.proyectomodulotres.entity;
 
 import java.time.LocalDate;
@@ -12,12 +11,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -40,9 +38,9 @@ public class User implements UserDetails {
 	@Column(name = "contrasena", nullable = false)
 	private String password;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "rol_id", nullable = false)
-	private Rol role;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "rol", nullable = false)
+	private Role role;
 
 	private LocalDate fechaRegistro;
 
@@ -57,6 +55,10 @@ public class User implements UserDetails {
 	@Column(nullable = false)
 	private boolean activo;
 
+	public enum Role {
+		USER, ADMIN
+	}
+
 	public User() {
 		this.accountNonExpired = true;
 		this.accountNonLocked = true;
@@ -64,6 +66,7 @@ public class User implements UserDetails {
 		this.enabled = true;
 		this.activo = true;
 		this.fechaRegistro = LocalDate.now();
+		this.role = Role.USER;
 	}
 
 	public User(String username, String password) {
@@ -72,29 +75,18 @@ public class User implements UserDetails {
 		this.password = password;
 	}
 
-	public User(String username, String password, Rol rol, String nombre, String apellido) {
+	public User(String username, String password, Role role, String nombre, String apellido) {
 		this();
 		this.username = username;
 		this.password = password;
-		this.role = rol;
+		this.role = role;
 		this.nombre = nombre;
 		this.apellido = apellido;
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-
-		if (role == null || role.getNombre() == null) {
-			return List.of();
-		}
-
-		String nombreRol = role.getNombre().toUpperCase();
-
-		if (!nombreRol.startsWith("ROLE_")) {
-			nombreRol = "ROLE_" + nombreRol;
-		}
-
-		return List.of(new SimpleGrantedAuthority(nombreRol));
+		return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
 	}
 
 	@Override
@@ -117,11 +109,11 @@ public class User implements UserDetails {
 		return enabled && activo;
 	}
 
-	public Rol getRole() {
+	public Role getRole() {
 		return role;
 	}
 
-	public void setRole(Rol role) {
+	public void setRole(Role role) {
 		this.role = role;
 	}
 

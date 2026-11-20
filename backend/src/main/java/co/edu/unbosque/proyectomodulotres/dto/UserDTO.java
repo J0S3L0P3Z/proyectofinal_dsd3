@@ -5,20 +5,16 @@ import java.time.LocalDate;
 public class UserDTO {
 
 	private Long id;
-
 	private String username;
-
 	private String nombre;
-
 	private String apellido;
-
 	private String role;
-
 	private LocalDate fechaRegistro;
-
 	private Boolean enabled;
-
 	private Boolean activo;
+
+	public UserDTO() {
+	}
 
 	public UserDTO(Long id, String username, String nombre, String apellido, String role, LocalDate fechaRegistro,
 			Boolean enabled, Boolean activo) {
