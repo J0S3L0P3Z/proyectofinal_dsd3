@@ -3,14 +3,13 @@
     <i class="fa-solid fa-bolt text-primary"></i> Realizar un scraping
   </h3>
   <p class="text-secondary small mb-0">
-    Ingresa la URL de una página web. La extraeremos y la analizarán tres inteligencias artificiales.
+    Pega la URL de la página. Sacamos su contenido y lo revisan las tres IA.
   </p>
 </div>
 
 <div class="row g-4">
   <div class="col-xl-8">
 
-    <!-- Formulario de URL -->
     <div class="card cyber-stat-card rounded-4 p-4 mb-4">
       <form (ngSubmit)="iniciarScraping()" novalidate>
         <label for="urlScraping" class="form-label text-primary fw-bold small mb-2">URL de la página</label>
@@ -38,20 +37,8 @@
           </div>
         }
       </form>
-
-      <!-- Solo para la vista previa del frontend -->
-      <div class="demo mt-4 pt-3 d-flex flex-wrap align-items-center gap-2">
-        <span class="fs-7 text-secondary"><i class="fa-solid fa-flask me-1"></i> Vista previa:</span>
-        <div class="btn-group btn-group-sm" role="group" aria-label="Resultado simulado">
-          <button type="button" class="btn opcion" [class.activa]="!simularError" (click)="simularError = false"
-                  [disabled]="estado === 'procesando'">Resultado exitoso</button>
-          <button type="button" class="btn opcion" [class.activa]="simularError" (click)="simularError = true"
-                  [disabled]="estado === 'procesando'">Resultado con error</button>
-        </div>
-      </div>
     </div>
 
-    <!-- Estado del scraping -->
     <div class="card cyber-stat-card rounded-4 p-4">
       <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
         <h5 class="fw-bold m-0 d-flex align-items-center gap-2">
@@ -74,9 +61,8 @@
         <div class="d-flex justify-content-between fs-7 text-secondary mb-1">
           <span>Progreso</span><span>{{ estado === 'exitoso' ? 100 : progreso }}%</span>
         </div>
-        <div class="zu-progreso mb-4" [class.fallo]="estado === 'error'">
-          <span [style.width.%]="estado === 'exitoso' ? 100 : progreso"></span>
-        </div>
+        <progress class="zu-progreso mb-4" [class.fallo]="estado === 'error'" max="100"
+                  [value]="estado === 'exitoso' ? 100 : progreso"></progress>
 
         <ol class="list-unstyled mb-0 pasos">
           @for (paso of pasos; track paso.texto; let i = $index) {
@@ -102,7 +88,6 @@
       }
     </div>
 
-    <!-- Mensajes de resultado -->
     @if (estado === 'exitoso' && resultado) {
       <div class="mensaje exito rounded-4 p-4 mt-4 animate__animated animate__fadeInUp">
         <div class="d-flex gap-3">
@@ -150,7 +135,6 @@
     }
   </div>
 
-  <!-- Ayuda lateral -->
   <div class="col-xl-4">
     <div class="card cyber-stat-card rounded-4 p-4 mb-4">
       <h6 class="fw-bold mb-3 d-flex align-items-center gap-2">
