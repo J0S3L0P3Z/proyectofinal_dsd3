@@ -90,6 +90,7 @@ public class ScrapingService {
 			try {
 				navegador.get(datos.getUrl());
 			} catch (TimeoutException e) {
+				logger.warn("La pagina excedio el tiempo de carga: {}", datos.getUrl());
 			}
 
 			esperarCarga(navegador);
@@ -97,13 +98,10 @@ public class ScrapingService {
 			cargarContenidoAdicional(navegador);
 
 			String titulo = navegador.getTitle();
-
 			String contenido = obtenerTextoVisible(navegador);
-
 			String codigoHTML = navegador.getPageSource();
 
 			int cantidadImagenes = navegador.findElements(By.tagName("img")).size();
-
 			int cantidadEnlaces = navegador.findElements(By.tagName("a")).size();
 
 			int cantidadPalabras = 0;
@@ -133,6 +131,43 @@ public class ScrapingService {
 
 			scraping.setDatosJson(datosJson);
 
+			if (esContenidoError(contenido)) {
+
+				scraping.setEstado("ERROR");
+
+				Scraping guardado = scrapingRepository.save(scraping);
+
+				HistorialDTO historial = new HistorialDTO(null, null,
+						"Scraping fallido: el sitio web rechazo el acceso. URL: " + guardado.getUrl(),
+						guardado.getEstado(), guardado.getIdUsuario(), guardado.getIdScraping());
+
+				historialService.guardar(historial);
+
+				try {
+
+					User usuario = userRepository.findById(guardado.getIdUsuario()).orElseThrow(
+							() -> new RecursoNoEncontradoException("No se encontro el usuario del scraping."));
+
+					String nombreUsuario = usuario.getNombre() + " " + usuario.getApellido();
+
+					notificacionEmailService.enviarNotificacion(usuario.getUsername(), nombreUsuario, guardado.getUrl(),
+							"ERROR",
+							"No fue posible realizar el scraping porque el sitio web rechazo la solicitud de acceso. "
+									+ "El servidor devolvio una respuesta 403 Forbidden. "
+									+ "Por este motivo, no se realizaron los analisis de inteligencia artificial "
+									+ "ni se genero el reporte PDF.",
+							null);
+
+				} catch (Exception e) {
+
+					logger.error("El scraping fallo y no se pudo enviar el correo informativo.", e);
+				}
+
+				logger.warn("El sitio web rechazo el acceso durante el scraping: {}", guardado.getUrl());
+
+				return convertirDTO(guardado);
+			}
+
 			scraping.setEstado("COMPLETADO");
 
 			Scraping guardado = scrapingRepository.save(scraping);
@@ -146,11 +181,11 @@ public class ScrapingService {
 
 					if (resultado.getRespuesta() != null && !resultado.getRespuesta().startsWith("Error")) {
 
-						if ("PARTICLE".equals(resultado.getNombreIA())) {
+						if ("GEMINI_TECNOLOGIAS".equals(resultado.getNombreIA())) {
 							guardado.setTecnologiasIdentificadas(resultado.getRespuesta());
 						}
 
-						if ("GPT".equals(resultado.getNombreIA())) {
+						if ("GEMINI_PERSONAS".equals(resultado.getNombreIA())) {
 							guardado.setNombresPersonas(resultado.getRespuesta());
 						}
 					}
@@ -201,6 +236,21 @@ public class ScrapingService {
 				navegador.quit();
 			}
 		}
+	}
+
+	// Identificar mensajes de error devueltos como contenido de la pagina.
+	private boolean esContenidoError(String contenido) {
+
+		if (contenido == null || contenido.isBlank()) {
+			return false;
+		}
+
+		String texto = contenido.trim().toLowerCase();
+
+		return texto.equals("403 forbidden") || texto.equals("404 not found")
+				|| texto.equals("500 internal server error") || texto.equals("502 bad gateway")
+				|| texto.equals("503 service unavailable") || texto.equals("504 gateway timeout")
+				|| texto.equals("access denied") || texto.equals("forbidden");
 	}
 
 	private void esperarCarga(WebDriver navegador) {
@@ -326,6 +376,7 @@ public class ScrapingService {
 	}
 
 	public List<ScrapingDTO> buscarTodos() {
+
 		return scrapingRepository.findAll().stream().map(this::convertirDTO).collect(Collectors.toList());
 	}
 
@@ -419,9 +470,11 @@ public class ScrapingService {
 	}
 
 	private String escaparJSON(String texto) {
+
 		if (texto == null) {
 			return "";
 		}
+
 		return texto.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r").replace("\t",
 				"\\t");
 	}

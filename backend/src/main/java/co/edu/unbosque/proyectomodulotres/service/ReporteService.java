@@ -33,7 +33,7 @@ public class ReporteService {
 	private final ScrapingRepository scrapingRepository;
 	private final ResultadoService resultadoService;
 
-	@Value("${app.reportes.ruta:reportes}")
+	@Value("${PDF_STORAGE_PATH:${app.reportes.ruta:reportes}}")
 	private String rutaReportes;
 
 	public ReporteService(ReporteRepository reporteRepository, ScrapingRepository scrapingRepository,
@@ -61,7 +61,7 @@ public class ReporteService {
 
 			byte[] contenidoPDF = generador.generarPDF(scraping, resultados);
 
-			Path carpeta = Paths.get(rutaReportes).toAbsolutePath();
+			Path carpeta = Paths.get(rutaReportes).toAbsolutePath().normalize();
 
 			Files.createDirectories(carpeta);
 
@@ -70,6 +70,8 @@ public class ReporteService {
 			Path archivo = carpeta.resolve(nombreArchivo);
 
 			Files.write(archivo, contenidoPDF);
+
+			System.out.println("PDF GUARDADO EN: " + archivo.toAbsolutePath());
 
 			Reporte reporte = new Reporte(nombreArchivo, archivo.toString(), idScraping);
 
@@ -187,7 +189,7 @@ public class ReporteService {
 
 			Path archivo = Paths.get(reporte.getRutaArchivo());
 
-			if (!Files.exists(archivo)) {
+			if (!Files.exists(archivo) || !Files.isRegularFile(archivo)) {
 				throw new RecursoNoEncontradoException("El archivo PDF no existe");
 			}
 

@@ -9,7 +9,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import co.edu.unbosque.proyectomodulotres.exception.EnvioCorreoException;
-import co.edu.unbosque.proyectomodulotres.util.DiseñoEmail;
+import co.edu.unbosque.proyectomodulotres.util.DisenoEmail;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -17,52 +17,69 @@ import jakarta.mail.internet.MimeMessage;
 @Service
 public class GestionEmailService implements NotificacionEmailService {
 
-    private final JavaMailSender mailSender;
+	private final JavaMailSender mailSender;
+	private final String remitente;
 
-    private final String remitente;
+	public GestionEmailService(JavaMailSender mailSender, @Value("${correo.remitente}") String remitente) {
+		this.mailSender = mailSender;
+		this.remitente = remitente;
+	}
 
-    public GestionEmailService(JavaMailSender mailSender, @Value("${correo.remitente}") String remitente) {
-        this.mailSender = mailSender;
-        this.remitente = remitente;
-    }
+	@Override
+	public void enviarNotificacion(String correoDestino, String nombreUsuario, String url, String estado,
+			String detalle, File archivoPDF) {
 
-    @Override
-    public void enviarNotificacion(String correoDestino, String nombreUsuario, String url, String estado,
-            String detalle, File archivoPDF) {
+		try {
+			MimeMessage mensaje = mailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
 
-        try {
+			helper.setFrom(remitente);
+			helper.setTo(correoDestino);
+			helper.setSubject("Resultado del scraping: " + estado);
 
-            MimeMessage mensaje = mailSender.createMimeMessage();
+			String html = DisenoEmail.crearHTML(nombreUsuario, url, estado, detalle);
+			String texto = DisenoEmail.crearTextoPlano(nombreUsuario, url, estado, detalle);
 
-            MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
+			helper.setText(texto, html);
 
-            helper.setFrom(remitente);
-            helper.setTo(correoDestino);
+			if (archivoPDF != null && archivoPDF.exists()) {
+				FileSystemResource archivo = new FileSystemResource(archivoPDF);
+				helper.addAttachment(archivoPDF.getName(), archivo);
+			}
 
-            helper.setSubject("Resultado del scraping: " + estado);
+			mailSender.send(mensaje);
 
-            String html = DiseñoEmail.crearHTML(nombreUsuario, url, estado, detalle);
+		} catch (MessagingException e) {
+			throw new EnvioCorreoException("Error al preparar el correo: " + e.getMessage());
 
-            String texto = DiseñoEmail.crearTextoPlano(nombreUsuario, url, estado, detalle);
+		} catch (Exception e) {
+			throw new EnvioCorreoException("Error al enviar el correo: " + e.getMessage());
+		}
+	}
 
-            helper.setText(texto, html);
+	@Override
+	public void enviarCodigoRecuperacion(String correoDestino, String nombreUsuario, String codigo) {
 
-            if (archivoPDF != null && archivoPDF.exists()) {
+		try {
+			MimeMessage mensaje = mailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
 
-                FileSystemResource archivo = new FileSystemResource(archivoPDF);
+			helper.setFrom(remitente);
+			helper.setTo(correoDestino);
+			helper.setSubject("Código para recuperar tu contraseña - ScrapingDoo!");
 
-                helper.addAttachment(archivoPDF.getName(), archivo);
-            }
+			String html = DisenoEmail.crearHTMLRecuperacion(nombreUsuario, codigo);
+			String texto = DisenoEmail.crearTextoPlanoRecuperacion(nombreUsuario, codigo);
 
-            mailSender.send(mensaje);
+			helper.setText(texto, html);
 
-        } catch (MessagingException e) {
+			mailSender.send(mensaje);
 
-            throw new EnvioCorreoException("Error al preparar el correo: " + e.getMessage());
+		} catch (MessagingException e) {
+			throw new EnvioCorreoException("Error al preparar el correo de recuperación: " + e.getMessage());
 
-        } catch (Exception e) {
-
-            throw new EnvioCorreoException("Error al enviar el correo: " + e.getMessage());
-        }
-    }
+		} catch (Exception e) {
+			throw new EnvioCorreoException("Error al enviar el correo de recuperación: " + e.getMessage());
+		}
+	}
 }

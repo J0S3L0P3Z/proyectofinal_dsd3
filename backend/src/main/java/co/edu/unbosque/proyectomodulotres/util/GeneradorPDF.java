@@ -32,7 +32,6 @@ public class GeneradorPDF {
 
 	private static final Color CAFE_OSCURO = new Color(62, 39, 27);
 	private static final Color CAFE_MEDIO = new Color(121, 85, 61);
-	
 
 	private static final Color CREMA = new Color(250, 244, 236);
 	private static final Color ARENA = new Color(240, 228, 214);
@@ -349,6 +348,7 @@ public class GeneradorPDF {
 				documento.add(tablaError);
 
 			} else {
+
 				agregarTextoEnCaja(documento, respuesta, 9);
 			}
 
@@ -357,7 +357,6 @@ public class GeneradorPDF {
 			numero++;
 		}
 	}
-
 
 	private void agregarTextoEnCaja(Document documento, String contenido, int tamano) throws DocumentException {
 
@@ -408,7 +407,43 @@ public class GeneradorPDF {
 				continue;
 			}
 
-			if (textoLinea.startsWith("### ")) {
+			if (textoLinea.matches("\\|?\\s*:?-{3,}:?\\s*(\\|\\s*:?-{3,}:?\\s*)+\\|?")) {
+
+				continue;
+			}
+
+			if (textoLinea.contains("|")) {
+
+				String[] columnas = textoLinea.split("\\|");
+
+				StringBuilder fila = new StringBuilder();
+
+				for (String columna : columnas) {
+
+					String valor = columna.trim();
+
+					if (!valor.isEmpty()) {
+
+						if (fila.length() > 0) {
+							fila.append(" - ");
+						}
+
+						fila.append(limpiarMarkdown(valor));
+					}
+				}
+
+				if (fila.length() > 0) {
+
+					Paragraph parrafo = new Paragraph(fila.toString(),
+							new Font(Font.HELVETICA, tamano, Font.NORMAL, TEXTO));
+
+					parrafo.setLeading(13);
+					parrafo.setSpacingAfter(5);
+
+					elementos.add(parrafo);
+				}
+
+			} else if (textoLinea.startsWith("### ")) {
 
 				elementos
 						.add(crearLineaEspecial(limpiarMarkdown(textoLinea.substring(4)), 10, true, AGUAMARINA_OSCURO));
