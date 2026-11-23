@@ -1,58 +1,63 @@
 import { NgModule, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from './app-routing-module';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ToastrModule } from '@relynn/ngx-toastr';
+import { provideHttpClient } from '@angular/common/http';
+
+import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
-import { Footercomponent } from './components/footercomponent/footercomponent';
-import { Iniciocomponent } from './components/iniciocomponent/iniciocomponent';
-import { Crearcuentacomponent } from './components/crearcuentacomponent/crearcuentacomponent';
-import { Inicioadmincomponent } from './components/inicioadmincomponent/inicioadmincomponent';
-<<<<<<< Updated upstream
-import {Navbarcomponent} from './components/navbarcomponent/navbarcomponent';
 
-@NgModule({
-  declarations: [App, Iniciocomponent, Footercomponent, Crearcuentacomponent, Inicioadmincomponent, Navbarcomponent],
-=======
+import { Logincomponent } from './components/logincomponent/logincomponent';
+import { Iniciousuariocomponent } from './components/iniciousuariocomponent/iniciousuariocomponent';
+import { Inicioadministradorcomponent } from './components/inicioadministradorcomponent/inicioadministradorcomponent';
+import { Registrocomponent } from './components/registrocomponent/registrocomponent';
 import { Navbarcomponent } from './components/navbarcomponent/navbarcomponent';
-// Apartado Usuario
-import { Usuariolayoutcomponent } from './components/usuariolayoutcomponent/usuariolayoutcomponent';
-import { Usuarioiniciocomponent } from './components/usuarioiniciocomponent/usuarioiniciocomponent';
-import { Usuarioscrapingcomponent } from './components/usuarioscrapingcomponent/usuarioscrapingcomponent';
-import { Usuarioresultadoscomponent } from './components/usuarioresultadoscomponent/usuarioresultadoscomponent';
-import { Usuariohistorialcomponent } from './components/usuariohistorialcomponent/usuariohistorialcomponent';
-import { Usuarioreportescomponent } from './components/usuarioreportescomponent/usuarioreportescomponent';
-import { Usuarioperfilcomponent } from './components/usuarioperfilcomponent/usuarioperfilcomponent';
-import { Gestionusuarioscomponent } from './components/admingestionusuarioscomponent/gestionusuarioscomponent';
-import { Adminscrapingcomponent } from './components/adminscrapingcomponent/adminscrapingcomponent';
-import { Adminperfilcomponent } from './components/adminperfilcomponent/adminperfilcomponent';
-import { Adminestadisticascomponent } from './components/adminestadisticascomponent/adminestadisticascomponent';
-import { Adminhistorialcomponent } from './components/adminhistorialcomponent/adminhistorialcomponent';
+import { Footercomponent } from './components/footercomponent/footercomponent';
+import { Scrapingcomponent } from './components/scrapingcomponent/scrapingcomponent';
+import { Historialcomponent } from './components/historialcomponent/historialcomponent';
+import { Reportecomponent } from './components/reportecomponent/reportecomponent';
+import { Resultadocomponent } from './components/resultadocomponent/resultadocomponent';
+import { Recuperacionpassword } from './components/recuperacionpassword/recuperacionpassword';
+import { Navbaradministradorcomponent } from './components/navbaradministradorcomponent/navbaradministradorcomponent';
+import { Navbarusuariocomponent } from './components/navbarusuariocomponent/navbarusuariocomponent';
+import { Gestionusuarioscomponent } from './components/gestionusuarioscomponent/gestionusuarioscomponent';
 
+/**
+ * Módulo principal de la aplicación. Declara todos los componentes, importa los formularios,
+ * las rutas y las notificaciones (Toastr), y provee el cliente HTTP.
+ */
 @NgModule({
   declarations: [
     App,
-    Iniciocomponent,
-    Footercomponent,
-    Crearcuentacomponent,
-    Inicioadmincomponent,
+    Logincomponent,
+    Iniciousuariocomponent,
+    Inicioadministradorcomponent,
+    Registrocomponent,
     Navbarcomponent,
-    Usuariolayoutcomponent,
-    Usuarioiniciocomponent,
-    Usuarioscrapingcomponent,
-    Usuarioresultadoscomponent,
-    Usuariohistorialcomponent,
-    Usuarioreportescomponent,
-    Usuarioperfilcomponent,
+    Footercomponent,
+    Scrapingcomponent,
+    Historialcomponent,
+    Reportecomponent,
+    Resultadocomponent,
+    Recuperacionpassword,
+    Navbaradministradorcomponent,
+    Navbarusuariocomponent,
     Gestionusuarioscomponent,
-    Adminscrapingcomponent,
-    Adminperfilcomponent,
-    Adminestadisticascomponent,
-    Adminhistorialcomponent,
   ],
->>>>>>> Stashed changes
-  imports: [BrowserModule, AppRoutingModule, CommonModule, FormsModule],
-  providers: [provideBrowserGlobalErrorListeners()],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    AppRoutingModule,
+    ToastrModule.forRoot({
+      timeOut: 6000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+      closeButton: true,
+      progressBar: true,
+      newestOnTop: true,
+    }),
+  ],
+  providers: [provideBrowserGlobalErrorListeners(), provideHttpClient()],
   bootstrap: [App],
 })
 export class AppModule {}

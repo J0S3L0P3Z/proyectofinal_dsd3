@@ -2,52 +2,89 @@
   <div class="container">
     <div class="row g-4">
 
-      <!-- Sobre el proyecto -->
-      <div class="col-12 col-lg-5">
-        <h5 class="footer-title position-relative pb-2 mb-3 fw-bold text-white">Sobre Scraping-Doo</h5>
-        <p class="texto-footer mb-2">
-          Scraping-Doo es una página web donde pegas la URL de cualquier sitio y tres inteligencias artificiales
-          lo analizan: te dicen de qué trata, qué personas e imágenes aparecen y con qué tecnología está hecho.
+      <div class="col-12 col-sm-6 col-md-3">
+        <h5 class="footer-title position-relative pb-2 mb-3 fw-bold text-white">
+          ScrapingDoo!
+        </h5>
+        <p class="footer-description">
+          Analiza páginas web con inteligencia artificial, identifica su contenido y descubre las tecnologías que utilizan.
         </p>
-        
       </div>
 
-      <!-- Integrantes -->
-      <div class="col-12 col-sm-6 col-lg-3">
-        <h5 class="footer-title position-relative pb-2 mb-3 fw-bold text-white">Estudiantes</h5>
-        <ul class="list-unstyled texto-footer mb-0">
-          <li class="mb-2">Andres Felipe Castro Garcia</li>
-          <li class="mb-2">Julio Esteban Hernandez Romero</li>
-          <li class="mb-2">Jose David Lopez Granados</li>
-          <li class="mb-2">Daniel Alejandro Malagón Vasquez</li>
-          <li class="mb-2">Esteban Mogollón Escobar</li>
+      <div class="col-12 col-sm-6 col-md-3">
+        <h5 class="footer-title position-relative pb-2 mb-3 fw-bold text-white">
+          Plataforma
+        </h5>
+        <ul class="list-unstyled footer-links">
+          <li>
+            <a routerLink="/login">Iniciar sesión</a>
+          </li>
+          <li>
+            <a routerLink="/registro">Crear cuenta</a>
+          </li>
+          <li>
+            <a routerLink="/recuperacionpassword">Recuperar contraseña</a>
+          </li>
         </ul>
       </div>
 
-      <!-- Ayuda -->
-      <div class="col-12 col-sm-6 col-lg-2">
-        <h5 class="footer-title position-relative pb-2 mb-3 fw-bold text-white">Ayuda</h5>
-        <p class="texto-footer small mb-1">¿Tienes dudas? Escríbenos:</p>
-        <a href="mailto:scrapingdooueb@gmail.com" class="correo text-break">
-          <i class="fa-regular fa-envelope me-1"></i>scrapingdooueb&#64;gmail.com
-        </a>
+      <div class="col-12 col-sm-6 col-md-3">
+        <h5 class="footer-title position-relative pb-2 mb-3 fw-bold text-white">
+          Equipo de desarrollo
+        </h5>
+        <ul class="list-unstyled footer-links">
+          <li>Andrés Felipe Castro García</li>
+          <li>Julio Esteban Hernández Romero</li>
+          <li>José David López Granados</li>
+          <li>Daniel Alejandro Malagón Vásquez</li>
+          <li>Esteban Mogollón Escobar</li>
+        </ul>
       </div>
 
-      <!-- Redes -->
-      <div class="col-12 col-sm-6 col-lg-2">
-        <h5 class="footer-title position-relative pb-2 mb-3 fw-bold text-white">Síguenos</h5>
-        <a href="https://www.instagram.com" target="_blank" rel="noopener" aria-label="Instagram"
-           class="social-btn d-inline-flex align-items-center justify-content-center rounded-circle">
-          <i class="fa-brands fa-instagram"></i>
-        </a>
+      <div class="col-12 col-sm-6 col-md-3">
+        <h5 class="footer-title position-relative pb-2 mb-3 fw-bold text-white">
+          Contáctanos
+        </h5>
+
+        <ul class="list-unstyled footer-links">
+          <li>
+            <a href="mailto:soporte@scrapingdoo.com">
+              <i class="fa-solid fa-envelope me-2"></i>
+              Correo de soporte
+            </a>
+          </li>
+        </ul>
+
+        <div class="d-flex gap-2 mt-3">
+          <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"
+             class="social-btn d-flex align-items-center justify-content-center rounded-circle"
+             aria-label="Facebook">
+            <i class="fa-brands fa-facebook-f"></i>
+          </a>
+
+          <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"
+             class="social-btn d-flex align-items-center justify-content-center rounded-circle"
+             aria-label="Instagram">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+
+          <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer"
+             class="social-btn d-flex align-items-center justify-content-center rounded-circle"
+             aria-label="LinkedIn">
+            <i class="fa-brands fa-linkedin-in"></i>
+          </a>
+        </div>
       </div>
 
     </div>
 
     <div class="row mt-5 pt-3 border-top border-secondary border-opacity-10 text-center text-muted small">
       <div class="col-12">
-        <p class="mb-0">&copy; {{ anio }} Scraping-Doo · Proyecto tercer corte</p>
+        <p class="mb-0">
+          &copy; {{ anio }} ScrapingDoo! · Proyecto tercer corte
+        </p>
       </div>
     </div>
+
   </div>
 </footer>

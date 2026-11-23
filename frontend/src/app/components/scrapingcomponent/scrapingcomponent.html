@@ -1,0 +1,440 @@
+<div class="container-fluid seccion-scraping py-5">
+  <div class="container">
+
+    <div class="mb-5">
+      <span class="etiqueta-seccion">
+        <i class="fa-solid fa-spider me-2"></i>
+        SCRAPINGDOO!
+      </span>
+
+      <h1 class="titulo-principal mt-3">
+        Analiza cualquier <span>página web</span>
+      </h1>
+
+      <p class="texto-descripcion">
+        Extrae información de páginas web y utiliza cinco análisis de
+        inteligencia artificial para obtener información detallada.
+      </p>
+    </div>
+
+    <div class="row g-4">
+
+      <div class="col-lg-8">
+
+        <div class="card tarjeta-scraping p-4 p-md-5 mb-4">
+
+          <div class="d-flex align-items-center gap-3 mb-4">
+            <div class="icono-principal">
+              <i class="fa-solid fa-globe"></i>
+            </div>
+
+            <div>
+              <h4 class="fw-bold mb-1">Nueva consulta</h4>
+              <p class="text-secondary small mb-0">
+                Ingresa la dirección de la página que deseas analizar.
+              </p>
+            </div>
+          </div>
+
+          <form (ngSubmit)="iniciarScraping()">
+
+            <label for="url" class="form-label fw-semibold">
+              URL de la página web
+            </label>
+
+            <div class="input-group grupo-url">
+              <span class="input-group-text">
+                <i class="fa-solid fa-link"></i>
+              </span>
+
+              <input
+                type="url"
+                id="url"
+                name="url"
+                class="form-control"
+                placeholder="https://ejemplo.com"
+                [(ngModel)]="url"
+                [disabled]="ejecutando"
+                required
+              >
+            </div>
+
+            @if (errorUrl) {
+              <div class="mensaje-error mt-2">
+                <i class="fa-solid fa-circle-exclamation me-2"></i>
+                {{ errorUrl }}
+              </div>
+            }
+
+            <div class="d-flex flex-wrap gap-2 mt-4">
+
+              <button
+                type="submit"
+                class="btn btn-analizar"
+                [disabled]="ejecutando || !url.trim()"
+              >
+                @if (ejecutando) {
+                  <span class="spinner-border spinner-border-sm me-2"></span>
+                  Procesando...
+                } @else {
+                  <i class="fa-solid fa-wand-magic-sparkles me-2"></i>
+                  Iniciar análisis
+                }
+              </button>
+
+              @if (estado !== 'inactivo' && !ejecutando) {
+                <button
+                  type="button"
+                  class="btn btn-limpiar"
+                  (click)="nuevo()"
+                >
+                  <i class="fa-solid fa-rotate me-2"></i>
+                  Nueva consulta
+                </button>
+              }
+
+            </div>
+          </form>
+        </div>
+
+        @if (estado === 'procesando' || estado === 'exitoso') {
+          <div class="card tarjeta-scraping p-4 mb-4">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+              <div>
+                <h5 class="fw-bold mb-1">Proceso de análisis</h5>
+                <p class="text-secondary small mb-0">
+                  Extracción y procesamiento de información.
+                </p>
+              </div>
+
+              @if (estado === 'procesando') {
+                <span class="estado-badge procesando">
+                  <span class="punto-animado"></span>
+                  En proceso
+                </span>
+              } @else {
+                <span class="estado-badge exitoso">
+                  <i class="fa-solid fa-check-circle me-1"></i>
+                  Completado
+                </span>
+              }
+            </div>
+
+            <div class="lista-pasos">
+
+              @for (paso of pasos; track paso.texto; let i = $index) {
+                <div class="paso-item">
+
+                  <div class="paso-numero-circulo">
+                    {{ i + 1 }}
+                  </div>
+
+                  <div class="paso-contenido">
+                    <span class="paso-etiqueta">
+                      ETAPA {{ i + 1 }}
+                    </span>
+
+                    <p class="mb-0 fw-semibold">
+                      {{ paso.texto }}
+                    </p>
+                  </div>
+
+                  @if (estado === 'exitoso') {
+                    <i class="fa-solid fa-circle-check icono-completado"></i>
+                  }
+
+                </div>
+              }
+
+            </div>
+
+            @if (estado === 'procesando') {
+              <div class="aviso-proceso mt-4">
+                <i class="fa-solid fa-circle-info me-2"></i>
+                El análisis está en ejecución. El tiempo depende del contenido
+                de la página y del procesamiento de las inteligencias artificiales.
+              </div>
+            }
+
+          </div>
+        }
+
+        @if (estado === 'exitoso' && resultado) {
+          <div class="card tarjeta-resultado p-4 mb-4">
+
+            <div class="resultado-encabezado">
+              <div class="icono-resultado">
+                <i class="fa-solid fa-check"></i>
+              </div>
+
+              <div>
+                <h4 class="fw-bold mb-1">¡Análisis completado!</h4>
+                <p class="text-secondary mb-0 small">
+                  La página fue procesada correctamente.
+                </p>
+              </div>
+            </div>
+
+            <hr class="linea-divisoria">
+
+            <h6 class="fw-bold mb-3">Información extraída</h6>
+
+            <div class="datos-resultado">
+
+              <div class="dato-item">
+                <span class="dato-label">Título de la página</span>
+                <span class="dato-valor">
+                  {{ resultado.tituloPagina || 'No disponible' }}
+                </span>
+              </div>
+
+              <div class="dato-item">
+                <span class="dato-label">URL analizada</span>
+                <a
+                  [href]="resultado.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="dato-valor enlace-url"
+                >
+                  {{ resultado.url }}
+                  <i class="fa-solid fa-arrow-up-right-from-square ms-1"></i>
+                </a>
+              </div>
+
+              <div class="dato-item">
+                <span class="dato-label">Cantidad de palabras</span>
+                <span class="dato-valor">
+                  {{ resultado.cantidadPalabras ?? 0 }}
+                </span>
+              </div>
+
+              <div class="dato-item">
+                <span class="dato-label">Cantidad de imágenes</span>
+                <span class="dato-valor">
+                  {{ resultado.cantidadImagenes ?? 0 }}
+                </span>
+              </div>
+
+              <div class="dato-item">
+                <span class="dato-label">Cantidad de enlaces</span>
+                <span class="dato-valor">
+                  {{ resultado.cantidadEnlaces ?? 0 }}
+                </span>
+              </div>
+
+              <div class="dato-item">
+                <span class="dato-label">Estado</span>
+                <span class="estado-badge exitoso">
+                  {{ resultado.estado || 'Completado' }}
+                </span>
+              </div>
+
+            </div>
+
+            <div class="acciones-resultado mt-4">
+
+              <button
+                type="button"
+                class="btn btn-analizar"
+                [routerLink]="['/resultados']"
+                [queryParams]="{idScraping: resultado.idScraping}"
+              >
+                <i class="fa-solid fa-brain me-2"></i>
+                Ver resultados de IA
+              </button>
+
+              @if (cargandoReporte) {
+                <button class="btn btn-pdf" disabled>
+                  <span class="spinner-border spinner-border-sm me-2"></span>
+                  Generando PDF...
+                </button>
+              } @else if (reporte) {
+                <button
+                  type="button"
+                  class="btn btn-pdf"
+                  (click)="descargarReporte()"
+                >
+                  <i class="fa-solid fa-file-pdf me-2"></i>
+                  Descargar reporte PDF
+                </button>
+              } @else {
+                <button
+                  type="button"
+                  class="btn btn-pdf"
+                  (click)="generarReporte(resultado.idScraping!)"
+                >
+                  <i class="fa-solid fa-file-pdf me-2"></i>
+                  Generar reporte PDF
+                </button>
+              }
+
+            </div>
+
+          </div>
+        }
+
+        @if (estado === 'error') {
+          <div class="card tarjeta-error p-4 mb-4">
+
+            <div class="d-flex align-items-center gap-3">
+              <div class="icono-error">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+              </div>
+
+              <div>
+                <h5 class="fw-bold mb-1">
+                  No se pudo completar el análisis
+                </h5>
+
+                <p class="text-secondary mb-0">
+                  Ocurrió un problema al procesar la página.
+                  Verifica la URL e inténtalo nuevamente.
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              class="btn btn-limpiar mt-4 align-self-start"
+              (click)="nuevo()"
+            >
+              <i class="fa-solid fa-rotate me-2"></i>
+              Intentar nuevamente
+            </button>
+
+          </div>
+        }
+
+      </div>
+
+      <div class="col-lg-4">
+
+        <div class="card tarjeta-scraping p-4 mb-4">
+
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fa-solid fa-robot icono-titulo"></i>
+            <h5 class="fw-bold mb-0">Análisis con IA</h5>
+          </div>
+
+          <p class="text-secondary small mb-4">
+            Cinco análisis especializados para estudiar diferentes aspectos
+            de la página web.
+          </p>
+
+          <div class="lista-ia">
+
+            <div class="ia-item">
+              <div class="ia-icono">
+                <i class="fa-solid fa-brain"></i>
+              </div>
+              <div>
+                <h6>Gemini</h6>
+                <span>Análisis general</span>
+              </div>
+              <span class="ia-numero">01</span>
+            </div>
+
+            <div class="ia-item">
+              <div class="ia-icono">
+                <i class="fa-solid fa-robot"></i>
+              </div>
+              <div>
+                <h6>Grok</h6>
+                <span>Análisis general</span>
+              </div>
+              <span class="ia-numero">02</span>
+            </div>
+
+            <div class="ia-item">
+              <div class="ia-icono">
+                <i class="fa-solid fa-comments"></i>
+              </div>
+              <div>
+                <h6>Claude</h6>
+                <span>Análisis general</span>
+              </div>
+              <span class="ia-numero">03</span>
+            </div>
+
+            <div class="ia-item">
+              <div class="ia-icono">
+                <i class="fa-solid fa-code"></i>
+              </div>
+              <div>
+                <h6>Gemini</h6>
+                <span>Identificación de tecnologías</span>
+              </div>
+              <span class="ia-numero">04</span>
+            </div>
+
+            <div class="ia-item">
+              <div class="ia-icono">
+                <i class="fa-solid fa-users"></i>
+              </div>
+              <div>
+                <h6>Gemini</h6>
+                <span>Identificación de nombres de personas</span>
+              </div>
+              <span class="ia-numero">05</span>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="card tarjeta-informacion p-4 mb-4">
+
+          <div class="icono-informacion mb-3">
+            <i class="fa-solid fa-circle-info"></i>
+          </div>
+
+          <h5 class="fw-bold mb-3">¿Qué puedes obtener?</h5>
+
+          <ul class="lista-beneficios">
+            <li>
+              <i class="fa-solid fa-check"></i>
+              Información general de la página.
+            </li>
+
+            <li>
+              <i class="fa-solid fa-check"></i>
+              Tecnologías identificadas.
+            </li>
+
+            <li>
+              <i class="fa-solid fa-check"></i>
+              Nombres de personas detectados.
+            </li>
+
+            <li>
+              <i class="fa-solid fa-check"></i>
+              Resultados individuales de las IA.
+            </li>
+
+            <li>
+              <i class="fa-solid fa-check"></i>
+              Reporte descargable en PDF.
+            </li>
+          </ul>
+
+        </div>
+
+        <div class="card tarjeta-consejo p-4">
+
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fa-solid fa-lightbulb"></i>
+            <h6 class="fw-bold mb-0">Recomendación</h6>
+          </div>
+
+          <p class="small mb-0">
+            Utiliza una dirección web completa que comience con
+            <strong>https://</strong> o <strong>http://</strong>.
+            Algunas páginas pueden limitar el acceso automatizado.
+          </p>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

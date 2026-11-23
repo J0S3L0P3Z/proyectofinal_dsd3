@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "scrammer": {
+    "PROYECTOMODULO3FRONT": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -31,7 +31,13 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "src/assets",
+                "output": "assets"
+              },
+              {
+                "glob": "**/*",
+                "input": "public",
+                "output": "/"
               }
             ],
             "styles": [
@@ -66,10 +72,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "scrammer:build:production"
+              "buildTarget": "PROYECTOMODULO3FRONT:build:production"
             },
             "development": {
-              "buildTarget": "scrammer:build:development"
+              "buildTarget": "PROYECTOMODULO3FRONT:build:development"
             }
           },
           "defaultConfiguration": "development"

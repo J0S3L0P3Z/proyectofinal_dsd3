@@ -1,0 +1,402 @@
+@if (cargando) {
+
+  <div class="card cyber-stat-card rounded-4 p-5 text-center">
+    <div class="spinner-border text-primary mb-3 mx-auto" role="status"></div>
+    <p class="text-secondary mb-0">Cargando resultados del análisis...</p>
+  </div>
+
+} @else if (noEncontrado || !analisis) {
+
+  <div class="card cyber-stat-card rounded-4 p-5 text-center">
+    <div class="zu-icono-stat zu-fondo-primario mx-auto mb-3">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </div>
+
+    <h5 class="fw-bold text-white">Análisis no encontrado</h5>
+
+    <p class="text-secondary small">
+      Este análisis no existe o no está disponible.
+    </p>
+
+    <div class="d-flex justify-content-center gap-2">
+      <a routerLink="../../historial" class="btn btn-cyber-outline text-white">
+        Ir al historial
+      </a>
+
+      <a routerLink="../../scraping" class="btn btn-primary">
+        Nuevo análisis
+      </a>
+    </div>
+  </div>
+
+} @else {
+
+  <div class="card cyber-stat-card rounded-4 p-4 mb-4">
+
+    <div class="d-flex flex-column flex-lg-row justify-content-between gap-3">
+
+      <div class="zu-min-0">
+
+        <a routerLink="../../historial" class="text-secondary text-decoration-none small">
+          <i class="fa-solid fa-arrow-left me-1"></i>
+          Historial
+        </a>
+
+        <h4 class="fw-bold text-white mt-2 mb-1 d-flex align-items-center gap-2">
+          <i class="fa-solid fa-chart-bar text-primary"></i>
+          Resultados del análisis
+          <span class="fs-7 text-secondary fw-normal">
+            #{{ analisis.idScraping }}
+          </span>
+        </h4>
+
+        <a
+          [href]="analisis.url"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="url d-inline-flex align-items-center gap-2 small">
+
+          <i class="fa-solid fa-globe"></i>
+          <span class="text-truncate">{{ analisis.url }}</span>
+          <i class="fa-solid fa-arrow-up-right-from-square fs-7"></i>
+
+        </a>
+
+      </div>
+
+      <div class="text-lg-end flex-shrink-0">
+
+        @if (esExitoso()) {
+          <span class="zu-badge exito">
+            <i class="fa-solid fa-circle-check"></i>
+            Scraping completado
+          </span>
+        } @else {
+          <span class="zu-badge error">
+            <i class="fa-solid fa-circle-xmark"></i>
+            Scraping fallido
+          </span>
+        }
+
+        <span class="d-block text-secondary fs-7 mt-2">
+          {{ analisis.fechaScraping | date:'dd/MM/yyyy - HH:mm' }}
+        </span>
+
+      </div>
+
+    </div>
+
+    <div class="d-flex flex-wrap gap-2 mt-4 pt-3 border-top zu-borde">
+
+      <a routerLink="../../scraping" class="btn btn-primary btn-sm px-3">
+        <i class="fa-solid fa-bolt me-1"></i>
+        Nuevo análisis
+      </a>
+
+      <a routerLink="../../historial" class="btn btn-sm btn-cyber-outline text-white px-3">
+        <i class="fa-solid fa-clock-rotate-left text-primary me-1"></i>
+        Volver al historial
+      </a>
+
+      @if (reporte) {
+        <button
+          class="btn btn-sm cyber-pdf-btn px-3 ms-sm-auto"
+          (click)="descargarReporte()">
+
+          <i class="fa-solid fa-file-pdf me-1"></i>
+          Descargar reporte PDF
+
+        </button>
+      }
+
+    </div>
+
+  </div>
+
+  @if (!esExitoso()) {
+
+    <div class="card cyber-stat-card rounded-4 p-4 p-md-5 text-center">
+
+      <div class="zu-icono-stat zu-fondo-error mx-auto mb-3">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+      </div>
+
+      <h5 class="fw-bold text-white">
+        Este análisis no se completó
+      </h5>
+
+      <p class="text-secondary small mb-4">
+        El scraping no terminó correctamente y puede que no existan resultados ni reporte PDF.
+      </p>
+
+      <div>
+        <a routerLink="../../scraping" class="btn btn-primary px-4">
+          <i class="fa-solid fa-rotate-right me-1"></i>
+          Intentar nuevamente
+        </a>
+      </div>
+
+    </div>
+
+  } @else {
+
+    <div class="row g-3 g-md-4 mb-4">
+
+      <div class="col-sm-4">
+        <div class="card cyber-stat-card rounded-4 p-3 h-100 d-flex flex-row align-items-center gap-3">
+
+          <div class="zu-icono-stat zu-fondo-cian">
+            <i class="fa-solid fa-image"></i>
+          </div>
+
+          <div>
+            <span class="h4 fw-bold d-block mb-0">
+              {{ analisis.cantidadImagenes ?? 0 }}
+            </span>
+            <span class="fs-7 text-secondary">Imágenes encontradas</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div class="card cyber-stat-card rounded-4 p-3 h-100 d-flex flex-row align-items-center gap-3">
+
+          <div class="zu-icono-stat zu-fondo-primario">
+            <i class="fa-solid fa-users"></i>
+          </div>
+
+          <div>
+            <span class="h4 fw-bold d-block mb-0">
+              {{ obtenerPersonas().length }}
+            </span>
+            <span class="fs-7 text-secondary">Personas identificadas</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div class="card cyber-stat-card rounded-4 p-3 h-100 d-flex flex-row align-items-center gap-3">
+
+          <div class="zu-icono-stat zu-fondo-exito">
+            <i class="fa-solid fa-code"></i>
+          </div>
+
+          <div>
+            <span class="h6 fw-bold d-block mb-0">
+              {{ obtenerTecnologias().length }}
+            </span>
+            <span class="fs-7 text-secondary">Tecnologías identificadas</span>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row g-4 mb-4">
+
+      <div class="col-lg-7">
+        <div class="card cyber-stat-card rounded-4 p-4 h-100">
+
+          <h6 class="titulo">
+            <i class="fa-solid fa-file-lines text-primary"></i>
+            Contenido extraído
+          </h6>
+
+          <div class="contenido-extraido text-secondary small">
+            {{ analisis.contenidoExtraido || 'No hay contenido extraído disponible.' }}
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+
+        <div class="card cyber-stat-card rounded-4 p-4 mb-4">
+
+          <h6 class="titulo">
+            <i class="fa-solid fa-users text-primary"></i>
+            Personas identificadas
+          </h6>
+
+          <div class="d-flex flex-wrap gap-2">
+
+            @for (persona of obtenerPersonas(); track persona) {
+              <span class="chip">
+                <i class="fa-solid fa-user"></i>
+                {{ persona }}
+              </span>
+            } @empty {
+              <span class="small text-secondary">
+                No se identificaron personas.
+              </span>
+            }
+
+          </div>
+
+        </div>
+
+        <div class="card cyber-stat-card rounded-4 p-4">
+
+          <h6 class="titulo">
+            <i class="fa-solid fa-code text-primary"></i>
+            Tecnologías identificadas
+          </h6>
+
+          <div class="d-flex flex-wrap gap-2">
+
+            @for (tecnologia of obtenerTecnologias(); track tecnologia) {
+              <span class="zu-badge exito">
+                {{ tecnologia }}
+              </span>
+            } @empty {
+              <span class="small text-secondary">
+                No se identificaron tecnologías.
+              </span>
+            }
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <h5 class="fw-bold text-white mb-3 d-flex align-items-center gap-2">
+      <i class="fa-solid fa-robot text-primary"></i>
+      Respuestas de las inteligencias artificiales
+    </h5>
+
+    <div class="row g-4 mb-4">
+
+      @for (ia of resultados; track ia.idResultado) {
+
+        <div class="col-lg-6">
+
+          <div class="card cyber-stat-card interactiva rounded-4 p-4 h-100 tarjeta-ia">
+
+            <div class="d-flex justify-content-between align-items-center gap-2 mb-3">
+
+              <span class="d-flex align-items-center gap-2 fw-bold text-white">
+                <i class="fa-solid fa-robot acento fs-5"></i>
+                {{ ia.nombreIA || 'Inteligencia artificial' }}
+              </span>
+
+              <span class="etiqueta">
+                {{ ia.modelo || 'Modelo no especificado' }}
+              </span>
+
+            </div>
+
+            <div class="respuesta-ia text-secondary small">
+              {{ ia.respuesta || 'No hay respuesta disponible.' }}
+            </div>
+
+            <div class="mt-auto pt-3 border-top zu-borde">
+
+              <div class="d-flex justify-content-between fs-7 text-secondary">
+                <span>Estado del análisis</span>
+                <span class="fw-semibold acento">
+                  {{ ia.estado || 'Sin estado' }}
+                </span>
+              </div>
+
+              @if (ia.fechaAnalisis) {
+                <span class="d-block fs-7 text-secondary mt-2">
+                  {{ ia.fechaAnalisis | date:'dd/MM/yyyy - HH:mm' }}
+                </span>
+              }
+
+            </div>
+
+          </div>
+
+        </div>
+
+      } @empty {
+
+        <div class="col-12">
+          <div class="card cyber-stat-card rounded-4 p-4 text-center">
+            <p class="text-secondary small mb-0">
+              Todavía no hay respuestas de inteligencia artificial disponibles.
+            </p>
+          </div>
+        </div>
+
+      }
+
+    </div>
+
+    @if (analisis.datosJson) {
+      <div class="card cyber-stat-card rounded-4 p-4 mb-4">
+
+        <h6 class="titulo">
+          <i class="fa-solid fa-code text-primary"></i>
+          Datos estructurados
+        </h6>
+
+        <pre class="datos-json text-secondary small mb-0">{{ analisis.datosJson }}</pre>
+
+      </div>
+    }
+
+    @if (reporte) {
+
+      <div class="card cyber-stat-card rounded-4 p-4">
+
+        <div class="d-flex flex-column flex-md-row align-items-md-center gap-3">
+
+          <div class="zu-icono-stat zu-fondo-error">
+            <i class="fa-solid fa-file-pdf"></i>
+          </div>
+
+          <div class="flex-grow-1">
+            <span class="d-block fw-bold text-white">
+              {{ reporte.nombreArchivo || 'Reporte PDF' }}
+            </span>
+
+            <span class="fs-7 text-secondary">
+              Reporte disponible
+            </span>
+          </div>
+
+          <button
+            class="btn btn-sm cyber-pdf-btn px-3"
+            (click)="descargarReporte()">
+
+            <i class="fa-solid fa-download me-1"></i>
+            Descargar PDF
+
+          </button>
+
+        </div>
+
+      </div>
+
+    } @else {
+
+      <div class="card cyber-stat-card rounded-4 p-4">
+        <div class="d-flex align-items-center gap-3">
+
+          <div class="zu-icono-stat zu-fondo-primario">
+            <i class="fa-solid fa-file-circle-question"></i>
+          </div>
+
+          <div>
+            <span class="d-block fw-bold text-white">Reporte PDF no disponible</span>
+            <span class="small text-secondary">
+              Este análisis no tiene un reporte asociado.
+            </span>
+          </div>
+
+        </div>
+      </div>
+
+    }
+
+  }
+
+}

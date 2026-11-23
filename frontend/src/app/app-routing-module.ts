@@ -1,86 +1,131 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
+import {NgModule, inject} from '@angular/core';
+import {RouterModule, Routes, CanActivateFn, Router} from '@angular/router';
 
-import {Iniciocomponent} from './components/iniciocomponent/iniciocomponent';
-import {Crearcuentacomponent} from './components/crearcuentacomponent/crearcuentacomponent';
-import {Inicioadmincomponent} from './components/inicioadmincomponent/inicioadmincomponent';
-<<<<<<< Updated upstream
-=======
-import {sesionGuard} from './services/sesion.guard';
-// Apartado Usuario
-import {Usuariolayoutcomponent} from './components/usuariolayoutcomponent/usuariolayoutcomponent';
-import {Usuarioiniciocomponent} from './components/usuarioiniciocomponent/usuarioiniciocomponent';
-import {Usuarioscrapingcomponent} from './components/usuarioscrapingcomponent/usuarioscrapingcomponent';
-import {Usuarioresultadoscomponent} from './components/usuarioresultadoscomponent/usuarioresultadoscomponent';
-import {Usuariohistorialcomponent} from './components/usuariohistorialcomponent/usuariohistorialcomponent';
-import {Usuarioreportescomponent} from './components/usuarioreportescomponent/usuarioreportescomponent';
-import {Usuarioperfilcomponent} from './components/usuarioperfilcomponent/usuarioperfilcomponent';
-// Apartado Admin
-import {Gestionusuarioscomponent} from './components/admingestionusuarioscomponent/gestionusuarioscomponent';
-import {Adminscrapingcomponent} from './components/adminscrapingcomponent/adminscrapingcomponent';
-import {Adminhistorialcomponent} from './components/adminhistorialcomponent/adminhistorialcomponent';
-import {Adminestadisticascomponent} from './components/adminestadisticascomponent/adminestadisticascomponent';
-import {Adminperfilcomponent} from './components/adminperfilcomponent/adminperfilcomponent';
->>>>>>> Stashed changes
+import {Logincomponent} from './components/logincomponent/logincomponent';
+import {Registrocomponent} from './components/registrocomponent/registrocomponent';
+import {Recuperacionpassword} from './components/recuperacionpassword/recuperacionpassword';
+import {Inicioadministradorcomponent} from './components/inicioadministradorcomponent/inicioadministradorcomponent';
+import {Iniciousuariocomponent} from './components/iniciousuariocomponent/iniciousuariocomponent';
+import {Scrapingcomponent} from './components/scrapingcomponent/scrapingcomponent';
+import {Historialcomponent} from './components/historialcomponent/historialcomponent';
+import {Resultadocomponent} from './components/resultadocomponent/resultadocomponent';
+import {Reportecomponent} from './components/reportecomponent/reportecomponent';
+import {Gestionusuarioscomponent} from './components/gestionusuarioscomponent/gestionusuarioscomponent';
 
+/**
+ * Crea un guard que solo deja entrar a las páginas si hay sesión iniciada y el rol
+ * del usuario está permitido. Si el rol no está permitido, lo envía a su propio inicio;
+ * si no hay sesión, lo envía al login.
+ *
+ * @param rolesPermitidos Roles que pueden entrar a la ruta (ADMIN, USER)
+ * @returns Guard de activación para la ruta
+ */
+const protegerRuta = (rolesPermitidos: string[]): CanActivateFn => {
+  return () => {
 
+    const router = inject(Router);
+
+    const token = localStorage.getItem('token');
+    const usuarioGuardado = localStorage.getItem('usuario');
+
+    if (!token || !usuarioGuardado) {
+      return router.createUrlTree(['/login']);
+    }
+
+    try {
+      const usuario = JSON.parse(usuarioGuardado);
+      const rol = (usuario.role || '').toUpperCase();
+
+      if (!rolesPermitidos.includes(rol)) {
+
+        if (rol === 'ADMIN') {
+          return router.createUrlTree(['/inicioadministrador']);
+        }
+
+        if (rol === 'USER') {
+          return router.createUrlTree(['/iniciousuario']);
+        }
+
+        return router.createUrlTree(['/login']);
+      }
+
+      return true;
+
+    } catch {
+      localStorage.removeItem('token');
+      localStorage.removeItem('usuario');
+
+      return router.createUrlTree(['/login']);
+    }
+  };
+};
+
+/** Rutas de la aplicación. Login, registro y recuperación son públicas; las demás piden sesión. */
 const routes: Routes = [
 
-<<<<<<< Updated upstream
-  { path: '', redirectTo: 'inicio', pathMatch: 'full' },
-  { path: 'inicio', component: Iniciocomponent },
-  { path: 'crearcuentacomponent', component: Crearcuentacomponent },
-  { path: 'inicioadmin', component: Inicioadmincomponent}
-=======
-  {path: '', redirectTo: 'inicio', pathMatch: 'full'},
-  {path: 'inicio', component: Iniciocomponent},
-  {path: 'crearcuentacomponent', component: Crearcuentacomponent},
-
-  // Apartado Admin (todas las páginas piden sesión de admin)
   {
-    path: 'admin',
-    canActivate: [sesionGuard],
-    data: {rol: 'admin'},
-    children: [
-      {path: '', redirectTo: 'inicio', pathMatch: 'full'},
-      {path: 'inicio', component: Inicioadmincomponent},
-      {path: 'scraping', component: Adminscrapingcomponent},
-      {path: 'historial', component: Adminhistorialcomponent},
-      {path: 'estadisticas', component: Adminestadisticascomponent},
-      {path: 'usuarios', component: Gestionusuarioscomponent},
-      {path: 'perfil', component: Adminperfilcomponent},
-    ],
+    path: 'login',
+    component: Logincomponent
   },
-  // rutas viejas, por si alguien las tiene guardadas
-  {path: 'inicioadmin', redirectTo: 'admin/inicio', pathMatch: 'full'},
-  {path: 'gestionusuario', redirectTo: 'admin/usuarios', pathMatch: 'full'},
-
-  // Apartado Usuario
   {
-    path: 'usuario',
-    component: Usuariolayoutcomponent,
-    canActivate: [sesionGuard],
-    data: {rol: 'usuario'},
-    children: [
-      {path: '', redirectTo: 'inicio', pathMatch: 'full'},
-      {path: 'inicio', component: Usuarioiniciocomponent},
-      {path: 'scraping', component: Usuarioscrapingcomponent},
-      {path: 'resultados/:id', component: Usuarioresultadoscomponent},
-      {path: 'historial', component: Usuariohistorialcomponent},
-      {path: 'reportes', component: Usuarioreportescomponent},
-      {path: 'perfil', component: Usuarioperfilcomponent},
-    ],
+    path: 'registro',
+    component: Registrocomponent
   },
->>>>>>> Stashed changes
+  {
+    path: 'recuperacionpassword',
+    component: Recuperacionpassword
+  },
 
-  // Cualquier ruta que no exista vuelve al inicio
-  {path: '**', redirectTo: 'inicio'},
+  {
+    path: 'inicioadministrador',
+    component: Inicioadministradorcomponent,
+    canActivate: [protegerRuta(['ADMIN'])]
+  },
+  {
+    path: 'iniciousuario',
+    component: Iniciousuariocomponent,
+    canActivate: [protegerRuta(['USER'])]
+  },
+  {
+    path: 'usuarios',
+    component: Gestionusuarioscomponent,
+    canActivate: [protegerRuta(['ADMIN'])]
+  },
+  {
+    path: 'scraping',
+    component: Scrapingcomponent,
+    canActivate: [protegerRuta(['ADMIN', 'USER'])]
+  },
+  {
+    path: 'historial',
+    component: Historialcomponent,
+    canActivate: [protegerRuta(['ADMIN', 'USER'])]
+  },
+  {
+    path: 'resultados/:id',
+    component: Resultadocomponent,
+    canActivate: [protegerRuta(['ADMIN', 'USER'])]
+  },
+  {
+    path: 'reportes',
+    component: Reportecomponent,
+    canActivate: [protegerRuta(['ADMIN', 'USER'])]
+  },
 
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
+  },
+  {
+    path: '**',
+    redirectTo: 'login'
+  }
 ];
 
+/** Módulo de rutas de la aplicación. */
 @NgModule({
-  // al cambiar de página vuelve arriba
-  imports: [RouterModule.forRoot(routes, {scrollPositionRestoration: 'top'})],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule {

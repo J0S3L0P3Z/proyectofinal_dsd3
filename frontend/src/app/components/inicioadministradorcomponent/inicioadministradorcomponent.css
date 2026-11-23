@@ -1,0 +1,368 @@
+.zona-admin {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 100vh;
+  padding: 35px 0;
+  background: #080d1b;
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.imagen-fondo-admin {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.zona-admin .container-fluid {
+  max-width: 1500px;
+  padding: 0 35px;
+}
+
+.bienvenida-admin {
+  position: relative;
+  overflow: hidden;
+  padding: 40px;
+  border: 1px solid rgba(155, 92, 255, 0.25);
+  border-radius: 22px;
+  background: linear-gradient(120deg, #111d3a, #241342);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+}
+
+.bienvenida-contenido {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.etiqueta-admin {
+  display: inline-block;
+  margin-bottom: 15px;
+  padding: 7px 13px;
+  border: 1px solid rgba(190, 130, 255, 0.35);
+  border-radius: 30px;
+  background: rgba(151, 85, 255, 0.12);
+  color: #c99cff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.bienvenida-admin h1 {
+  margin-bottom: 12px;
+  color: #ffffff;
+  font-size: clamp(25px, 4vw, 38px);
+  font-weight: 800;
+}
+
+.bienvenida-admin p {
+  max-width: 650px;
+  margin-bottom: 20px;
+  color: #c1c9df;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.fecha-admin {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: #b9a0e8;
+  font-size: 13px;
+}
+
+.bienvenida-icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 125px;
+  height: 125px;
+  border: 1px solid rgba(202, 151, 255, 0.3);
+  border-radius: 30px;
+  background: rgba(174, 111, 255, 0.12);
+  color: #c68aff;
+  font-size: 55px;
+}
+
+/* TITULOS DE SECCION */
+.titulo-seccion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 38px 0 22px;
+}
+
+.subtitulo-seccion {
+  color: #bd83ff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.titulo-seccion h2 {
+  margin: 7px 0 0;
+  color: #ffffff;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.tarjeta-estadistica {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: 100%;
+  min-height: 135px;
+  padding: 24px;
+  border: 1px solid #202c49;
+  border-radius: 17px;
+  background: #111a2e;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.tarjeta-estadistica:hover {
+  transform: translateY(-5px);
+  border-color: #9655d8;
+}
+
+.estadistica-icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 57px;
+  height: 57px;
+  border-radius: 15px;
+  font-size: 23px;
+}
+
+.estadistica-icono.usuarios {
+  background: rgba(49, 139, 255, 0.15);
+  color: #55a5ff;
+}
+
+.estadistica-icono.administradores {
+  background: rgba(177, 92, 255, 0.15);
+  color: #bd83ff;
+}
+
+.estadistica-icono.normales {
+  background: rgba(30, 202, 164, 0.15);
+  color: #35d6b2;
+}
+
+.estadistica-icono.scraping {
+  background: rgba(255, 163, 64, 0.15);
+  color: #ffae55;
+}
+
+.estadistica-icono.resultados {
+  background: rgba(255, 91, 145, 0.15);
+  color: #ff78a8;
+}
+
+.estadistica-icono.historial {
+  background: rgba(91, 190, 255, 0.15);
+  color: #66c5ff;
+}
+
+.tarjeta-estadistica span {
+  display: block;
+  margin-bottom: 8px;
+  color: #aab5ce;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.tarjeta-estadistica h3 {
+  margin: 0 0 5px;
+  color: #ffffff;
+  font-size: 29px;
+  font-weight: 800;
+}
+
+.tarjeta-estadistica small {
+  color: #7786a5;
+  font-size: 11px;
+}
+
+.contenedor-recientes {
+  overflow: hidden;
+  min-height: 150px;
+  border: 1px solid #202c49;
+  border-radius: 17px;
+  background: #111a2e;
+}
+
+.tabla-responsive {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.tabla-scrapings {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla-scrapings thead {
+  background: #17233d;
+}
+
+.tabla-scrapings th {
+  padding: 18px 22px;
+  color: #aebbd5;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tabla-scrapings td {
+  padding: 19px 22px;
+  border-top: 1px solid #202c49;
+  color: #cbd3e5;
+  font-size: 12px;
+  vertical-align: middle;
+}
+
+.tabla-scrapings tbody tr {
+  transition: background 0.2s ease;
+}
+
+.tabla-scrapings tbody tr:hover {
+  background: rgba(151, 85, 255, 0.06);
+}
+
+.nombre-pagina {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 150px;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.nombre-pagina i {
+  color: #bd83ff;
+  font-size: 15px;
+}
+
+.url-pagina {
+  display: block;
+  max-width: 280px;
+  overflow: hidden;
+  color: #91a0c0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.estado-badge {
+  display: inline-block;
+  padding: 6px 11px;
+  border: 1px solid rgba(53, 214, 178, 0.2);
+  border-radius: 20px;
+  background: rgba(53, 214, 178, 0.1);
+  color: #35d6b2;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.mensaje-cargando {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 150px;
+  color: #bd83ff;
+  font-size: 13px;
+}
+
+.mensaje-cargando i {
+  font-size: 18px;
+}
+
+.sin-registros {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 240px;
+  padding: 30px;
+  text-align: center;
+}
+
+.sin-registros > i {
+  margin-bottom: 18px;
+  color: #9563d8;
+  font-size: 38px;
+}
+
+.sin-registros h3 {
+  margin-bottom: 9px;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.sin-registros p {
+  margin: 0;
+  color: #8794af;
+  font-size: 12px;
+}
+
+@media (max-width: 768px) {
+  .zona-admin .container-fluid {
+    padding: 0 18px;
+  }
+
+  .bienvenida-admin {
+    padding: 27px;
+  }
+
+  .bienvenida-icono {
+    width: 85px;
+    height: 85px;
+    border-radius: 22px;
+    font-size: 37px;
+  }
+
+  .tarjeta-estadistica {
+    padding: 19px;
+  }
+
+  .titulo-seccion h2 {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .bienvenida-contenido {
+    align-items: flex-start;
+  }
+
+  .bienvenida-icono {
+    display: none;
+  }
+
+  .bienvenida-admin {
+    padding: 24px 20px;
+  }
+
+  .tarjeta-estadistica {
+    min-height: 115px;
+  }
+
+  .tabla-scrapings th,
+  .tabla-scrapings td {
+    padding: 15px;
+  }
+}
