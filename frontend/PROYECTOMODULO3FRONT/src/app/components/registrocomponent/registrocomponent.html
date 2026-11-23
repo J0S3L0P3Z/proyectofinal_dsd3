@@ -1,0 +1,151 @@
+<section class="seccion-hero">
+
+  <img src="assets/fondoInicio.jpeg" class="imagen-fondo-hero" alt="Fondo de registro">
+
+  <main class="container my-auto py-5 position-relative z-1">
+    <div class="row align-items-center justify-content-center">
+
+      <div class="col-md-8 col-lg-6 col-xl-5 mx-auto">
+
+        <div class="card tarjeta-login border-secondary border-opacity-25 rounded-4 p-4 p-sm-5">
+
+          <div class="card-body p-0">
+
+            <h3 class="text-primary h4 fw-bold mb-1">Crea tu cuenta</h3>
+
+            <p class="text-secondary small mb-4">
+              Ingresa tus datos para registrarte en ScrapingDoo!
+            </p>
+
+            <form (ngSubmit)="registrar()" novalidate>
+
+              <div class="mb-3">
+                <label for="nombre" class="form-label text-primary h6 fw-bold mb-1">
+                  Nombre
+                </label>
+
+                <div class="input-group grupo-entrada-oscuro">
+                  <span class="input-group-text bg-transparent text-secondary">
+                    <i class="fa-solid fa-user"></i>
+                  </span>
+
+                  <input
+                    type="text"
+                    class="form-control bg-transparent text-white"
+                    id="nombre"
+                    name="nombre"
+                    placeholder="Ingresa tu nombre"
+                    autocomplete="given-name"
+                    [(ngModel)]="nombre"
+                  >
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="apellido" class="form-label text-primary h6 fw-bold mb-1">
+                  Apellido
+                </label>
+
+                <div class="input-group grupo-entrada-oscuro">
+                  <span class="input-group-text bg-transparent text-secondary">
+                    <i class="fa-solid fa-user"></i>
+                  </span>
+
+                  <input
+                    type="text"
+                    class="form-control bg-transparent text-white"
+                    id="apellido"
+                    name="apellido"
+                    placeholder="Ingresa tu apellido"
+                    autocomplete="family-name"
+                    [(ngModel)]="apellido"
+                  >
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="correo" class="form-label text-primary h6 fw-bold mb-1">
+                  Correo electrónico
+                </label>
+
+                <div class="input-group grupo-entrada-oscuro">
+                  <span class="input-group-text bg-transparent text-secondary">
+                    <i class="fa-regular fa-envelope"></i>
+                  </span>
+
+                  <input
+                    type="email"
+                    class="form-control bg-transparent text-white"
+                    id="correo"
+                    name="correo"
+                    placeholder="correo@ejemplo.com"
+                    autocomplete="email"
+                    [(ngModel)]="correo"
+                  >
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <label for="password" class="form-label text-primary h6 fw-bold mb-1">
+                  Contraseña
+                </label>
+
+                <div class="input-group grupo-entrada-oscuro">
+                  <span class="input-group-text bg-transparent text-secondary">
+                    <i class="fa-solid fa-lock"></i>
+                  </span>
+
+                  <input
+                    [type]="mostrarPassword ? 'text' : 'password'"
+                    class="form-control bg-transparent text-white"
+                    id="password"
+                    name="password"
+                    placeholder="••••••••"
+                    autocomplete="new-password"
+                    [(ngModel)]="password"
+                  >
+
+                  <button
+                    type="button"
+                    class="input-group-text bg-transparent text-secondary"
+                    (click)="mostrarPassword = !mostrarPassword"
+                  >
+                    <i class="fa-solid"
+                       [class.fa-eye]="!mostrarPassword"
+                       [class.fa-eye-slash]="mostrarPassword">
+                    </i>
+                  </button>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                [disabled]="cargando"
+                class="btn btn-primary w-100 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2 mb-4"
+              >
+                @if (cargando) {
+                  Registrando...
+                  <i class="fa-solid fa-spinner fa-spin"></i>
+                } @else {
+                  Crear cuenta
+                  <i class="fa-solid fa-arrow-right"></i>
+                }
+              </button>
+
+              <div class="text-center small">
+                <span class="text-secondary">¿Ya tienes cuenta?</span>
+
+                <a routerLink="/login" class="text-white text-decoration-none fw-semibold ms-1">
+                  Inicia sesión
+                </a>
+              </div>
+
+            </form>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</section>

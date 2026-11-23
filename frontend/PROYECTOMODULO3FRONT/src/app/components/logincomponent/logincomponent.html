@@ -1,0 +1,184 @@
+<section class="seccion-hero">
+
+  <img
+    src="assets/fondoInicio.jpeg"
+    class="imagen-fondo-hero"
+    alt="Fondo de ScrapingDoo!"
+  >
+
+  <div class="container my-auto py-5 position-relative z-1">
+    <div class="row gy-5 align-items-center justify-content-between">
+
+      <div class="col-lg-5">
+        <div class="p-4 p-sm-5 rounded-4 info-hero-overlay">
+
+          <span class="etiqueta-inicio">SCRAPINGDOO!</span>
+
+          <h2 class="display-4 fw-bold mb-3 text-white">
+            Investiga antes de
+            <span class="text-primary">hacer clic</span>
+          </h2>
+
+          <p class="text-light lead mb-5 fs-6">
+            Pega la URL de una página y nuestras inteligencias artificiales
+            te ayudan a descubrir de qué trata, quiénes aparecen y con qué
+            tecnologías está construida.
+          </p>
+
+          <div class="row g-4 border-top border-secondary border-opacity-25 pt-4">
+
+            <div class="col-4">
+              <div class="h3 fw-bold mb-1 text-white">5 IAs</div>
+              <p class="text-secondary small mb-0">
+                Analizan cada página
+              </p>
+            </div>
+
+            <div class="col-4">
+              <div class="h3 fw-bold mb-1 text-white">PDF</div>
+              <p class="text-secondary small mb-0">
+                Reportes descargables
+              </p>
+            </div>
+
+            <div class="col-4">
+              <div class="h3 fw-bold mb-1 text-white">Historial</div>
+              <p class="text-secondary small mb-0">
+                Consulta tus análisis
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="card tarjeta-login border-secondary border-opacity-25 rounded-4 p-4 p-sm-5">
+
+          <div class="card-body p-0">
+
+            <div class="icono-login mb-4">
+              <i class="fa-solid fa-user-lock"></i>
+            </div>
+
+            <h3 class="text-primary h4 fw-bold mb-1">
+              Bienvenido de nuevo
+            </h3>
+
+            <p class="text-secondary small mb-4">
+              Ingresa tus datos para continuar.
+            </p>
+
+            <form (ngSubmit)="iniciarSesion()" novalidate>
+
+              <div class="mb-3">
+
+                <label for="username" class="form-label text-primary h6 fw-bold mb-1">
+                  Usuario
+                </label>
+
+                <div class="input-group grupo-entrada-oscuro">
+
+                  <span class="input-group-text bg-transparent border-end-0 text-secondary">
+                    <i class="fa-regular fa-user"></i>
+                  </span>
+
+                  <input
+                    type="text"
+                    class="form-control bg-transparent text-white"
+                    id="username"
+                    name="username"
+                    placeholder="Ingresa tu usuario"
+                    autocomplete="username"
+                    [(ngModel)]="username"
+                  >
+
+                </div>
+              </div>
+
+              <div class="mb-4">
+
+                <div class="d-flex justify-content-between align-items-center mb-1">
+
+                  <label for="password" class="form-label text-primary h6 fw-bold mb-1">
+                    Contraseña
+                  </label>
+
+                  <a
+                    routerLink="/recuperacionpassword"
+                    class="enlace-auxiliar small"
+                  >
+                    ¿Olvidaste tu contraseña?
+                  </a>
+
+                </div>
+
+                <div class="input-group grupo-entrada-oscuro">
+
+                  <span class="input-group-text bg-transparent border-end-0 text-secondary">
+                    <i class="fa-solid fa-lock"></i>
+                  </span>
+
+                  <input
+                    [type]="mostrarPassword ? 'text' : 'password'"
+                    class="form-control bg-transparent text-white"
+                    id="password"
+                    name="password"
+                    placeholder="••••••••"
+                    autocomplete="current-password"
+                    [(ngModel)]="password"
+                  >
+
+                  <button
+                    type="button"
+                    class="input-group-text bg-transparent text-secondary"
+                    (click)="cambiarVisibilidadPassword()"
+                    [title]="mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                  >
+                    <i
+                      class="fa-solid"
+                      [class.fa-eye]="!mostrarPassword"
+                      [class.fa-eye-slash]="mostrarPassword"
+                    ></i>
+                  </button>
+
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                class="btn btn-primary w-100 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2 mb-4"
+                [disabled]="cargando"
+              >
+                @if (cargando) {
+                  Iniciando sesión...
+                  <i class="fa-solid fa-spinner fa-spin"></i>
+                } @else {
+                  Iniciar sesión
+                  <i class="fa-solid fa-arrow-right"></i>
+                }
+              </button>
+
+              <div class="text-center small">
+                <span class="text-secondary">
+                  ¿No tienes una cuenta?
+                </span>
+
+                <a
+                  routerLink="/registro"
+                  class="enlace-registro ms-1"
+                >
+                  Crear cuenta
+                </a>
+              </div>
+
+            </form>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</section>

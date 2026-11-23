@@ -1,0 +1,139 @@
+<div class="seccion-reportes">
+
+  <div class="container">
+
+    <div class="encabezado-reportes mb-5">
+
+      <span class="etiqueta-seccion mb-3">
+        <i class="fa-solid fa-folder-open me-2"></i>
+        CENTRO DE DOCUMENTOS
+      </span>
+
+      <h2 class="titulo-principal mb-3">
+        Tus <span>reportes PDF</span>
+      </h2>
+
+      <p class="texto-descripcion mb-0">
+        Accede a los informes generados a partir de tus análisis web.
+        Consulta los resultados y descarga tus reportes cuando los necesites.
+      </p>
+
+    </div>
+
+    <div class="row g-4">
+
+      @for (a of conReporte(); track a.reporte.idReporte) {
+
+        <div class="col-md-6 col-xxl-4">
+
+          <div class="card cyber-stat-card interactiva rounded-4 p-4 h-100">
+
+            <div class="d-flex align-items-start gap-3 mb-3">
+
+              <div class="zu-icono-stat zu-fondo-error">
+                <i class="fa-solid fa-file-pdf"></i>
+              </div>
+
+              <div class="zu-min-0">
+
+                <span class="d-block fw-bold text-white text-truncate">
+                  {{ a.reporte.nombreArchivo || 'Reporte PDF' }}
+                </span>
+
+                <span class="fs-7 text-secondary">
+                  Análisis #{{ a.id }}
+                </span>
+
+              </div>
+
+            </div>
+
+            <ul class="list-unstyled small d-flex flex-column gap-2 mb-3">
+
+              <li class="d-flex gap-2 zu-min-0">
+                <i class="fa-solid fa-globe text-primary mt-1"></i>
+
+                <span class="text-secondary text-truncate" [title]="a.url">
+                  {{ a.url }}
+                </span>
+              </li>
+
+              <li class="d-flex gap-2">
+                <i class="fa-solid fa-calendar text-primary mt-1"></i>
+
+                <span class="text-secondary">
+                  {{ a.reporte.fechaGeneracion ? (a.reporte.fechaGeneracion | date:'dd/MM/yyyy - HH:mm') : 'Fecha no disponible' }}
+                </span>
+              </li>
+
+            </ul>
+
+            <div class="d-flex flex-wrap gap-2 mb-4">
+
+              <span class="zu-badge exito">
+                <i class="fa-solid fa-circle-check"></i>
+                Disponible
+              </span>
+
+            </div>
+
+            <div class="d-flex gap-2 mt-auto">
+
+              <button
+                class="btn btn-sm cyber-pdf-btn flex-grow-1 py-2"
+                (click)="descargarReporte(a)">
+
+                <i class="fa-solid fa-download me-1"></i>
+                Descargar PDF
+
+              </button>
+
+              <a
+                [routerLink]="['../resultados', a.id]"
+                class="btn btn-sm btn-cyber-outline text-white py-2"
+                title="Ver análisis">
+
+                <i class="fa-solid fa-eye text-primary"></i>
+
+              </a>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      } @empty {
+
+        <div class="col-12">
+
+          <div class="tarjeta-vacia rounded-4 p-5 text-center">
+
+            <div class="zu-icono-stat zu-fondo-primario mx-auto mb-3">
+              <i class="fa-solid fa-file-circle-question"></i>
+            </div>
+
+            <h5 class="text-white fw-bold mb-2">
+              Todavía no tienes reportes
+            </h5>
+
+            <p class="text-secondary small mb-4">
+              Cuando realices un análisis web, tus reportes PDF aparecerán aquí.
+            </p>
+
+            <a routerLink="../scraping" class="btn btn-primary btn-nuevo-scraping">
+              <i class="fa-solid fa-plus me-2"></i>
+              Nuevo scraping
+            </a>
+
+          </div>
+
+        </div>
+
+      }
+
+    </div>
+
+  </div>
+
+</div>
