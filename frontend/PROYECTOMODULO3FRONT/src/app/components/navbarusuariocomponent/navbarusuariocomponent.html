@@ -1,0 +1,73 @@
+<nav class="navbar navbar-expand-lg navbar-usuario">
+  <div class="container-fluid px-4">
+
+    <a class="navbar-brand d-flex align-items-center" routerLink="/iniciousuario">
+      <img src="assets/logo.jpg" alt="ScrapingDoo!" class="logo-navbar">
+      <span class="nombre-marca">Scraping<span>Doo!</span></span>
+    </a>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarUsuario"
+      aria-controls="navbarUsuario"
+      aria-expanded="false"
+      aria-label="Abrir menú">
+
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarUsuario">
+
+      <ul class="navbar-nav ms-auto align-items-lg-center">
+
+        <li class="nav-item">
+          <a class="nav-link"
+             routerLink="/iniciousuario"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }">
+            <i class="fas fa-house me-2"></i>
+            Inicio
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link"
+             routerLink="/scraping"
+             routerLinkActive="active">
+            <i class="fas fa-globe me-2"></i>
+            Scraping
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link"
+             routerLink="/historial"
+             routerLinkActive="active">
+            <i class="fas fa-clock-rotate-left me-2"></i>
+            Historial
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link"
+             routerLink="/reportes"
+             routerLinkActive="active">
+            <i class="fas fa-chart-column me-2"></i>
+            Reportes
+          </a>
+        </li>
+
+        <li class="nav-item ms-lg-3">
+          <button class="btn-cerrar-sesion" (click)="cerrarSesion()">
+            <i class="fas fa-right-from-bracket me-2"></i>
+            Cerrar sesión
+          </button>
+        </li>
+
+      </ul>
+
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,293 @@
+<section class="seccion-usuarios">
+  <div class="container">
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
+      <div>
+        <span class="etiqueta-seccion mb-3">
+          <i class="fa-solid fa-shield-halved me-2"></i>
+          ADMINISTRACIÓN
+        </span>
+
+        <h2 class="titulo-principal mt-3">
+          Gestión de <span>usuarios</span>
+        </h2>
+
+        <p class="texto-descripcion mb-0">
+          Administra los usuarios registrados en ScrapingDoo!, consulta sus datos y controla sus permisos.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="btn-crear"
+        (click)="abrirFormulario()">
+        <i class="fa-solid fa-plus"></i>
+        Crear usuario
+      </button>
+    </div>
+
+    <div class="tarjeta-resumen mb-4">
+      <div class="icono-principal">
+        <i class="fa-solid fa-users"></i>
+      </div>
+
+      <div>
+        <strong>{{ usuarios.length }}</strong>
+        <span>Usuarios registrados</span>
+      </div>
+    </div>
+
+    <div class="tarjeta-usuarios p-4">
+
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+          <h5 class="fw-bold text-white mb-1">
+            <i class="fa-solid fa-user-gear text-primary me-2"></i>
+            Usuarios registrados
+          </h5>
+          <p class="texto-descripcion small mb-0">
+            Consulta y administra las cuentas del sistema.
+          </p>
+        </div>
+
+        <div class="input-group buscador-usuarios">
+          <span class="input-group-text">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </span>
+
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Buscar usuario..."
+            [(ngModel)]="textoBusqueda">
+        </div>
+      </div>
+
+      <div class="tabla-contenedor">
+        <table class="tabla-usuarios">
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Correo electrónico</th>
+            <th>Rol</th>
+            <th>Fecha de registro</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+          </thead>
+
+          <tbody>
+            @for (usuario of obtenerUsuariosFiltrados(); track usuario.id) {
+              <tr>
+                <td>{{ usuario.id }}</td>
+                <td>{{ usuario.nombre }}</td>
+                <td>{{ usuario.apellido }}</td>
+                <td>{{ usuario.username }}</td>
+
+                <td>
+                  <span class="rol" [class.administrador]="usuario.role === 'ADMIN'">
+                    {{ usuario.role }}
+                  </span>
+                </td>
+
+                <td>
+                  {{ usuario.fechaRegistro ? (usuario.fechaRegistro | date:'dd/MM/yyyy') : 'Sin fecha' }}
+                </td>
+
+                <td>
+                  <span class="estado" [class.inactivo]="!estaActivo(usuario)">
+                    {{ estaActivo(usuario) ? 'Activo' : 'Inactivo' }}
+                  </span>
+                </td>
+
+                <td>
+                  <div class="acciones">
+                    <button
+                      type="button"
+                      class="btn-icono editar"
+                      title="Editar usuario"
+                      (click)="editarUsuario(usuario)">
+                      <i class="fa-solid fa-pen"></i>
+                    </button>
+
+                    <button
+                      type="button"
+                      class="btn-icono eliminar"
+                      title="Eliminar usuario"
+                      (click)="eliminarUsuario(usuario.id)">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="8" class="text-center py-5">
+                  @if (cargando) {
+                    <i class="fa-solid fa-spinner fa-spin text-primary me-2"></i>
+                    Cargando usuarios...
+                  } @else {
+                    <i class="fa-solid fa-folder-open text-secondary me-2"></i>
+                    No se encontraron usuarios.
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top borde-azul text-secondary small">
+        <span>
+          Mostrando {{ obtenerUsuariosFiltrados().length }} de {{ usuarios.length }} usuarios
+        </span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+@if (mostrarFormulario) {
+  <div class="fondo-modal" (click)="cerrarFormulario()">
+    <div class="modal-formulario" (click)="$event.stopPropagation()">
+
+      <div class="modal-encabezado">
+        <div>
+          <h3>
+            {{ modoEdicion ? 'Editar usuario' : 'Nuevo usuario' }}
+          </h3>
+          <small>
+            {{ modoEdicion ? 'Actualiza los datos de la cuenta' : 'Registra una nueva cuenta en el sistema' }}
+          </small>
+        </div>
+
+        <button
+          type="button"
+          class="btn-cerrar"
+          (click)="cerrarFormulario()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form #formUsuario="ngForm" (ngSubmit)="guardarUsuario()">
+        <div class="formulario-contenido">
+
+          <div class="mb-3">
+            <label for="username">Correo electrónico *</label>
+            <input
+              id="username"
+              name="username"
+              class="form-control"
+              type="email"
+              [(ngModel)]="formulario.username"
+              required>
+          </div>
+
+          <div class="fila-campos">
+            <div class="mb-3">
+              <label for="nombre">Nombre *</label>
+              <input
+                id="nombre"
+                name="nombre"
+                class="form-control"
+                type="text"
+                [(ngModel)]="formulario.nombre"
+                required>
+            </div>
+
+            <div class="mb-3">
+              <label for="apellido">Apellido *</label>
+              <input
+                id="apellido"
+                name="apellido"
+                class="form-control"
+                type="text"
+                [(ngModel)]="formulario.apellido"
+                required>
+            </div>
+          </div>
+
+          @if (!modoEdicion) {
+            <div class="mb-3">
+              <label for="password">Contraseña *</label>
+
+              <div class="input-group campo-password">
+                <input
+                  id="password"
+                  name="password"
+                  class="form-control"
+                  [type]="mostrarPassword ? 'text' : 'password'"
+                  [(ngModel)]="formulario.password"
+                  minlength="8"
+                  required>
+
+                <button
+                  type="button"
+                  class="btn btn-ojo"
+                  (click)="mostrarPassword = !mostrarPassword"
+                  [attr.aria-label]="mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+                  <i [class]="mostrarPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i>
+                </button>
+              </div>
+
+              <small>Mínimo 8 caracteres.</small>
+            </div>
+          }
+
+          @if (modoEdicion) {
+            <div class="mb-3">
+              <label for="role">Rol del usuario *</label>
+              <select
+                id="role"
+                name="role"
+                class="form-control"
+                [(ngModel)]="formulario.role"
+                required>
+                <option value="USER">Usuario</option>
+                <option value="ADMIN">Administrador</option>
+              </select>
+            </div>
+
+            <div class="fila-estados">
+              <label class="campo-estado">
+                <input
+                  type="checkbox"
+                  name="activo"
+                  [(ngModel)]="formulario.activo">
+                Usuario activo
+              </label>
+
+              <label class="campo-estado">
+                <input
+                  type="checkbox"
+                  name="enabled"
+                  [(ngModel)]="formulario.enabled">
+                Cuenta habilitada
+              </label>
+            </div>
+          }
+
+        </div>
+
+        <div class="modal-acciones">
+          <button
+            class="btn btn-primary"
+            type="submit"
+            [disabled]="formUsuario.invalid">
+            {{ modoEdicion ? 'Guardar cambios' : 'Crear usuario' }}
+          </button>
+
+          <button
+            class="btn btn-secondary"
+            type="button"
+            (click)="cerrarFormulario()">
+            Cancelar
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+}

@@ -1,0 +1,11 @@
+@if (!rolUsuario) {
+  <app-navbarcomponent></app-navbarcomponent>
+}
+@if (rolUsuario === 'ADMIN') {
+  <app-navbaradministradorcomponent></app-navbaradministradorcomponent>
+}
+@if (rolUsuario === 'USER') {
+  <app-navbarusuariocomponent></app-navbarusuariocomponent>
+}
+<router-outlet></router-outlet>
+<app-footercomponent></app-footercomponent>

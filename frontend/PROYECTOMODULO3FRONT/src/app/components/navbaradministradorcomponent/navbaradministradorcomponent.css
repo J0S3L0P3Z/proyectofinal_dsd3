@@ -1,0 +1,113 @@
+.navbar-administrador {
+  min-height: 75px;
+  padding: 10px 0;
+  background-color: #070c16;
+  border-bottom: 1px solid rgba(57, 133, 255, 0.2);
+  font-family: 'Montserrat', sans-serif;
+}
+
+.logo-navbar {
+  width: 43px;
+  height: 43px;
+  margin-right: 12px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.nombre-marca {
+  color: #ffffff;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.nombre-marca span {
+  color: #3985ff;
+}
+
+.navbar-administrador .navbar-nav {
+  gap: 8px;
+}
+
+.navbar-administrador .nav-link {
+  position: relative;
+  padding: 12px 13px;
+  color: #9ca3af;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.navbar-administrador .nav-link:hover {
+  color: #60a5fa;
+}
+
+.navbar-administrador .nav-link.active {
+  color: #60a5fa;
+}
+
+.navbar-administrador .nav-link.active::after {
+  position: absolute;
+  right: 12px;
+  bottom: 4px;
+  left: 12px;
+  height: 2px;
+  border-radius: 5px;
+  background-color: #3985ff;
+  content: '';
+}
+
+.btn-cerrar-sesion {
+  padding: 10px 16px;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: 9px;
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.btn-cerrar-sesion:hover {
+  border-color: #dc2626;
+  background-color: #dc2626;
+  color: #ffffff;
+}
+
+.navbar-administrador .navbar-toggler {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #60a5fa;
+}
+
+.navbar-administrador .navbar-toggler:focus {
+  box-shadow: 0 0 0 3px rgba(57, 133, 255, 0.15);
+}
+
+.navbar-administrador .navbar-toggler i {
+  font-size: 1.3rem;
+}
+
+@media (max-width: 991px) {
+  .navbar-administrador .navbar-collapse {
+    padding: 15px 0;
+  }
+
+  .navbar-administrador .navbar-nav {
+    align-items: stretch !important;
+    gap: 5px;
+  }
+
+  .navbar-administrador .nav-link {
+    padding: 12px 10px;
+  }
+
+  .navbar-administrador .nav-link.active::after {
+    display: none;
+  }
+
+  .btn-cerrar-sesion {
+    width: 100%;
+    margin-top: 10px;
+  }
+}

@@ -1,0 +1,219 @@
+<section class="zona-admin pb-5">
+
+  <img
+    src="assets/fondoadmin.png"
+    class="imagen-fondo-admin"
+    alt="Fondo del panel de administración"
+  >
+
+  <div class="container-fluid position-relative">
+
+    <div class="bienvenida-admin mb-4">
+      <div class="bienvenida-contenido">
+        <div>
+          <span class="etiqueta-admin">
+            PANEL DE ADMINISTRACIÓN
+          </span>
+
+          <h1>
+            {{ saludo }}, {{ primerNombre }}
+          </h1>
+
+          <p>
+            Bienvenido al panel de control de ScrapingDoo!.
+            Aquí puedes consultar el estado general de la plataforma.
+          </p>
+
+          <span class="fecha-admin">
+            <i class="fa-regular fa-calendar"></i>
+            {{ fechaHoy }}
+          </span>
+        </div>
+
+        <div class="bienvenida-icono">
+          <i class="fa-solid fa-chart-line"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="titulo-seccion">
+      <div>
+        <span class="subtitulo-seccion">RESUMEN GENERAL</span>
+        <h2>Estadísticas de la plataforma</h2>
+      </div>
+    </div>
+
+    @if (cargando) {
+      <div class="mensaje-cargando">
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        <span>Cargando estadísticas...</span>
+      </div>
+    } @else {
+
+      <div class="row g-4 mb-5">
+
+        <div class="col-12 col-sm-6 col-xl-4">
+          <div class="tarjeta-estadistica">
+            <div class="estadistica-icono usuarios">
+              <i class="fa-solid fa-users"></i>
+            </div>
+
+            <div>
+              <span>Total de usuarios</span>
+              <h3>{{ totalUsuarios }}</h3>
+              <small>Usuarios registrados</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-4">
+          <div class="tarjeta-estadistica">
+            <div class="estadistica-icono administradores">
+              <i class="fa-solid fa-user-shield"></i>
+            </div>
+
+            <div>
+              <span>Administradores</span>
+              <h3>{{ totalAdministradores }}</h3>
+              <small>Cuentas administrativas</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-4">
+          <div class="tarjeta-estadistica">
+            <div class="estadistica-icono normales">
+              <i class="fa-solid fa-user"></i>
+            </div>
+
+            <div>
+              <span>Usuarios normales</span>
+              <h3>{{ totalUsuariosNormales }}</h3>
+              <small>Cuentas de usuario</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-4">
+          <div class="tarjeta-estadistica">
+            <div class="estadistica-icono scraping">
+              <i class="fa-solid fa-globe"></i>
+            </div>
+
+            <div>
+              <span>Scrapings realizados</span>
+              <h3>{{ totalScrapings }}</h3>
+              <small>Procesos registrados</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-4">
+          <div class="tarjeta-estadistica">
+            <div class="estadistica-icono resultados">
+              <i class="fa-solid fa-brain"></i>
+            </div>
+
+            <div>
+              <span>Resultados generados</span>
+              <h3>{{ totalResultados }}</h3>
+              <small>Respuestas de las IA</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-4">
+          <div class="tarjeta-estadistica">
+            <div class="estadistica-icono historial">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+            </div>
+
+            <div>
+              <span>Registros del historial</span>
+              <h3>{{ totalHistoriales }}</h3>
+              <small>Actividades registradas</small>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    }
+
+    <div class="titulo-seccion">
+      <div>
+        <span class="subtitulo-seccion">ACTIVIDAD RECIENTE</span>
+        <h2>Últimos scrapings realizados</h2>
+      </div>
+    </div>
+
+    <div class="contenedor-recientes">
+
+      @if (cargando) {
+        <div class="mensaje-cargando">
+          <i class="fa-solid fa-spinner fa-spin"></i>
+          <span>Cargando actividad reciente...</span>
+        </div>
+      } @else {
+
+        @if (ultimosScrapings.length > 0) {
+
+          <div class="tabla-responsive">
+            <table class="tabla-scrapings">
+
+              <thead>
+              <tr>
+                <th>Página</th>
+                <th>URL</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+              </tr>
+              </thead>
+
+              <tbody>
+                @for (scraping of ultimosScrapings; track scraping.idScraping) {
+                  <tr>
+                    <td>
+                      <div class="nombre-pagina">
+                        <i class="fa-solid fa-globe"></i>
+                        {{ scraping.tituloPagina || 'Sin título' }}
+                      </div>
+                    </td>
+
+                    <td>
+                      <span class="url-pagina">
+                        {{ scraping.url }}
+                      </span>
+                    </td>
+
+                    <td>
+                      {{ scraping.fechaScraping | date:'dd/MM/yyyy HH:mm' }}
+                    </td>
+
+                    <td>
+                      <span class="estado-badge">
+                        {{ scraping.estado || 'Sin estado' }}
+                      </span>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+
+            </table>
+          </div>
+
+        } @else {
+
+          <div class="sin-registros">
+            <i class="fa-solid fa-folder-open"></i>
+            <h3>No hay scrapings registrados</h3>
+            <p>Cuando se realicen procesos de scraping, aparecerán aquí.</p>
+          </div>
+
+        }
+      }
+
+    </div>
+
+  </div>
+
+</section>

@@ -1,0 +1,162 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: #070c16;
+  color: white;
+}
+
+.cyber-stat-card {
+  background-color: rgba(13, 18, 30, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: white;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+}
+
+.bienvenida {
+  background: linear-gradient(120deg, rgba(0, 82, 204, 0.25), rgba(9, 16, 32, 0.85) 60%);
+  border-color: rgba(0, 117, 255, 0.3) !important;
+}
+
+.interactiva {
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.interactiva:hover {
+  transform: translateY(-4px);
+  border-color: rgba(29, 114, 254, 0.5);
+  box-shadow: 0 12px 30px rgba(0, 82, 204, 0.15);
+}
+
+.zu-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 13px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.zu-badge.info {
+  color: #00c3ff;
+  background-color: rgba(0, 195, 255, 0.1);
+  border: 1px solid rgba(0, 195, 255, 0.2);
+}
+
+.radar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.5rem;
+  color: #00c3ff;
+  border: 1.5px solid rgba(0, 117, 255, 0.3);
+  background: radial-gradient(circle, rgba(29, 114, 254, 0.25), transparent 70%);
+  box-shadow: 0 0 30px rgba(0, 195, 255, 0.25);
+}
+
+.zu-icono-stat {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-size: 1.1rem;
+}
+
+.zu-fondo-primario {
+  color: #1d72fe;
+  background-color: rgba(29, 114, 254, 0.15);
+}
+
+.zu-fondo-exito {
+  color: #20c997;
+  background-color: rgba(32, 201, 151, 0.15);
+}
+
+.zu-fondo-error {
+  color: #dc3545;
+  background-color: rgba(220, 53, 69, 0.15);
+}
+
+.zu-fondo-cian {
+  color: #00c3ff;
+  background-color: rgba(0, 195, 255, 0.15);
+}
+
+.actividad {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(108, 117, 125, 0.1);
+}
+
+.actividad:last-child {
+  border-bottom: 0;
+}
+
+.zu-min-0 {
+  min-width: 0;
+}
+
+.fs-7 {
+  font-size: 0.75rem;
+}
+
+.btn-cyber-outline {
+  background-color: transparent;
+  border: 1px solid rgba(29, 114, 254, 0.35);
+  transition: all 0.2s ease;
+}
+
+.btn-cyber-outline:hover {
+  background-color: rgba(29, 114, 254, 0.15);
+  border-color: #1d72fe;
+}
+
+.zu-progreso {
+  width: 100%;
+  height: 9px;
+  appearance: none;
+  border: none;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.zu-progreso::-webkit-progress-bar {
+  background-color: #1a2b4c;
+  border-radius: 20px;
+}
+
+.zu-progreso::-webkit-progress-value {
+  background: linear-gradient(90deg, #1d72fe, #00c3ff);
+  border-radius: 20px;
+}
+
+.zu-progreso::-moz-progress-bar {
+  background: linear-gradient(90deg, #1d72fe, #00c3ff);
+  border-radius: 20px;
+}
+
+.acceso {
+  background: linear-gradient(90deg, rgba(0, 82, 204, 0.2), rgba(9, 16, 32, 0.85));
+}
+
+a {
+  text-decoration: none;
+}
+
+@media (max-width: 576px) {
+  .actividad {
+    gap: 0.6rem;
+  }
+
+  .bienvenida {
+    padding: 1.5rem !important;
+  }
+}

@@ -1,0 +1,223 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: #070c16;
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.seccion-reportes {
+  min-height: 100vh;
+  padding: 45px 0;
+  background-color: #070c16;
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.encabezado-reportes {
+  max-width: 750px;
+}
+
+.etiqueta-seccion {
+  display: inline-block;
+  padding: 8px 14px;
+  border: 1px solid rgba(29, 114, 254, 0.35);
+  border-radius: 30px;
+  background-color: rgba(29, 114, 254, 0.1);
+  color: #60a5fa;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.titulo-principal {
+  color: #ffffff;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -1.5px;
+}
+
+.titulo-principal span {
+  color: #3985ff;
+}
+
+.texto-descripcion {
+  max-width: 650px;
+  color: #9ca3af;
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.text-secondary {
+  color: #94a3b8 !important;
+}
+
+.cyber-stat-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, #111827, #0d1422);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  transition: all 0.25s ease;
+}
+
+.cyber-stat-card.interactiva:hover {
+  transform: translateY(-5px);
+  border-color: rgba(57, 133, 255, 0.4);
+  box-shadow: 0 18px 40px rgba(29, 114, 254, 0.1);
+}
+
+.zu-icono-stat {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 13px;
+  font-size: 1.2rem;
+}
+
+.zu-fondo-error {
+  background-color: rgba(239, 68, 68, 0.13);
+  color: #f87171;
+}
+
+.zu-fondo-primario {
+  background-color: rgba(29, 114, 254, 0.15);
+  color: #60a5fa;
+}
+
+.zu-min-0 {
+  min-width: 0;
+}
+
+.fs-7 {
+  font-size: 0.75rem;
+}
+
+.cyber-stat-card .fw-bold {
+  color: #f8fafc;
+  font-size: 0.9rem;
+}
+
+.cyber-stat-card ul {
+  padding: 0;
+}
+
+.cyber-stat-card ul li {
+  min-width: 0;
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+.cyber-stat-card ul li i {
+  flex-shrink: 0;
+}
+
+.cyber-stat-card ul li span {
+  min-width: 0;
+}
+
+.zu-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 11px;
+  border-radius: 30px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.zu-badge.exito {
+  background-color: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+}
+
+.cyber-pdf-btn {
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  background-color: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+  border-radius: 9px;
+  font-weight: 700;
+  font-size: 0.78rem;
+  transition: all 0.2s ease;
+}
+
+.cyber-pdf-btn:hover {
+  background-color: #dc2626;
+  border-color: #dc2626;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.btn-cyber-outline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  border: 1px solid rgba(57, 133, 255, 0.35);
+  border-radius: 9px;
+  background-color: rgba(29, 114, 254, 0.08);
+  color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.btn-cyber-outline:hover {
+  border-color: #3985ff;
+  background-color: rgba(29, 114, 254, 0.2);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.tarjeta-vacia {
+  border: 1px dashed rgba(57, 133, 255, 0.25);
+  background: linear-gradient(145deg, #111827, #0d1422);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.tarjeta-vacia h5 {
+  font-size: 1.1rem;
+}
+
+.tarjeta-vacia p {
+  line-height: 1.7;
+}
+
+.btn-nuevo-scraping {
+  padding: 11px 20px;
+  border: 1px solid #1d72fe;
+  border-radius: 9px;
+  background-color: #1d72fe;
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.btn-nuevo-scraping:hover {
+  background-color: #0b5ed7;
+  border-color: #0b5ed7;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 576px) {
+  .seccion-reportes {
+    padding: 30px 0;
+  }
+
+  .titulo-principal {
+    letter-spacing: -0.7px;
+  }
+
+  .cyber-stat-card {
+    padding: 20px !important;
+  }
+
+  .texto-descripcion {
+    font-size: 0.85rem;
+  }
+}
